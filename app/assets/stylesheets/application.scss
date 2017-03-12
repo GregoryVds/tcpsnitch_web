@@ -1,0 +1,31 @@
+@import "materialize/components/color";
+$primary-color: color("blue", "lighten-2") !default;
+$secondary-color: color("yellow", "base") !default;
+@import 'materialize';
+
+html,body {
+	height: 100%;
+	line-height: 1.5;
+	font-family: 'Roboto', sans-serif;
+	color: rgba(0,0,0,0.87);
+}
+
+nav.top-nav a.page-title {
+	line-height: 122px;
+	font-size: 48px;
+}
+
+.top-nav {
+	height: 125px;
+}
+
+header, main, footer {
+	padding-left: 300px;
+}
+
+.caption {
+	font-size: 1.25rem;
+	font-weight: 300;
+	margin-bottom: 30px;
+}
+
