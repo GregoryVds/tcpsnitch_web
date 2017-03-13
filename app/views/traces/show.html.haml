@@ -1,0 +1,17 @@
+= link_to 'Back to traces', traces_path
+
+%p
+  %strong
+    Description:
+  = @trace.description
+  %br
+
+  %strong
+    Creation date:
+  = @trace.created_at.to_date
+
+  %br
+  %strong
+    Download:
+  = link_to 'Download', @trace.zip_file.url
+

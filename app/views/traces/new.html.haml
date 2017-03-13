@@ -1,0 +1,25 @@
+= link_to 'Back to traces', traces_path
+
+%h3
+  New trace
+
+- if @trace.errors.any?
+  .errors
+    %ul
+      - @trace.errors.full_messages.each do |msg|
+        %li= msg
+
+= form_for :trace, url: traces_path do |f|
+  %p
+    = f.label :description
+    = f.text_area :description
+  %p
+    = f.label :zip_file
+    = f.file_field :zip_file
+  %p
+    = f.submit
+
+
+
+
+

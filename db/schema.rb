@@ -15,32 +15,24 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "datasets", force: :cascade do |t|
-    t.string   "name",        null: false
-    t.text     "description"
-    t.integer  "user_id"
-    t.string   "zip_file",    null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["user_id"], name: "index_datasets_on_user_id", using: :btree
-  end
-
-  create_table "executions", force: :cascade do |t|
-    t.string   "app",                        null: false
+  create_table "traces", force: :cascade do |t|
+    t.string   "app"
     t.string   "cmd"
-    t.integer  "connectivity", default: 0,   null: false
+    t.integer  "connectivity"
+    t.text     "description"
     t.string   "kernel"
     t.text     "log"
     t.string   "machine"
     t.text     "net"
-    t.string   "os",           default: "0", null: false
-    t.integer  "dataset_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.index ["app"], name: "index_executions_on_app", using: :btree
-    t.index ["connectivity"], name: "index_executions_on_connectivity", using: :btree
-    t.index ["dataset_id"], name: "index_executions_on_dataset_id", using: :btree
-    t.index ["os"], name: "index_executions_on_os", using: :btree
+    t.string   "os"
+    t.string   "zip_file",     null: false
+    t.integer  "user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["app"], name: "index_traces_on_app", using: :btree
+    t.index ["connectivity"], name: "index_traces_on_connectivity", using: :btree
+    t.index ["os"], name: "index_traces_on_os", using: :btree
+    t.index ["user_id"], name: "index_traces_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -53,6 +45,4 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.index ["email"], name: "index_users_on_email", using: :btree
   end
 
-  add_foreign_key "datasets", "users"
-  add_foreign_key "executions", "datasets"
 end

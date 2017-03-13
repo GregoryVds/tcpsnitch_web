@@ -1,4 +1,4 @@
-class DatasetUploader < CarrierWave::Uploader::Base
+class TraceUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick

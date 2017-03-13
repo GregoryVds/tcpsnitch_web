@@ -1,8 +1,12 @@
-class Dataset < ApplicationRecord
-	has_many :executions, inverse_of: :dataset
-	validates :name, :zip_file, presence: true
-  mount_uploader :zip_file, DatasetUploader
+class Trace < ApplicationRecord
+  mount_uploader :zip_file, TraceUploader
+	validates :zip_file, presence: true
 	validate :zip_file_contains_meta_files
+
+#	validates :app, :connectivity, :kernel, :log, :machine, :net, :os, :zip_file, presence: true
+
+	enum connectivity: [ :wifi, :lte, :ethernet ]
+	enum os: [ :darwin, :linux ]
 
 	META_FILES = ['os','log','app','kernel','connectivity','machine','net','cmd']
 
@@ -27,4 +31,9 @@ class Dataset < ApplicationRecord
 			end
 		end	
 	end
+
+	def first_line(path)
+		File.open(path, &:readline).strip
+	end
+
 end

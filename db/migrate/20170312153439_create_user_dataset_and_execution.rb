@@ -8,28 +8,19 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.timestamps
     end
 
-    create_table :datasets do |t|
-			t.string :name, null: false
-			t.text :description
-			t.references :user, index: true
-    	t.string :zip_file, null: false
-			t.timestamps
-    end
-		add_foreign_key :datasets, :users
-
-    create_table :executions do |t|
-			t.string :app, null: false, index: true
+    create_table :traces do |t|
+			t.string :app, index: true
 			t.string :cmd
-			t.integer :connectivity, default: 0, null: false, index: true
+			t.integer :connectivity, index: true
+			t.text :description
 			t.string :kernel 
 			t.text :log
 			t.string :machine
 			t.text :net
-			t.string :os, default: 0, null: false, index: true
-			t.references :dataset, index: true
+			t.string :os, index: true
+    	t.string :zip_file, null: false
+			t.references :user, index: true
 			t.timestamps
     end
-		add_foreign_key :executions, :datasets
-
   end
 end

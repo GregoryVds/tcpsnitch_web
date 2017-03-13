@@ -1,0 +1,19 @@
+= content_for :page_header, 'List of traces'
+
+%h3 Traces
+
+= link_to 'New trace', new_trace_path
+
+%table
+  %tr
+    %th
+      Name
+    %th
+      Description
+
+  - @traces.each do |trace|
+    %tr
+      %td= trace.description
+      %td= link_to 'Download', trace.zip_file.url
+      %td= link_to 'Show', trace_path(trace)
+      %td= link_to 'Delete', trace_path(trace), method: :delete, data: { confirm: 'Are you sure?' }
