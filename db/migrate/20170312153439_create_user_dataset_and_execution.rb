@@ -12,6 +12,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.string :name, null: false
 			t.text :description
 			t.references :user, index: true
+    	t.string :zip_file, null: false
 			t.timestamps
     end
 		add_foreign_key :datasets, :users

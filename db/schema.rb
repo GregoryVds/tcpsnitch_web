@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.string   "name",        null: false
     t.text     "description"
     t.integer  "user_id"
+    t.string   "zip_file",    null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.index ["user_id"], name: "index_datasets_on_user_id", using: :btree

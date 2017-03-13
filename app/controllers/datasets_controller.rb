@@ -23,7 +23,7 @@ class DatasetsController < ApplicationController
 	private
 
 	def dataset_params
-		params.require(:dataset).permit(:name)
+		params.require(:dataset).permit(:name, :description, :zip_file)
 	end
 
 end

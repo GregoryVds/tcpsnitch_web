@@ -15,3 +15,8 @@
     Creation date:
   = @dataset.created_at.to_date
 
+  %br
+  %strong
+    Download:
+  = link_to 'Download', @dataset.zip_file.url
+

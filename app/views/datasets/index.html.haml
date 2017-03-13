@@ -15,4 +15,5 @@
     %tr
       %td= dataset.name
       %td= dataset.description
+      %td= link_to 'Download', dataset.zip_file.url
       %td= link_to 'Show', dataset_path(dataset)
