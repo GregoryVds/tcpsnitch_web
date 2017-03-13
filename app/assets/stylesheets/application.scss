@@ -10,20 +10,30 @@ html,body {
 	color: rgba(0,0,0,0.87);
 }
 
-nav.top-nav a.page-title {
-	line-height: 122px;
-	font-size: 48px;
-}
-
-.top-nav {
-	height: 125px;
-}
-
 header, main, footer {
 	padding-left: 300px;
 }
 
-.caption {
+.top-nav { 
+	height: 125px;
+
+	.page-title {
+		line-height: 122px;
+		font-size: 48px;
+	}
+}
+
+
+.side-nav {
+	li#logo a {
+		font-size: 30px;
+		text-align: center;
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+}
+
+main .caption {
 	font-size: 1.25rem;
 	font-weight: 300;
 	margin-bottom: 30px;

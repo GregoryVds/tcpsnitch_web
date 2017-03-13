@@ -1,0 +1,17 @@
+= link_to 'Back to datasets', datasets_path
+
+%p
+  %strong
+    Name:
+  = @dataset.name
+  %br
+
+  %strong
+    Description:
+  = @dataset.description
+  %br
+
+  %strong
+    Creation date:
+  = @dataset.created_at.to_date
+

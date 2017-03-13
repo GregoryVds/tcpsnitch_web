@@ -14,6 +14,8 @@ module TcpsnitchWeb
 		config.generators do |g|
 			g.orm :active_record
 		end
+
+		config.active_job.queue_adapter = :sidekiq
   end
 end
 

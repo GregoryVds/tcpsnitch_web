@@ -16,28 +16,30 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   enable_extension "plpgsql"
 
   create_table "datasets", force: :cascade do |t|
-    t.string   "name",                    null: false
-    t.text     "description",             null: false
-    t.integer  "os",          default: 0, null: false
-    t.string   "kernel",                  null: false
-    t.date     "upload_date",             null: false
+    t.string   "name",        null: false
+    t.text     "description"
     t.integer  "user_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.index ["kernel"], name: "index_datasets_on_kernel", using: :btree
-    t.index ["os"], name: "index_datasets_on_os", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["user_id"], name: "index_datasets_on_user_id", using: :btree
   end
 
   create_table "executions", force: :cascade do |t|
-    t.string   "application",              null: false
-    t.integer  "connectivity", default: 0, null: false
+    t.string   "app",                        null: false
+    t.string   "cmd"
+    t.integer  "connectivity", default: 0,   null: false
+    t.string   "kernel"
+    t.text     "log"
+    t.string   "machine"
+    t.text     "net"
+    t.string   "os",           default: "0", null: false
     t.integer  "dataset_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.index ["application"], name: "index_executions_on_application", using: :btree
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["app"], name: "index_executions_on_app", using: :btree
     t.index ["connectivity"], name: "index_executions_on_connectivity", using: :btree
     t.index ["dataset_id"], name: "index_executions_on_dataset_id", using: :btree
+    t.index ["os"], name: "index_executions_on_os", using: :btree
   end
 
   create_table "users", force: :cascade do |t|

@@ -34,6 +34,11 @@ gem 'jbuilder', '~> 2.5'
 gem 'mongoid', '~> 6.1.0'
 gem 'materialize-sass'
 gem "haml-rails", "~> 0.9"
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
+gem 'carrierwave', '~> 1.0'
+
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
