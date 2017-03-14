@@ -18,6 +18,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.string :machine
 			t.text :net
 			t.string :os, index: true
+			t.boolean :processed, default: false
     	t.string :zip_file, null: false
 			t.references :user, index: true
 			t.timestamps

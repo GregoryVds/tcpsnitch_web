@@ -1,6 +1,6 @@
 @import "materialize/components/color";
-$primary-color: color("blue", "lighten-2") !default;
-$secondary-color: color("yellow", "base") !default;
+$primary-color: color("indigo", "lighten-2") !default;
+$secondary-color: color("indigo", "lighten-4") !default;
 @import 'materialize';
 
 html,body {
@@ -14,12 +14,22 @@ header, main, footer {
 	padding-left: 300px;
 }
 
-.top-nav { 
-	height: 125px;
+.banner { 
+	background-color: $primary-color;
 
-	.page-title {
-		line-height: 122px;
+	h1 {
+		color: white;
+		line-height: 110%;
 		font-size: 48px;
+		margin: 0 0 1.68rem 0;
+		padding-top: 2.1rem;
+		font-weight: 300;
+	}
+
+	h4 {
+		padding-bottom: 40px;
+		font-weight: 300;
+		color: $secondary-color;
 	}
 }
 

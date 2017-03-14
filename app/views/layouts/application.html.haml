@@ -8,12 +8,16 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
   %header
-    %nav.top-nav
-      .container.page-title
-        - if content_for?(:page_header)
-          = yield :page_header
-        - else
-          Tcpsnitch
+    .banner 
+      .container
+        %h1
+          - if content_for?(:page_header_title)
+            = yield :page_header_title
+          - else
+            Tcpsnitch
+        - if content_for?(:page_header_text)
+          %h4
+            = yield :page_header_text
     %ul#nav-mobile.side-nav.fixed
       %li#logo
         = link_to 'Tcpsnitch', root_path

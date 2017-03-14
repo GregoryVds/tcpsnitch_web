@@ -1,4 +1,5 @@
 class Trace < ApplicationRecord
+	after_commit :schedule_import, on: :create
   mount_uploader :zip_file, TraceUploader
 	validates :zip_file, presence: true
 	validate :zip_file_contains_meta_files
@@ -36,4 +37,7 @@ class Trace < ApplicationRecord
 		File.open(path, &:readline).strip
 	end
 
+	def schedule_import
+		TraceImportJob.perform_later(id)
+	end
 end

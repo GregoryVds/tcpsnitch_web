@@ -25,10 +25,11 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.string   "machine"
     t.text     "net"
     t.string   "os"
-    t.string   "zip_file",     null: false
+    t.boolean  "processed",    default: false
+    t.string   "zip_file",                     null: false
     t.integer  "user_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.index ["app"], name: "index_traces_on_app", using: :btree
     t.index ["connectivity"], name: "index_traces_on_connectivity", using: :btree
     t.index ["os"], name: "index_traces_on_os", using: :btree
