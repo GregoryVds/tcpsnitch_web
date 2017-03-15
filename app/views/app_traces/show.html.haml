@@ -15,3 +15,9 @@
     Download:
   = link_to 'Download', @app_trace.archive.url
 
+- AppTraceStat::STATS.each do |stat|
+  %p
+    %strong
+      = stat.to_s.humanize
+    - if @app_trace.stat
+      = pie_chart @app_trace.stat.send(stat)

@@ -20,4 +20,14 @@ class Event
 			self.socket_trace_id = sock.id
 		end
 	end
+
+	def self.proportions(node, **match)
+		Event.collection.aggregate([ 
+			{"$match": match}, 
+			{"$sortByCount": "$#{node}"}
+		]).map do |r|
+		[r["_id"], r["count"]]
+		end
+	end
+
 end

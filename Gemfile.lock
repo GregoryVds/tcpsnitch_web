@@ -46,6 +46,7 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    chartkick (2.2.3)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.2.x)
@@ -205,6 +206,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   carrierwave (~> 1.0)
+  chartkick
   coffee-rails (~> 4.2)
   haml-rails (~> 0.9)
   jbuilder (~> 2.5)

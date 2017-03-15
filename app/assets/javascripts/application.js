@@ -14,5 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require materialize-sprockets
+//= require highcharts
+//= require chartkick
 //= require_tree .
 $(".button-collapse").sideNav();
