@@ -1,16 +1,18 @@
 class AppTraceImportJob < ActiveJob::Base
 	queue_as :default
 
-	def perform(trace_id)
-		@app_trace = AppTrace.find(trace_id)
-		return if @app_trace.processed
+	def perform(app_trace_id)
+		@app_trace = AppTrace.find(app_trace_id)
+		return if @app_trace.imported
 
 		extract_archive
 		update_meta_infos
-		create_events if @app_trace.valid?
+		return unless @app_trace.valid?
+		create_events
+		@app_trace.schedule_stats_computation
 		rm_extracted_archive
 
-		@app_trace.processed = true
+		@app_trace.imported = true
 		@app_trace.save!
 	end
 

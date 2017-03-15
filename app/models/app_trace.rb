@@ -1,17 +1,25 @@
 class AppTrace < ApplicationRecord
-	has_many :socket_traces, inverse_of: :app_trace
+	META = ['app', 'cmd', 'connectivity', 'kernel', 'log', 'machine', 'os', 'version']
+
   mount_uploader :archive, TraceUploader
-	validates :archive, :workload, presence: true
-	validate :archive_contains_meta_files
-	after_commit :schedule_import, on: :create
-	# Only validate update, since at creation time, archive is not yet processed
-	validates :app, :connectivity, :kernel, :machine, :os, :version, :workload, 
-            presence: true, on: :update
 
 	enum connectivity: {wifi: 0, lte: 1, ethernet: 2}
 	enum os: {linux: 0, android: 1, darwin: 2}
 
-	META = ['app', 'cmd', 'connectivity', 'kernel', 'log', 'machine', 'os', 'version']
+	has_many :socket_traces, inverse_of: :app_trace, dependent: :destroy
+
+	validates :archive, :workload, presence: true
+	validate :archive_contains_meta_files
+	# At creation time, archive is not yet processed
+	validates :app, :connectivity, :kernel, :machine, :os, :version, :workload, 
+            presence: true, on: :update
+
+	after_commit :schedule_import, on: :create
+	before_destroy :destroy_stat
+
+	def stat
+		AppTraceStat.where(app_trace_id: id).first
+	end
 
 	def os_int
 		AppTrace.os[os]
@@ -48,5 +56,14 @@ class AppTrace < ApplicationRecord
 
 	def schedule_import
 		AppTraceImportJob.perform_later(id)
+	end
+
+	def schedule_stats_computation
+		socket_traces.each(&:schedule_stats_computation)
+		AppTraceStatsJob.perform_later(id)
+	end
+
+	def destroy_stat
+		stat.destroy if stat
 	end
 end

@@ -11,15 +11,18 @@
     %th
       Workload
     %th
-      Processed
+      Imported
+    %th
+      Stats computed
     %th
     %th
     %th
-  - @app_traces.each do |trace|
+  - @app_traces.each do |app_trace|
     %tr
-      %td= trace.description
-      %td= trace.workload
-      %td= trace.processed
-      %td= link_to 'Download', trace.archive.url
-      %td= link_to 'Show', app_trace_path(trace)
-      %td= link_to 'Delete', app_trace_path(trace), method: :delete, data: { confirm: 'Are you sure?' }
+      %td= app_trace.description
+      %td= app_trace.workload
+      %td= app_trace.imported
+      %td= app_trace.stats_computed
+      %td= link_to 'Download', app_trace.archive.url
+      %td= link_to 'Show', app_trace_path(app_trace)
+      %td= link_to 'Delete', app_trace_path(app_trace), method: :delete, data: { confirm: 'Are you sure?' }
