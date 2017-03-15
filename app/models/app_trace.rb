@@ -18,7 +18,7 @@ class AppTrace < ApplicationRecord
 	before_destroy :destroy_stat
 
 	def stat
-		AppTraceStat.where(app_trace_id: id).first
+		@stat ||= AppTraceStat.where(app_trace_id: id).first
 	end
 
 	def os_int

@@ -8,21 +8,30 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.timestamps
     end
 
-    create_table :traces do |t|
+    create_table :app_traces do |t|
     	t.string :archive, null: false
 			t.string :app, index: true
 			t.string :cmd
 			t.integer :connectivity, index: true
 			t.text :description
+			t.boolean :imported, default: false
 			t.string :kernel 
 			t.text :log
 			t.string :machine
 			t.integer :os, index: true
-			t.boolean :processed, default: false
+			t.boolean :stats_computed, default: false
 			t.references :user, index: true
 			t.text :version
 			t.text :workload, null: false
 			t.timestamps
     end
+
+		create_table :socket_traces do |t|
+			t.references :app_trace, index: true	
+			t.integer :socket_type, index: true
+			t.boolean :stats_computed, default: false
+			t.timestamps
+		end
+
   end
 end

@@ -6,7 +6,7 @@ class SocketTrace < ApplicationRecord
 	before_destroy :destroy_stat
 
 	def stat
-		SocketTraceStat.where(socket_trace_id: id).first
+		@stat ||= SocketTraceStat.where(socket_trace_id: id).first
 	end
 
 	def schedule_stats_computation 

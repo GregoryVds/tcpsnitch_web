@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'home#index'
 	
-	resources :traces
+	resources :app_traces
 
 	require 'sidekiq/web'
 	mount Sidekiq::Web, at: '/jobs'

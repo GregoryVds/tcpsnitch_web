@@ -15,26 +15,37 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "traces", force: :cascade do |t|
-    t.string   "archive",                      null: false
+  create_table "app_traces", force: :cascade do |t|
+    t.string   "archive",                        null: false
     t.string   "app"
     t.string   "cmd"
     t.integer  "connectivity"
     t.text     "description"
+    t.boolean  "imported",       default: false
     t.string   "kernel"
     t.text     "log"
     t.string   "machine"
     t.integer  "os"
-    t.boolean  "processed",    default: false
+    t.boolean  "stats_computed", default: false
     t.integer  "user_id"
     t.text     "version"
-    t.text     "workload",                     null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.index ["app"], name: "index_traces_on_app", using: :btree
-    t.index ["connectivity"], name: "index_traces_on_connectivity", using: :btree
-    t.index ["os"], name: "index_traces_on_os", using: :btree
-    t.index ["user_id"], name: "index_traces_on_user_id", using: :btree
+    t.text     "workload",                       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.index ["app"], name: "index_app_traces_on_app", using: :btree
+    t.index ["connectivity"], name: "index_app_traces_on_connectivity", using: :btree
+    t.index ["os"], name: "index_app_traces_on_os", using: :btree
+    t.index ["user_id"], name: "index_app_traces_on_user_id", using: :btree
+  end
+
+  create_table "socket_traces", force: :cascade do |t|
+    t.integer  "app_trace_id"
+    t.integer  "socket_type"
+    t.boolean  "stats_computed", default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.index ["app_trace_id"], name: "index_socket_traces_on_app_trace_id", using: :btree
+    t.index ["socket_type"], name: "index_socket_traces_on_socket_type", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
