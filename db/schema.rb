@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   enable_extension "plpgsql"
 
   create_table "traces", force: :cascade do |t|
+    t.string   "archive",                      null: false
     t.string   "app"
     t.string   "cmd"
     t.integer  "connectivity"
@@ -23,11 +24,11 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.string   "kernel"
     t.text     "log"
     t.string   "machine"
-    t.text     "net"
-    t.string   "os"
+    t.integer  "os"
     t.boolean  "processed",    default: false
-    t.string   "zip_file",                     null: false
     t.integer  "user_id"
+    t.text     "version"
+    t.text     "workload",                     null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.index ["app"], name: "index_traces_on_app", using: :btree

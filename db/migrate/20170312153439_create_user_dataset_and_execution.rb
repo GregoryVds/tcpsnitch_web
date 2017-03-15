@@ -9,6 +9,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
     end
 
     create_table :traces do |t|
+    	t.string :archive, null: false
 			t.string :app, index: true
 			t.string :cmd
 			t.integer :connectivity, index: true
@@ -16,11 +17,11 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.string :kernel 
 			t.text :log
 			t.string :machine
-			t.text :net
-			t.string :os, index: true
+			t.integer :os, index: true
 			t.boolean :processed, default: false
-    	t.string :zip_file, null: false
 			t.references :user, index: true
+			t.text :version
+			t.text :workload, null: false
 			t.timestamps
     end
   end

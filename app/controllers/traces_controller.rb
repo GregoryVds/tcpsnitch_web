@@ -29,7 +29,7 @@ class TracesController < ApplicationController
 	private
 
 	def trace_params
-		params.require(:trace).permit(:description, :zip_file)
+		params.require(:trace).permit(:archive, :description, :workload)
 	end
 
 end

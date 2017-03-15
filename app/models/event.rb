@@ -1,12 +1,14 @@
 class Event
 	include Mongoid::Document
-
-	field :execution_id, type: Integer
-	field :dataset_id, type: Integer
-	field :socket_id, type: Integer
-	field :os, type: String
-	field :kernel, type: String
-	field :libc, type: String
-	field :application, type: String
-	field :connectivity, type: String  # TODO: Enum
+	field :app, type: String
+	field :connectivity, type: Integer
+	field :details, type: Hash
+	field :error_str, type: String
+	field :os, type: Integer
+	field :return_value, type: Integer
+	field :socket_num, type: Integer
+	field :success, type: Boolean
+	field :timestamp, type: Hash
+	field :trace_id, type: Integer
+	field :type, type: String
 end

@@ -7,13 +7,19 @@
 %table
   %tr
     %th
-      Name
-    %th
       Description
-
+    %th
+      Workload
+    %th
+      Processed
+    %th
+    %th
+    %th
   - @traces.each do |trace|
     %tr
       %td= trace.description
-      %td= link_to 'Download', trace.zip_file.url
+      %td= trace.workload
+      %td= trace.processed
+      %td= link_to 'Download', trace.archive.url
       %td= link_to 'Show', trace_path(trace)
       %td= link_to 'Delete', trace_path(trace), method: :delete, data: { confirm: 'Are you sure?' }

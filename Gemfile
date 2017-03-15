@@ -38,6 +38,7 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
 gem 'carrierwave', '~> 1.0'
+gem 'oj'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

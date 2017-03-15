@@ -107,6 +107,7 @@ GEM
     nio4r (2.0.0)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
+    oj (2.18.0)
     pg (0.20.0)
     puma (3.8.1)
     rack (2.0.1)
@@ -211,6 +212,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   materialize-sass
   mongoid (~> 6.1.0)
+  oj
   pg (~> 0.18)
   puma (~> 3.0)
   rails (~> 5.0.2)

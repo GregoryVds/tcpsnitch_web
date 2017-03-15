@@ -1,40 +1,49 @@
 class Trace < ApplicationRecord
 	after_commit :schedule_import, on: :create
-  mount_uploader :zip_file, TraceUploader
-	validates :zip_file, presence: true
-	validate :zip_file_contains_meta_files
+  mount_uploader :archive, TraceUploader
+	validates :archive, :workload, presence: true
+	validate :archive_contains_meta_files
 
-#	validates :app, :connectivity, :kernel, :log, :machine, :net, :os, :zip_file, presence: true
+	# Only validate update, since at creation time, archive is not yet processed
+	validates :app, :connectivity, :kernel, :machine, :os, :version, :workload, 
+            presence: true, on: :update
 
-	enum connectivity: [ :wifi, :lte, :ethernet ]
-	enum os: [ :darwin, :linux ]
+	enum connectivity: {wifi: 0, lte: 1, ethernet: 2}
+	enum os: {linux: 0, android: 1, darwin: 2}
 
-	META_FILES = ['os','log','app','kernel','connectivity','machine','net','cmd']
+	META = ['app', 'cmd', 'connectivity', 'kernel', 'log', 'machine', 'os', 'version']
 
-	def files_in_zip
-		@files_in_zip ||= zip_file.file.extension.eql?("tar.gz") ? targz_files : zip_files 
+	def os_int
+		Trace.os[os]
+	end
+
+	def connectivity_int
+		Trace.connectivities[connectivity]
+	end
+
+	def archive_is_zip
+		archive.file.extension.eql? "zip"
+	end
+
+	def files_in_archive
+		@files_in_archive ||= (archive_is_zip ? zip_files : targz_files) 
 	end
 
 	def targz_files
-			`tar -tf #{zip_file.file.path}`.split("\n").map do |f| 
-				f.sub!("./", "") # tar -t prepends "./" to filename, we remove it.
-			end.reject(&:empty?) # Also adds "./" which becomes "", we remove it.
+			`tar -tf #{archive.file.path}`.split("\n") 
 	end
 
 	def zip_files
-			`zipinfo -1 #{zip_file.file.path}`.split("\n") 
+			`zipinfo -1 #{archive.file.path}`.split("\n") 
 	end
 
-	def zip_file_contains_meta_files	
-		META_FILES.each do |f|
-			unless files_in_zip.include?("meta/#{f}") then
-				errors.add(:zip_file, "missing file 'meta/#{f}'")	
+	def archive_contains_meta_files	
+		return if errors
+		META.each do |f|
+			unless files_in_archive.include?("meta/#{f}") then
+				errors.add(:archive, "missing file 'meta/#{f}'")	
 			end
 		end	
-	end
-
-	def first_line(path)
-		File.open(path, &:readline).strip
 	end
 
 	def schedule_import
