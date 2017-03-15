@@ -1,0 +1,17 @@
+= link_to 'Back to app traces', app_traces_path
+
+%p
+  %strong
+    Description:
+  = @app_trace.description
+  %br
+
+  %strong
+    Creation date:
+  = @app_trace.created_at.to_date
+
+  %br
+  %strong
+    Download:
+  = link_to 'Download', @app_trace.archive.url
+

@@ -1,9 +1,9 @@
-class Trace < ApplicationRecord
-	after_commit :schedule_import, on: :create
+class AppTrace < ApplicationRecord
+	has_many :socket_traces, inverse_of: :app_trace
   mount_uploader :archive, TraceUploader
 	validates :archive, :workload, presence: true
 	validate :archive_contains_meta_files
-
+	after_commit :schedule_import, on: :create
 	# Only validate update, since at creation time, archive is not yet processed
 	validates :app, :connectivity, :kernel, :machine, :os, :version, :workload, 
             presence: true, on: :update
@@ -14,11 +14,11 @@ class Trace < ApplicationRecord
 	META = ['app', 'cmd', 'connectivity', 'kernel', 'log', 'machine', 'os', 'version']
 
 	def os_int
-		Trace.os[os]
+		AppTrace.os[os]
 	end
 
 	def connectivity_int
-		Trace.connectivities[connectivity]
+		AppTrace.connectivities[connectivity]
 	end
 
 	def archive_is_zip
@@ -47,6 +47,6 @@ class Trace < ApplicationRecord
 	end
 
 	def schedule_import
-		TraceImportJob.perform_later(id)
+		AppTraceImportJob.perform_later(id)
 	end
 end

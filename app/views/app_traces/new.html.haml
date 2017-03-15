@@ -1,15 +1,15 @@
-= link_to 'Back to traces', traces_path
+= link_to 'Back to traces', app_traces_path
 
 %h3
-  New trace
+  New app trace
 
-- if @trace.errors.any?
+- if @app_trace.errors.any?
   .errors
     %ul
-      - @trace.errors.full_messages.each do |msg|
+      - @app_trace.errors.full_messages.each do |msg|
         %li= msg
 
-= form_for :trace, url: traces_path do |f|
+= form_for :app_trace, url: app_traces_path do |f|
   %p
     = f.label :description
     = f.text_area :description
