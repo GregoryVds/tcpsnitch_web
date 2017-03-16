@@ -5,6 +5,10 @@ class Stat
 		new(:proportion, name, node, where)
 	end
 
+	def self.cdf(name, node, **where)
+		new(:cdf, name, node, where)
+	end
+
 	def initialize(type, symbol_name, node, **where)
 		@type = type
 		@symbol_name = symbol_name		
@@ -27,7 +31,16 @@ class Stat
 
 	def compute
 		if type == :proportion then
-			Event.proportions(node, @where) 
+			Event.count_by_val(node, @where) 
+		elsif type == :cdf then
+		 	cdf(Event.vals(node, @where))
 		end
 	end
+
+	def cdf(sorted_val)
+		sorted_val.map do |el|
+			pc = ((sorted_val.rindex { |v| v <= el } || -1.0) + 1.0) / sorted_val.size * 100.0
+			[el, pc]
+		end.uniq
+  end
 end

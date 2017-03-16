@@ -21,13 +21,35 @@ class Event
 		end
 	end
 
-	def self.proportions(node, **match)
+	def self.count_by_val(node, **match)
 		collection.aggregate([ 
-			{"$match": match}, 
-			{"$sortByCount": "$#{node}"}
+			{:$match => match}, 
+			{:$sortByCount => "$#{node}"}
 		]).map do |r|
-		[r["_id"], r["count"]]
+			[r["_id"], r["count"]]
 		end
 	end
 
+	def self.vals(node, **match)
+		collection.aggregate([ 
+			{:$match => match}, 
+			{:$project => {node => 1}},
+			{:$sort => {node => 1}}
+		]).map do |r|
+			node_val(r, node)
+		end
+	end
+
+	# Helpers to access path in hash
+  def self.node_val(hash, path)
+		val_for(hash, keys_from_path(path))
+	end
+
+  def self.val_for(hash, keys)
+		keys.reduce(hash) { |h, key| h[key] }
+	end
+		    
+	def self.keys_from_path(path)
+		path.split('.').collect(&:to_sym)
+	end
 end

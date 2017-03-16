@@ -21,4 +21,7 @@
     %p
     %strong
       = stat.name
-      = pie_chart @app_trace.stat.send(stat.db_name)
+      - if stat.type == :proportion
+        = pie_chart @app_trace.stat.send(stat.db_name)
+      - elsif stat.type == :cdf
+        = line_chart @app_trace.stat.send(stat.db_name), max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
