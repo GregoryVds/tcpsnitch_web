@@ -23,7 +23,7 @@ class Stat
 	def name
 		db_name.humanize
 	end
-
+	
 	def set_filter(filter)
 		@where.merge!(filter)
 		self

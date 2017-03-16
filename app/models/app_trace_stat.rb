@@ -15,6 +15,7 @@ class AppTraceStat
 		Stat.prop(:setsockopt_level, 'details.level', type: 'setsockopt'),
 		# Fcntl
 		Stat.prop(:fcntl_cmd, 'details.cmd', type: 'fcntl'),
+		Stat.prop(:function_calls, 'type'),
 		# CDF
 		Stat.cdf(:read_bytes, 'details.bytes', type: 'read'),	
 		Stat.cdf(:recv_bytes, 'details.bytes', type: 'recv')	

@@ -21,6 +21,10 @@
     %p
     %strong
       = stat.name
+    - data = @app_trace.stat.send(stat.db_name)
+    - if data.empty?
+      No data
+    - else
       - if stat.type == :proportion
         = pie_chart @app_trace.stat.send(stat.db_name)
       - elsif stat.type == :cdf
