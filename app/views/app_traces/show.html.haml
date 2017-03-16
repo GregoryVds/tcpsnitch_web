@@ -15,9 +15,10 @@
     Download:
   = link_to 'Download', @app_trace.archive.url
 
-- AppTraceStat::STATS.each do |stat|
-  %p
+
+- if @app_trace.stats_computed
+  - AppTraceStat::STATS.each do |stat|
+    %p
     %strong
-      = stat.to_s.humanize
-    - if @app_trace.stat
-      = pie_chart @app_trace.stat.send(stat)
+      = stat.name
+      = pie_chart @app_trace.stat.send(stat.db_name)

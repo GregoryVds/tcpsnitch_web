@@ -22,7 +22,7 @@ class Event
 	end
 
 	def self.proportions(node, **match)
-		Event.collection.aggregate([ 
+		collection.aggregate([ 
 			{"$match": match}, 
 			{"$sortByCount": "$#{node}"}
 		]).map do |r|
