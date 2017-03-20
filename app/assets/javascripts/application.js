@@ -21,6 +21,8 @@
 $(document).on('turbolinks:load', function(event) {
 		$('select').material_select();
 		
+	  Materialize.updateTextFields();
+
 		$('.alert-close').click(function(event){
 			  $(event.target).closest('.alert-box').fadeOut("slow", function() {});
 		});

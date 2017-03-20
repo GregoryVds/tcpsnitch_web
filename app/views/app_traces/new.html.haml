@@ -2,19 +2,17 @@
 - content_for :page_header_text, 'Contribute by uploading your own trace'
 
 = form_for :app_trace, url: app_traces_path do |f|
-  %p
-    = f.label :description
-    = f.text_area :description
-  %p
-    = f.label :workload
-    = f.text_area :workload
-  %p
-    = f.label :archive
-    = f.file_field :archive
-  %p
-    = f.submit
-
-
-
-
+	.input-field
+		= f.label :description
+		= f.text_field :description
+	.input-field
+		= f.label :workload
+		= f.text_field :workload
+	.input-field.file-field
+		.btn.blue-grey
+			%span Archive (.zip or .tar.gz)
+			= f.file_field :archive
+		.file-path-wrapper
+			%input.file-path{type: 'text'}
+	= f.submit 'Save', class: 'btn waves-effect waves-light right light-green'
 
