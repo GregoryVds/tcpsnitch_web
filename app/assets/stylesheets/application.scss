@@ -36,6 +36,9 @@ header nav {
 		font-size: 20px;
 		a {color: white;}
 	}
+	li.active {
+		background-color: rgba(0, 0, 0, 0.3);
+	}
 }
 
 header .banner {

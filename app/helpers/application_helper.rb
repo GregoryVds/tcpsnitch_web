@@ -7,4 +7,8 @@ module ApplicationHelper
 			end
 		end
 	end
+
+	def active_on(controller, action)
+		(params[:controller] == controller && params[:action] == action) ? 'active' : ''
+	end
 end
