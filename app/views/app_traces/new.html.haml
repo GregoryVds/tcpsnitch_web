@@ -1,7 +1,5 @@
-= link_to 'Back to traces', app_traces_path
-
-%h3
-  New app trace
+- content_for :page_header_title, 'Upload trace' 
+- content_for :page_header_text, 'Contribute by uploading your own trace'
 
 - if @app_trace.errors.any?
   .errors

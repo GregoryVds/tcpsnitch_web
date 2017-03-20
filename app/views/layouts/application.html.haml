@@ -7,9 +7,17 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
-  %header
-    .banner 
-      .container
+    %header
+      %nav
+        .logo
+          = link_to 'Tcpsnitch', root_path
+        .nav-wrapper
+          %ul#nav-mobile.left
+            %li= link_to 'Sockets API usage', root_path
+            %li= link_to 'Browse traces', app_traces_path
+            %li= link_to 'Upload trace', new_app_trace_path
+            %li= link_to 'About', about_path 
+      .banner 
         %h1
           - if content_for?(:page_header_title)
             = yield :page_header_title
@@ -18,34 +26,59 @@
         - if content_for?(:page_header_text)
           %h4
             = yield :page_header_text
-    %ul#nav-mobile.side-nav.fixed
-      %li#logo
-        = link_to 'Tcpsnitch', root_path
-      %li
-        = link_to 'App traces', app_traces_path
-  %main
-    .container
-      .row 
-        .section
-          = yield
-  %footer.page-footer
-    .container
-      .row
-        .col.l6.s12
-          %h5.white-text Footer Content
-          %p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content.
-        .col.l4.offset-l2.s12
-          %h5.white-text Links
-          %ul
-            %li
-              %a.grey-text.text-lighten-3{:href => "#!"} Link 1
-            %li
-              %a.grey-text.text-lighten-3{:href => "#!"} Link 2
-            %li
-              %a.grey-text.text-lighten-3{:href => "#!"} Link 3
-            %li
-              %a.grey-text.text-lighten-3{:href => "#!"} Link 4
-    .footer-copyright
-      .container
+    %main
+      .left-menu
+        %ul.collapsible{data: {collapsible: 'expandable'}}>
+          %li 
+            %a.collapsible-header Nature of sockets 
+            .collapsible-body
+              %ul
+                %li Link1
+                %li Link2
+                %li Link3
+          %li 
+            %a.collapsible-header Functions usage 
+            .collapsible-body
+              %ul
+                %li Link1
+                %li Link2
+                %li Link3
+          %li 
+            %a.collapsible-header Usage patterns 
+            .collapsible-body
+              %ul
+                %li Link1
+                %li Link2
+                %li Link3
+          %li 
+            %a.collapsible-header Threads usage 
+            .collapsible-body
+              %ul
+                %li Link1
+                %li Link2
+                %li Link3
+      .content
+        .container
+          .row 
+            .section
+              = yield
+    %footer.page-footer
+      .footer-main
+        .row
+          .col.l6.s12
+            %h5.white-text Footer Content
+            %p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content.
+          .col.l4.offset-l2.s12
+            %h5.white-text Links
+            %ul
+              %li
+                %a.grey-text.text-lighten-3{:href => "#!"} Link 1
+              %li
+                %a.grey-text.text-lighten-3{:href => "#!"} Link 2
+              %li
+                %a.grey-text.text-lighten-3{:href => "#!"} Link 3
+              %li
+                %a.grey-text.text-lighten-3{:href => "#!"} Link 4
+      .footer-copyright
         © 2014 Copyright Text
         %a.grey-text.text-lighten-4.right{:href => "#!"} More Links

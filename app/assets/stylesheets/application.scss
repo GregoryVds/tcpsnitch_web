@@ -1,7 +1,13 @@
 @import "materialize/components/color";
 $primary-color: color("indigo", "lighten-2") !default;
 $secondary-color: color("indigo", "lighten-4") !default;
+$nav-color: color("blue-grey", "darken-4") !default;
+$logo-color: darken($nav-color, 2%); 
+$bg-color: color("grey", "lighten-5") !default;
 @import 'materialize';
+
+$left-menu-width: 300px;
+$left-padding: 70px;
 
 html,body {
 	height: 100%;
@@ -10,36 +16,61 @@ html,body {
 	color: rgba(0,0,0,0.87);
 }
 
-header, main, footer {
-	padding-left: 300px;
+header nav {
+	background-color: $nav-color;
+	display: flex;
+	.logo {
+		background-color: $logo-color; 
+		width: $left-menu-width;
+		padding-left: $left-padding;
+		font-size: 20px;
+	}
 }
 
-.banner { 
+header .banner {
+	padding: 30px $left-padding;
 	background-color: $primary-color;
-
 	h1 {
 		color: white;
 		line-height: 110%;
 		font-size: 48px;
-		margin: 0 0 1.68rem 0;
-		padding-top: 2.1rem;
 		font-weight: 300;
 	}
-
 	h4 {
-		padding-bottom: 40px;
 		font-weight: 300;
 		color: $secondary-color;
 	}
 }
 
+main {
+	background-color: $bg-color;
+	display: flex;
 
-.side-nav {
-	li#logo a {
-		font-size: 30px;
-		text-align: center;
-		margin-top: 30px;
-		margin-bottom: 30px;
+	.left-menu {
+		background-color: white;
+		width: $left-menu-width;
+		min-width: $left-menu-width;
+		border: solid 1px rgba(51,51,51,0.12);
+		ul {
+			font-size: 15px;
+			padding-left: 30px;
+			line-height: 44px;
+			list-style-type: none;
+			a {
+				color: $nav-color;
+			}
+		}
+		.collapsible {
+			border: none;
+			box-shadow: none;
+			.collapsible-body {
+				padding: 0;
+			}
+		}
+
+	}
+	.content {
+		background-color: $bg-color;
 	}
 }
 
@@ -49,3 +80,8 @@ main .caption {
 	margin-bottom: 30px;
 }
 
+footer.page-footer {
+	.footer-main, .footer-copyright {
+		padding: 0 $left-padding;
+	}
+}

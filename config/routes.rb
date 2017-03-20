@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  root 'home#index'
-	
+  root 'pages#home'
+
+	controller :pages do
+		get :about
+	end
+
 	resources :app_traces
 
 	require 'sidekiq/web'
