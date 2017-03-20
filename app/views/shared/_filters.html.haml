@@ -1,0 +1,38 @@
+.filters
+  .row
+    .col.instruction.s2
+      Filter traces
+    %form.col.s10
+      .row
+        .input-field.col.s3
+          %select{multiple: true}
+            %option{disabled_selected: true} All
+            %option{value: 'Darwin'} Darwin
+            %option Android
+            %option OS X
+          %label
+            Operating system
+        .input-field.col.s3
+          %select{multiple: true}
+            %option{disabled_selected: true} All
+            %option Facebook 
+            %option Chrome 
+            %option Firefox 
+          %label
+            Application
+        .input-field.col.s3
+          %select{multiple: true}
+            %option{disabled_selected: true} All
+            %option TCP 
+            %option UDP 
+          %label
+            Sockets 
+        .input-field.col.s3
+          %select{multiple: true}
+            %option{disabled_selected: true} All
+            %option Wifi 
+            %option Ethernet
+            %option LTE 
+          %label
+            Connectivity
+
