@@ -14,7 +14,7 @@
         .nav-wrapper
           %ul.left
             %li{class: active_on('pages', 'home')}= link_to 'Sockets API usage', root_path
-            %li{class: (params[:controller] == 'app_traces' && params[:action] != 'new') ? 'active' : ''}= link_to 'Browse traces', app_traces_path
+            %li{class: ((params[:controller] == 'app_traces' && params[:action] != 'new') or params[:controller] == 'socket_traces') ? 'active' : ''}= link_to 'Browse traces', app_traces_path
             %li{class: active_on('app_traces', 'new')}= link_to 'Upload trace', new_app_trace_path
             %li{class: active_on('pages', 'about')}= link_to 'About', about_path 
       .banner 
@@ -42,22 +42,26 @@
                   = render 'layouts/flash', type: type, msg: msg
                 = yield
     %footer.page-footer
-      .footer-main
+      .footer-main.white-text
         .row
           .col.l6.s12
-            %h5.white-text Footer Content
-            %p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content.
+            %h5.white-text Support
+            Contact us on 
+            = link_to 'Gitter,', ' https://gitter.im/Tcpsnitch/Lobby'
+            or create an
+            = link_to 'issue on Github',  'https://github.com/GregoryVds/tcpsnitch_web/issues'
           .col.l4.offset-l2.s12
-            %h5.white-text Links
+            %h5.white-text Open-source
             %ul
               %li
-                %a.grey-text.text-lighten-3{:href => "#!"} Link 1
+                Record traces with
+                = link_to 'Tcpsnitch', 'https://github.com/GregoryVds/tcpsnitch'
               %li
-                %a.grey-text.text-lighten-3{:href => "#!"} Link 2
+                Get statistics about traces with
+                = link_to 'Tcpsnitch Web', 'https://github.com/GregoryVds/tcpsnitch_web'
               %li
-                %a.grey-text.text-lighten-3{:href => "#!"} Link 3
-              %li
-                %a.grey-text.text-lighten-3{:href => "#!"} Link 4
+                Analyze traces with
+                = link_to 'Tcpsnitch Analyzer', 'https://github.com/GregoryVds/tcpsnitch_analyzer'
       .footer-copyright
-        © 2014 Copyright Text
-        %a.grey-text.text-lighten-4.right{:href => "#!"} More Links
+        © 2017 Université catholique de Louvain
+        // %a.grey-text.text-lighten-4.right{:href => "#!"} More Links
