@@ -107,3 +107,24 @@ footer.page-footer {
 		padding: 0 $horizontal-padding;
 	}
 }
+
+.alert-box {
+	margin-bottom: 0;
+	.icon-style{
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			font-size: 20px;
+			color: white;
+			cursor:pointer; 
+			color: $secondary-color;
+	}
+}
+
+.alert-box.notice .card {
+	background-color: color("lime", "lighten-3");
+}
+
+.alert-box.error .card {
+	background-color: color("red", "lighten-3");
+}

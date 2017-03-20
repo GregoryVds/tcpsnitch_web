@@ -1,3 +1,6 @@
+- content_for :page_header_title, "App trace n°#{@app_trace.id}"
+- if @app_trace.imported
+  - content_for :page_header_text, "'#{@app_trace.app}' on #{@app_trace.os} over #{@app_trace.connectivity}"
 - content_for :left_menu, render('left_menu')
 
 - content_for :main_header do 

@@ -14,6 +14,8 @@ class AppTrace < ApplicationRecord
 	validates :app, :connectivity, :kernel, :machine, :os, :version, :workload, 
             presence: true, on: :update
 
+	scope :imported, -> { where(imported: true) }
+
 	after_commit :schedule_import, on: :create
 	before_destroy :destroy_stat
 
@@ -46,7 +48,7 @@ class AppTrace < ApplicationRecord
 	end
 
 	def archive_contains_meta_files	
-		return if errors
+		return if errors.present?
 		META.each do |f|
 			unless files_in_archive.include?("meta/#{f}") then
 				errors.add(:archive, "missing file 'meta/#{f}'")	

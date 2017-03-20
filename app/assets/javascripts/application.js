@@ -18,8 +18,12 @@
 //= require chartkick
 //= require_tree .
 
-
-
 $(document).on('turbolinks:load', function(event) {
 		$('select').material_select();
+		
+		$('.alert-close').click(function(event){
+			  $(event.target).closest('.alert-box').fadeOut("slow", function() {});
+		});
 });
+
+

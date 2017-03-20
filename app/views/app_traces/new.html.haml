@@ -1,12 +1,6 @@
 - content_for :page_header_title, 'Upload trace' 
 - content_for :page_header_text, 'Contribute by uploading your own trace'
 
-- if @app_trace.errors.any?
-  .errors
-    %ul
-      - @app_trace.errors.full_messages.each do |msg|
-        %li= msg
-
 = form_for :app_trace, url: app_traces_path do |f|
   %p
     = f.label :description
