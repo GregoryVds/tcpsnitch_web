@@ -2,37 +2,16 @@
   .row
     .col.instruction.s2
       Filter traces
-    %form.col.s10
+    = form_tag(app_traces_path, method: :get, class: 'col s10') do
       .row
-        .input-field.col.s3
-          %select{multiple: true}
-            %option{disabled_selected: true} All
-            %option{value: 'Darwin'} Darwin
-            %option Android
-            %option OS X
+        .input-field.col.s5
+          = select_tag(:os, options_for_select(AppTrace.os, params[:os]), multiple: true, include_blank: 'All')
           %label
             Operating system
-        .input-field.col.s3
-          %select{multiple: true}
-            %option{disabled_selected: true} All
-            %option Facebook 
-            %option Chrome 
-            %option Firefox 
+        .input-field.col.s5
+          = select_tag(:app, options_for_select(AppTrace.distinct.pluck(:app), params[:app]), multiple: true, include_blank: 'All') 
           %label
             Application
-        .input-field.col.s3
-          %select{multiple: true}
-            %option{disabled_selected: true} All
-            %option TCP 
-            %option UDP 
-          %label
-            Sockets 
-        .input-field.col.s3
-          %select{multiple: true}
-            %option{disabled_selected: true} All
-            %option Wifi 
-            %option Ethernet
-            %option LTE 
-          %label
-            Connectivity
+        .input-field.col.s2
+          = submit_tag 'Filter', class: 'waves-effect waves-light btn'
 

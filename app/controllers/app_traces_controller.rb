@@ -1,6 +1,11 @@
 class AppTracesController < ApplicationController
+	FILTERS = [:os, :app]
+
 	def index
-		@app_traces = AppTrace.all
+		sanitize_filters
+		@app_traces = AppTrace.where(nil)
+		@app_traces = @app_traces.where(os: params[:os]) if params[:os].present? 
+	 	@app_traces = @app_traces.where(app: params[:app]) if params[:app].present?
 	end
 
 	def show
@@ -32,4 +37,9 @@ class AppTracesController < ApplicationController
 		params.require(:app_trace).permit(:archive, :description, :workload)
 	end
 
+	def sanitize_filters
+		FILTERS.each do |filter|
+			params[filter].reject!(&:blank?) if params.has_key?(filter)
+		end
+	end
 end
