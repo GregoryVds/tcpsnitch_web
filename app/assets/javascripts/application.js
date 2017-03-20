@@ -17,4 +17,9 @@
 //= require highcharts
 //= require chartkick
 //= require_tree .
-$(".button-collapse").sideNav();
+
+
+
+$(document).on('turbolinks:load', function(event) {
+		$('select').material_select();
+});

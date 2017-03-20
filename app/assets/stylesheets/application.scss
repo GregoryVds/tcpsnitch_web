@@ -1,34 +1,42 @@
 @import "materialize/components/color";
 $primary-color: color("indigo", "lighten-2") !default;
-$secondary-color: color("indigo", "lighten-4") !default;
-$nav-color: color("blue-grey", "darken-4") !default;
-$logo-color: darken($nav-color, 2%); 
+$secondary-color: color("blue-grey", "darken-4") !default;
+$ternary-color: color("light-green", "lighten-3") !default;
 $bg-color: color("grey", "lighten-5") !default;
 @import 'materialize';
 
 $left-menu-width: 300px;
-$left-padding: 70px;
+$horizontal-padding: 70px;
 
 html,body {
 	height: 100%;
 	line-height: 1.5;
 	font-family: 'Roboto', sans-serif;
-	color: rgba(0,0,0,0.87);
+	font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+	color: $secondary-color; 
+	a {
+		color: $secondary-color;
+	}
 }
 
 header nav {
-	background-color: $nav-color;
+	background-color: $secondary-color;
 	display: flex;
+	font-weight: 400;
 	.logo {
-		background-color: $logo-color; 
+		background-color: darken($secondary-color, 2%);
 		width: $left-menu-width;
-		padding-left: $left-padding;
+		padding-left: $horizontal-padding;
 		font-size: 20px;
+		a {
+			color: white;
+		}
 	}
 }
 
 header .banner {
-	padding: 30px $left-padding;
+	padding: 30px $horizontal-padding;
 	background-color: $primary-color;
 	h1 {
 		color: white;
@@ -38,39 +46,54 @@ header .banner {
 	}
 	h4 {
 		font-weight: 300;
-		color: $secondary-color;
+		color: color("indigo", "lighten-4"); 
 	}
 }
 
 main {
-	background-color: $bg-color;
-	display: flex;
-
-	.left-menu {
-		background-color: white;
-		width: $left-menu-width;
-		min-width: $left-menu-width;
-		border: solid 1px rgba(51,51,51,0.12);
-		ul {
-			font-size: 15px;
-			padding-left: 30px;
-			line-height: 44px;
-			list-style-type: none;
-			a {
-				color: $nav-color;
-			}
+	.filters {
+		font-size: 24px;
+		height: 100px;
+		background-color: $ternary-color; 
+		padding: 15px $horizontal-padding;
+		label {
+			color: color("indigo", "base");
 		}
-		.collapsible {
-			border: none;
-			box-shadow: none;
-			.collapsible-body {
-				padding: 0;
-			}
+		.instruction {
+			line-height: 70px;
 		}
-
 	}
-	.content {
+	.filters .row {
+		margin-bottom: 0;
+	}
+	.main-wrapper {
 		background-color: $bg-color;
+		display: flex;
+
+		.left-menu {
+			background-color: white;
+			width: $left-menu-width;
+			min-width: $left-menu-width;
+			border: solid 1px rgba(51,51,51,0.12);
+			ul {
+				font-size: 15px;
+				padding-left: 30px;
+				line-height: 44px;
+				list-style-type: none;
+
+			}
+			.collapsible {
+				border: none;
+				box-shadow: none;
+				.collapsible-body {
+					padding: 0;
+				}
+			}
+
+		}
+		.content {
+			background-color: $bg-color;
+		}
 	}
 }
 
@@ -82,6 +105,6 @@ main .caption {
 
 footer.page-footer {
 	.footer-main, .footer-copyright {
-		padding: 0 $left-padding;
+		padding: 0 $horizontal-padding;
 	}
 }
