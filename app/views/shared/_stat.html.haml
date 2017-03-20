@@ -1,0 +1,21 @@
+// Receive trace & stat as argument
+- data = trace.stat.send(stat.db_name).to_a
+
+.row
+  .col.s12
+    .card
+      .card-content
+        %span.card-title
+          = stat.name
+        .content
+          - if data.empty?
+            No data
+          - else
+            - if stat.type == :proportion
+              = pie_chart data 
+            - elsif stat.type == :cdf
+              = line_chart data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
+      .card-action
+        This is where we describe what the statistic is about and how it is computed.
+
+

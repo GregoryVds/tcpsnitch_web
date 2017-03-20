@@ -4,8 +4,9 @@ class AppTracesController < ApplicationController
 	def index
 		sanitize_filters
 		@app_traces = AppTrace.where(nil)
-		@app_traces = @app_traces.where(os: params[:os]) if params[:os].present? 
-	 	@app_traces = @app_traces.where(app: params[:app]) if params[:app].present?
+		FILTERS.each do |filter|
+			@app_traces = @app_traces.where(filter => params[filter]) if params[filter].present?
+		end
 	end
 
 	def show

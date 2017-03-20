@@ -1,0 +1,20 @@
+- content_for :left_menu, render('left_menu')
+
+- content_for :main_header do 
+  %nav
+    .nav-wrapper
+      .col.s12
+        = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
+        = link_to "App trace #{@socket_trace.app_trace.id}", app_trace_path(@socket_trace.app_trace), class: 'breadcrumb'
+
+        = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
+
+
+%p
+  - [:app_trace_id, :socket_type, :stats_computed].each do |attr|
+    = show_property(attr.to_s.humanize, @socket_trace.send(attr))
+
+- if @socket_trace.stats_computed
+  - SocketTraceStat::STATS.each do |stat|
+    = render 'shared/stat', stat: stat, trace: @socket_trace
+

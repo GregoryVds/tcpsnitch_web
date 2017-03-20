@@ -2,21 +2,23 @@
 - content_for :page_header_text, 'Browse all available traces'
 - content_for :main_header, render('shared/filters')
 
-= link_to 'New trace', new_app_trace_path
+%p
+  #{@app_traces.count} traces found
 
 %table
-  %tr
-    %th
-      Description
-    %th
-      Workload
-    %th
-      Imported
-    %th
-      Stats computed
-    %th
-    %th
-    %th
+  %thead
+    %tr
+      %th
+        Description
+      %th
+        Workload
+      %th
+        Imported
+      %th
+        Stats computed
+      %th
+      %th
+      %th
   - @app_traces.each do |app_trace|
     %tr
       %td= app_trace.description

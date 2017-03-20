@@ -19,6 +19,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.text :log
 			t.string :machine
 			t.integer :os, index: true
+			t.integer :socket_traces_count
 			t.boolean :stats_computed, default: false
 			t.references :user, index: true
 			t.text :version

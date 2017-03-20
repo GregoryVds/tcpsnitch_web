@@ -40,7 +40,8 @@ class AppTraceStat
 	def self.compute(app_trace_id)
 		attr = {app_trace_id: app_trace_id} 
 		STATS.each do |stat| 
-			attr[stat.db_name] = stat.set_filter({app_trace_id: app_trace_id}).compute
+			attr[stat.db_name] = 
+				StatComputation.new(stat, {app_trace_id: app_trace_id}).compute
 		end
 		create(attr)
 	end

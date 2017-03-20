@@ -1,7 +1,7 @@
 class SocketTrace < ApplicationRecord
 	enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
 
-	belongs_to :app_trace, inverse_of: :socket_traces
+	belongs_to :app_trace, inverse_of: :socket_traces, counter_cache: true
 
 	before_destroy :destroy_stat
 
