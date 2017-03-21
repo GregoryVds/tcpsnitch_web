@@ -14,6 +14,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.string :cmd
 			t.integer :connectivity, index: true
 			t.text :description
+			t.integer :events_count
 			t.boolean :imported, default: false
 			t.string :kernel 
 			t.text :log
@@ -29,6 +30,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 
 		create_table :socket_traces do |t|
 			t.references :app_trace, index: true	
+			t.integer :events_count
 			t.integer :socket_type, index: true
 			t.boolean :stats_computed, default: false
 			t.timestamps

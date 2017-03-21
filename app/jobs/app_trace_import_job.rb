@@ -8,10 +8,11 @@ class AppTraceImportJob < ActiveJob::Base
 		extract_archive
 		update_meta_infos
 		return unless @app_trace.valid?
-		create_events
+		create_socket_traces
 		@app_trace.schedule_stats_computation
 		rm_extracted_archive
 
+		@app_trace.events_count = @app_trace.socket_traces.sum(:events_count)
 		@app_trace.imported = true
 		@app_trace.save!
 	end
@@ -36,19 +37,33 @@ class AppTraceImportJob < ActiveJob::Base
 		Oj.load(line.chomp("\n")) # TODO: error handling
 	end
 
-	def create_events
-		Dir.glob("#{@extract_dir}/*.json").each_with_index do |file|
-			File.open(file).lazy.map do |line|
-				parse_json_event(line)
-			end.map do |hash|
-				add_trace_info(hash)	
-			end.each do |event|
-				Event.create(event)
-			end
+	def create_socket_traces
+		Dir.glob("#{@extract_dir}/*.json").each do |file|
+			s = SocketTrace.create!(app_trace_id: @app_trace.id)
+			s.events_count, s.socket_type = create_socket_trace_events(file, s.id)
+			s.save!
 		end
 	end
 
-	def add_trace_info(event_hash)
+	def create_socket_trace_events(file, socket_trace_id)
+			events_count = 0
+			socket_type = nil
+
+			File.open(file).lazy.map do |line|
+				parse_json_event(line)
+			end.map do |hash|
+				add_app_trace_info(hash)
+			end.each do |event|
+				event['socket_trace_id'] = socket_trace_id
+				ev = Event.create(event)
+				socket_type = ev.details['type'] if ev.type.eql? 'socket'
+				events_count += 1
+			end
+
+			return events_count, socket_type
+	end
+
+	def add_app_trace_info(event_hash)
 		event_hash['app'] = @app_trace.app
 		event_hash['connectivity'] = @app_trace.connectivity_int
 		event_hash['os'] = @app_trace.os_int

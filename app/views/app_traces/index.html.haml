@@ -1,8 +1,8 @@
 - content_for :page_header_title, 'Browse traces'
-- content_for :page_header_text, 'Browse all available traces'
+- content_for :page_header_text, 'Browse available traces, filter by operating systems or application'
 - content_for :main_header, render('shared/filters')
 
-%p
+%h6
   #{@app_traces.count} traces found
 
 %table
@@ -11,7 +11,8 @@
       %th App
       %th Os
       %th Connectivity 
-      %th Sockets 
+      %th Sockets count 
+      %th Events count
       %th Version
       %th Created at
   - @app_traces.each do |app_trace|
@@ -20,6 +21,7 @@
       %td= app_trace.os.capitalize
       %td= app_trace.connectivity.capitalize
       %td= app_trace.socket_traces_count
+      %td= app_trace.events_count
       %td= app_trace.version
       %td= app_trace.created_at.to_date
       %td= link_to 'Show', app_trace_path(app_trace)

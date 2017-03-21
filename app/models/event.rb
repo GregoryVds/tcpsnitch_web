@@ -12,15 +12,6 @@ class Event
 	field :app_trace_id, type: Integer
 	field :type, type: String
 
-	before_create :create_socket_trace 
-
-	def create_socket_trace
-		if type.eql? 'socket' then
-			sock = SocketTrace.create(app_trace_id: app_trace_id, socket_type: details["type"])
-			self.socket_trace_id = sock.id
-		end
-	end
-
 	def self.count_by_val(node, **match)
 		collection.aggregate([ 
 			{:$match => match}, 

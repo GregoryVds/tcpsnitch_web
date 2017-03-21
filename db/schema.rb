@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.string   "cmd"
     t.integer  "connectivity"
     t.text     "description"
+    t.integer  "events_count"
     t.boolean  "imported",            default: false
     t.string   "kernel"
     t.text     "log"
@@ -41,6 +42,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
 
   create_table "socket_traces", force: :cascade do |t|
     t.integer  "app_trace_id"
+    t.integer  "events_count"
     t.integer  "socket_type"
     t.boolean  "stats_computed", default: false
     t.datetime "created_at",                     null: false

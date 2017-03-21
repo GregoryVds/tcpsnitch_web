@@ -11,7 +11,7 @@
 
 
 %p
-  - [:app_trace_id, :socket_type, :stats_computed].each do |attr|
+  - [:app_trace_id, :socket_type, :events_count, :stats_computed].each do |attr|
     = show_property(attr.to_s.humanize, @socket_trace.send(attr))
 
 - if @socket_trace.stats_computed
