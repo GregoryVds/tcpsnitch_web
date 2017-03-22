@@ -1,6 +1,6 @@
-- content_for :page_header_title, "Process trace n°#{@process_trace.id}"
+- content_for :page_header_title, "Process trace ##{@process_trace.id}"
 - if @process_trace.events_imported
-  - content_for :page_header_text, "#{@process_trace.name}"
+  - content_for :page_header_text, @process_trace
 - content_for :left_menu, render('left_menu')
 
 - content_for :main_header do 

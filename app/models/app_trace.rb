@@ -45,6 +45,10 @@ class AppTrace < ActiveRecord::Base
     AppTrace.connectivities[connectivity]
   end
 
+  def to_s
+    "Trace for #{app.capitalize} on #{os.capitalize} over #{connectivity.capitalize}"
+  end
+
   def archive_is_zip
     archive.file.extension.eql? "zip"
   end

@@ -1,7 +1,6 @@
-- content_for :page_header_title, "Socket trace n°#{@socket_trace.id}"
+- content_for :page_header_title, "Socket trace ##{@socket_trace.id}"
 - if @socket_trace.events_imported
-  - content_for :page_header_text, "#{@socket_trace.index}th socket opened by #{@socket_trace.process_trace.name}"
-
+  - content_for :page_header_text, @socket_trace
 - content_for :left_menu, render('left_menu')
 
 - content_for :main_header do 

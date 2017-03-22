@@ -18,4 +18,8 @@ class SocketTrace < ActiveRecord::Base
   validates :process_trace, presence: true
   # At creation time, events are not yet processed
   validates :socket_type, :events_count, presence: true, on: :update
+
+  def to_s
+    "Trace for #{index.ordinalize} socket opened by process #{process_trace.name.capitalize}"
+  end
 end

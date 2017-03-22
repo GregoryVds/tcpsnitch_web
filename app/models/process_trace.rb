@@ -21,4 +21,8 @@ class ProcessTrace < ActiveRecord::Base
   has_many :socket_traces, inverse_of: :process_trace, dependent: :destroy
 
   validates :app_trace, :name, presence: true
+
+  def to_s
+    "Trace for process #{name.capitalize} spawned by app #{app_trace.app.capitalize}"
+  end
 end
