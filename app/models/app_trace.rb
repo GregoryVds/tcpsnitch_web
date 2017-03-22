@@ -1,27 +1,40 @@
 class AppTrace < ApplicationRecord
-	META = ['app', 'cmd', 'connectivity', 'kernel', 'log', 'machine', 'os', 'version']
+	include Measurable
+
+	META = ['app', 'cmd', 'kernel', 'machine', 'net', 'os', 'version']
+
+	STATS = [
+		:socket_domains,
+		:socket_types,
+		:socket_protocols,
+		:socket_cloexec,
+		:socket_nonblock,
+		:getsockopt_level,
+		:getsockopt_optname,
+		:setsockopt_level,
+		:setsockopt_optname,
+		:fcntl_cmd,
+		:function_calls,
+		:read_bytes,
+		:recv_bytes
+	]
 
   mount_uploader :archive, TraceUploader
 
 	enum connectivity: {wifi: 0, lte: 1, ethernet: 2}
 	enum os: {linux: 0, android: 1, darwin: 2}
 
-	has_many :socket_traces, inverse_of: :app_trace, dependent: :destroy
+	has_many :process_traces, inverse_of: :app_trace, dependent: :destroy
 
-	validates :archive, :workload, presence: true
+	validates :archive, :connectivity, :workload, presence: true
 	validate :archive_contains_meta_files
 	# At creation time, archive is not yet processed
-	validates :app, :connectivity, :kernel, :machine, :os, :version, :workload, 
+	validates :app, :kernel, :machine, :os, :version, :workload, 
             presence: true, on: :update
 
-	scope :imported, -> { where(imported: true) }
+	scope :imported, -> { where(events_imported: true) }
 
 	after_commit :schedule_import, on: :create
-	before_destroy :destroy_stat
-
-	def stat
-		@stat ||= AppTraceStat.where(app_trace_id: id).first
-	end
 
 	def os_int
 		AppTrace.os[os]
@@ -40,7 +53,7 @@ class AppTrace < ApplicationRecord
 	end
 
 	def targz_files
-			`tar -tf #{archive.file.path}`.split("\n") 
+			`tar -tf #{archive.file.path}`.split("\n").map{|s| s.gsub("./", "")}
 	end
 
 	def zip_files
@@ -58,14 +71,5 @@ class AppTrace < ApplicationRecord
 
 	def schedule_import
 		AppTraceImportJob.perform_later(id)
-	end
-
-	def schedule_stats_computation
-		socket_traces.each(&:schedule_stats_computation)
-		AppTraceStatsJob.perform_later(id)
-	end
-
-	def destroy_stat
-		stat.destroy if stat
 	end
 end

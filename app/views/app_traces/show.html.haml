@@ -1,5 +1,5 @@
 - content_for :page_header_title, "App trace n°#{@app_trace.id}"
-- if @app_trace.imported
+- if @app_trace.events_imported
   - content_for :page_header_text, "#{@app_trace.app.capitalize} on #{@app_trace.os.capitalize} over #{@app_trace.connectivity.capitalize}"
 - content_for :left_menu, render('left_menu')
 
@@ -14,30 +14,31 @@
   %h5 About trace
   %p
     .row
-      - [:id, :app, :cmd, :connectivity, :description, :events_count, :imported, :kernel, :machine, :os, :stats_computed, :version, :workload, :created_at, :updated_at].each do |attr|
+      - [:id, :app, :cmd, :connectivity, :description, :events_count, :events_imported, :kernel, :machine, :os, :quantitative_analysis_computed, :version, :workload, :created_at, :updated_at].each do |attr|
         = show_property(attr.to_s.humanize, @app_trace.send(attr))
 
-      = show_property("Sockets opened", @app_trace.socket_traces.count)
+      = show_property("Processes swpaned", @app_trace.process_traces.count)
+      = show_property("Sockets opened","TODO")
       = show_property("Download", link_to("#{@app_trace.archive.file.filename}", @app_trace.archive.url))
 
-.section.sockets
-  %h5 Sockets
+.section.processes
+  %h5 Processes
   %p
-    #{@app_trace.socket_traces_count} sockets opened:
+    #{@app_trace.process_traces_count} processes spawned:
   %table
     %thead
-      %th Socket index
-      %th Socket type
+      %th Process
+      %th Sockets count
       %th Events count
-    - @app_trace.socket_traces.each_with_index do |socket_trace, index|
+    - @app_trace.process_traces.each do |process_trace|
       %tr
-        %td= index
-        %td= socket_trace.socket_type
-        %td= socket_trace.events_count
-        %td= link_to('Show', socket_trace_path(socket_trace)) 
+        %td= process_trace.process_name
+        %td= process_trace.socket_traces_count
+        %td= process_trace.events_count
+        %td= link_to('Show', process_trace_path(process_trace)) 
 
 .section.nature_of_sockets
   %h5 Nature of sockets
-  - if @app_trace.stats_computed
-    - AppTraceStat::STATS.each do |stat|
-      = render 'shared/stat', stat: stat, trace: @app_trace
+  - if @app_trace.quantitative_analysis_computed
+    - AppTrace::STATS.each do |stat|
+      = render 'shared/stat', stat_name: stat, trace: @app_trace

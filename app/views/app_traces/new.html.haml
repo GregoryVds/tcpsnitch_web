@@ -2,17 +2,19 @@
 - content_for :page_header_text, 'Contribute by uploading a trace archive'
 
 = form_for :app_trace, url: app_traces_path do |f|
-	.input-field
-		= f.label :description
-		= f.text_field :description
-	.input-field
-		= f.label :workload
-		= f.text_field :workload
-	.input-field.file-field
-		.btn.indigo.lighten-1
-			%span Archive (.zip or .tar.gz)
-			= f.file_field :archive
-		.file-path-wrapper
-			%input.file-path{type: 'text'}
-	= f.submit 'Save', class: 'btn waves-effect waves-light right light-green'
-
+  .input-field
+    = f.label :description
+    = f.text_field :description
+  .input-field
+    = f.label :workload
+    = f.text_field :workload
+  .input-field
+    = f.select(:connectivity, options_for_select(AppTrace.connectivities.keys.to_a), include_blank: '')
+    = f.label :connectivity
+  .input-field.file-field
+    .btn.indigo.lighten-1
+      %span Archive (.zip or .tar.gz)
+      = f.file_field :archive
+    .file-path-wrapper
+      %input.file-path{type: 'text'}
+  = f.submit 'Save', class: 'btn waves-effect waves-light right light-green'

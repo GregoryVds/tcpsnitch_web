@@ -3,18 +3,16 @@ class AppTraceImportJob < ActiveJob::Base
 
 	def perform(app_trace_id)
 		@app_trace = AppTrace.find(app_trace_id)
-		return if @app_trace.imported
 
 		extract_archive
 		update_meta_infos
 		return unless @app_trace.valid?
-		create_socket_traces
-		@app_trace.schedule_stats_computation
-		rm_extracted_archive
 
-		@app_trace.events_count = @app_trace.socket_traces.sum(:events_count)
-		@app_trace.imported = true
+		@app_trace.events_count = create_process_traces!
+		@app_trace.events_imported!
 		@app_trace.save!
+
+		rm_extracted_archive
 	end
 
 	def extract_archive
@@ -29,23 +27,47 @@ class AppTraceImportJob < ActiveJob::Base
 
 	def update_meta_infos
 		AppTrace::META.each do |meta|
-			@app_trace.send("#{meta}=", first_line("#{@extract_dir}/meta/#{meta}")) 
+			@app_trace.send("#{meta}=", first_line("#{@extract_dir}/meta/#{meta}").downcase) 
 		end
 	end
 
 	def parse_json_event(line)
-		Oj.load(line.chomp("\n")) # TODO: error handling
+		Oj.load(line.chomp("\n"))
 	end
 
-	def create_socket_traces
-		Dir.glob("#{@extract_dir}/*.json").each do |file|
-			s = SocketTrace.create!(app_trace_id: @app_trace.id)
-			s.events_count, s.socket_type = create_socket_trace_events(file, s.id)
-			s.save!
+	def process_traces
+		Dir.glob("#{@extract_dir}/*").select{|f| File.directory?(f) }.select{ |f| f !~ /meta$/ }
+	end
+
+	def create_process_traces!
+		events_count = 0
+		process_traces.each do |dir|
+			next if Dir["#{dir}/*.json"].empty? # Sockets with no calls (TODO: Handle this in tcpsnitch?)
+			p = ProcessTrace.create!({
+				app_trace_id: @app_trace.id, 
+				process_name: dir.split('/').last
+			})
+			p.events_count = create_socket_traces!(p.id, dir)
+			p.events_imported!
+			p.save!
+			events_count += p.events_count
 		end
+		events_count
 	end
 
-	def create_socket_trace_events(file, socket_trace_id)
+	def create_socket_traces!(process_trace_id, process_trace_dir)
+			events_count = 0
+			Dir.glob("#{process_trace_dir}/*.json").each do |socket_trace|
+				s = SocketTrace.create!(process_trace_id: process_trace_id)
+				s.events_count, s.socket_type = create_socket_trace_events(socket_trace, process_trace_id, s.id)
+				s.events_imported!
+				s.save!
+				events_count += s.events_count
+			end
+			events_count
+	end
+	
+	def create_socket_trace_events(file, process_trace_id, socket_trace_id)
 			events_count = 0
 			socket_type = nil
 
@@ -54,6 +76,7 @@ class AppTraceImportJob < ActiveJob::Base
 			end.map do |hash|
 				add_app_trace_info(hash)
 			end.each do |event|
+				event['process_trace_id'] = process_trace_id
 				event['socket_trace_id'] = socket_trace_id
 				ev = Event.create(event)
 				socket_type = ev.details['type'] if ev.type.eql? 'socket'
@@ -71,7 +94,7 @@ class AppTraceImportJob < ActiveJob::Base
 		# TODO: time_since
 		event_hash
 	end
-	
+
 	def rm_extracted_archive
 		system("rm -rf #{@extract_dir}")
 	end

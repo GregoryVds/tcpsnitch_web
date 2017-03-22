@@ -1,15 +1,18 @@
 class Event
 	include Mongoid::Document
+
 	field :app, type: String
+	field :app_trace_id, type: Integer
 	field :connectivity, type: Integer
 	field :details, type: Hash
 	field :error_str, type: String
 	field :os, type: Integer
 	field :return_value, type: Integer
+	field :process_trace_id, type: Integer
 	field :socket_trace_id, type: Integer
 	field :success, type: Boolean
 	field :timestamp, type: Hash
-	field :app_trace_id, type: Integer
+	field :thread_id, type: Integer
 	field :type, type: String
 
 	def self.count_by_val(node, **match)

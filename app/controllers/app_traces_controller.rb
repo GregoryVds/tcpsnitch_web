@@ -37,7 +37,7 @@ class AppTracesController < ApplicationController
 	private
 
 	def trace_params
-		params.require(:app_trace).permit(:archive, :description, :workload)
+		params.require(:app_trace).permit(:archive, :connectivity, :description, :workload)
 	end
 
 	def sanitize_filters

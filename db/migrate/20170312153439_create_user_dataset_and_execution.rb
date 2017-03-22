@@ -15,24 +15,36 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
 			t.integer :connectivity, index: true
 			t.text :description
 			t.integer :events_count
-			t.boolean :imported, default: false
+			t.boolean :events_imported, default: false
 			t.string :kernel 
 			t.text :log
 			t.string :machine
+			t.text :net
 			t.integer :os, index: true
-			t.integer :socket_traces_count
-			t.boolean :stats_computed, default: false
+			t.integer :process_traces_count
+			t.boolean :quantitative_analysis_computed, default: false
 			t.references :user, index: true
 			t.text :version
 			t.text :workload, null: false
 			t.timestamps
     end
 
-		create_table :socket_traces do |t|
+		create_table :process_traces do |t|
 			t.references :app_trace, index: true	
+			t.boolean :events_imported, default: false
+			t.string :process_name
 			t.integer :events_count
+			t.integer :socket_traces_count
+			t.boolean :quantitative_analysis_computed, default: false
+			t.timestamps
+		end
+
+		create_table :socket_traces do |t|
+			t.integer :events_count
+			t.boolean :events_imported, default: false
+			t.references :process_trace, index: true	
 			t.integer :socket_type, index: true
-			t.boolean :stats_computed, default: false
+			t.boolean :quantitative_analysis_computed, default: false
 			t.timestamps
 		end
 

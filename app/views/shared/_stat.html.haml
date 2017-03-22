@@ -1,17 +1,18 @@
 // Receive trace & stat as argument
-- data = trace.stat.send(stat.db_name).to_a
+- data = trace.quantitative_analysis.send(stat_name).to_a # to_a cast nil to []
+- stat = StatComputation::STATS_DEFINITIONS[stat_name]
 
 .row
   .col.s12
     .card
       .card-content
         %span.card-title
-          = stat.name
+          = stat_name
         .content
           - if data.empty?
             No data
           - else
-            - if stat.type == :proportion
+            - if stat.type == :prop
               = pie_chart data 
             - elsif stat.type == :cdf
               = line_chart data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}

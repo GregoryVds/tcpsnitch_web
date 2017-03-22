@@ -1,5 +1,7 @@
 # README
 
+* Usages Ruby 2.3.3 (don't use 2.4 as Mongo driver does not support it)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

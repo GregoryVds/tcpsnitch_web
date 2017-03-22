@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
 	resources :app_traces
 	resources :socket_traces
+	resources :process_traces
 
 	require 'sidekiq/web'
 	mount Sidekiq::Web, at: '/jobs'

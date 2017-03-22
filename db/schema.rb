@@ -16,38 +16,52 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   enable_extension "plpgsql"
 
   create_table "app_traces", force: :cascade do |t|
-    t.string   "archive",                             null: false
+    t.string   "archive",                                        null: false
     t.string   "app"
     t.string   "cmd"
     t.integer  "connectivity"
     t.text     "description"
     t.integer  "events_count"
-    t.boolean  "imported",            default: false
+    t.boolean  "events_imported",                default: false
     t.string   "kernel"
     t.text     "log"
     t.string   "machine"
+    t.text     "net"
     t.integer  "os"
-    t.integer  "socket_traces_count"
-    t.boolean  "stats_computed",      default: false
+    t.integer  "process_traces_count"
+    t.boolean  "quantitative_analysis_computed", default: false
     t.integer  "user_id"
     t.text     "version"
-    t.text     "workload",                            null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.text     "workload",                                       null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.index ["app"], name: "index_app_traces_on_app", using: :btree
     t.index ["connectivity"], name: "index_app_traces_on_connectivity", using: :btree
     t.index ["os"], name: "index_app_traces_on_os", using: :btree
     t.index ["user_id"], name: "index_app_traces_on_user_id", using: :btree
   end
 
-  create_table "socket_traces", force: :cascade do |t|
+  create_table "process_traces", force: :cascade do |t|
     t.integer  "app_trace_id"
+    t.boolean  "events_imported",                default: false
+    t.string   "process_name"
     t.integer  "events_count"
+    t.integer  "socket_traces_count"
+    t.boolean  "quantitative_analysis_computed", default: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.index ["app_trace_id"], name: "index_process_traces_on_app_trace_id", using: :btree
+  end
+
+  create_table "socket_traces", force: :cascade do |t|
+    t.integer  "events_count"
+    t.boolean  "events_imported",                default: false
+    t.integer  "process_trace_id"
     t.integer  "socket_type"
-    t.boolean  "stats_computed", default: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.index ["app_trace_id"], name: "index_socket_traces_on_app_trace_id", using: :btree
+    t.boolean  "quantitative_analysis_computed", default: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.index ["process_trace_id"], name: "index_socket_traces_on_process_trace_id", using: :btree
     t.index ["socket_type"], name: "index_socket_traces_on_socket_type", using: :btree
   end
 
