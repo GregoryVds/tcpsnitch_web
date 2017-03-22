@@ -22,7 +22,7 @@ module Measurable
 	end
 
 	def events_imported!
-		events_imported = true
+		self.events_imported = true
 		save!
 		schedule_quantitative_analysis
 	end
