@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.integer  "events_count"
     t.boolean  "events_imported",   default: false
     t.integer  "process_trace_id"
+    t.integer  "index"
     t.integer  "socket_type"
     t.boolean  "analysis_computed", default: false
     t.datetime "created_at",                        null: false

@@ -13,6 +13,7 @@ class SocketTrace < ActiveRecord::Base
   enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
 
   belongs_to :process_trace, inverse_of: :socket_traces, counter_cache: true
+  delegate :app_trace_id, :app_trace, to: :process_trace
 
   validates :process_trace, presence: true
   # At creation time, events are not yet processed

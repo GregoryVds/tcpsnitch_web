@@ -1,1 +1,36 @@
+- content_for :page_header_title, "Process trace n°#{@process_trace.id}"
+- if @process_trace.events_imported
+  - content_for :page_header_text, "#{@process_trace.name}"
+- content_for :left_menu, render('left_menu')
+
+- content_for :main_header do 
+  %nav
+    .nav-wrapper
+      .col.s12
+        = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
+        = link_to "App trace #{@process_trace.app_trace.id}", app_trace_path(@process_trace.app_trace), class: 'breadcrumb'
+        = link_to "Process trace #{@process_trace.id}", process_trace_path(@process_trace), class: 'breadcrumb'
+
+.section.about
+  %h5 About process trace
+
+.section.sockets
+  %h5 Sockets
+  %p
+    #{@process_trace.socket_traces_count} sockets opened:
+  %table
+    %thead
+      %th Socket index
+      %th Type
+      %th Events count
+    - @process_trace.socket_traces.each_with_index do |socket_trace|
+      %tr
+        %td= socket_trace.id
+        %td= socket_trace.socket_type
+        %td= socket_trace.events_count
+        %td= link_to('Show', socket_trace_path(socket_trace)) 
+
+- if @process_trace.analysis_computed
+  - ProcessTrace::STATS.each do |stat|
+    = render 'shared/stat', stat_name: stat, trace: @process_trace
 

@@ -1,5 +1,5 @@
 // Receive trace & stat as argument
-- data = trace.quantitative_analysis.send(stat_name).to_a # to_a cast nil to []
+- data = trace.analysis.send(stat_name).to_a # to_a cast nil to []
 - stat = StatComputation::STATS_DEFINITIONS[stat_name]
 
 .row

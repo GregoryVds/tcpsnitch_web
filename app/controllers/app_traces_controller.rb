@@ -1,5 +1,7 @@
 class AppTracesController < ApplicationController
   FILTERS = [:os, :app]
+  IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few seconds..."
+  COMPURTED_SHORTLY = "Trace analysis will be computed shortly. Refresh this page in a few seconds..."
 
   def index
     sanitize_filters
@@ -11,6 +13,8 @@ class AppTracesController < ApplicationController
 
   def show
     @app_trace = AppTrace.find(params[:id])
+    flash[:notice] = IMPORTED_SHORTLY unless @app_trace.events_imported
+    flash[:notice] = COMPURTED_SHORTLY if @app_trace.events_imported && !@app_trace.analysis_computed
   end
 
   def new
@@ -20,7 +24,7 @@ class AppTracesController < ApplicationController
   def create
     @app_trace = AppTrace.new(trace_params)
     if @app_trace.save
-      flash[:notice] = "Trace successfully uploaded and will be imported shortly. Refresh this page in a few seconds..."
+      flash[:notice] = IMPORTED_SHORTLY
       redirect_to @app_trace
     else
       flash.now[:error] = @app_trace.errors.full_messages.join('<br/>').html_safe

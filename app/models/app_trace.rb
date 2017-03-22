@@ -25,6 +25,7 @@ class AppTrace < ActiveRecord::Base
   enum os: {linux: 0, android: 1, darwin: 2}
 
   has_many :process_traces, inverse_of: :app_trace, dependent: :destroy
+  has_many :socket_traces, through: :process_traces
 
   validates :archive, :connectivity, :workload, presence: true
   validate :archive_contains_meta_files
