@@ -1,20 +1,20 @@
 class SocketTrace < ActiveRecord::Base
-	include Measurable
-	
-	STATS = [
-		:setsockopt_optname,
-		:setsockopt_level,
-		:fcntl_cmd,
-		:function_calls,
-		:read_bytes,
-		:recv_bytes
-	]
+  include Measurable
 
-	enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
+  STATS = [
+    :setsockopt_optname,
+    :setsockopt_level,
+    :fcntl_cmd,
+    :function_calls,
+    :read_bytes,
+    :recv_bytes
+  ]
 
-	belongs_to :process_trace, inverse_of: :socket_traces, counter_cache: true
+  enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
 
-	validates :process_trace, presence: true
-	# At creation time, events are not yet processed
-	validates :socket_type, :events_count, presence: true, on: :update
+  belongs_to :process_trace, inverse_of: :socket_traces, counter_cache: true
+
+  validates :process_trace, presence: true
+  # At creation time, events are not yet processed
+  validates :socket_type, :events_count, presence: true, on: :update
 end
