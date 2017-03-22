@@ -1,4 +1,4 @@
-class AppTrace < ApplicationRecord
+class AppTrace < ActiveRecord::Base
 	include Measurable
 
 	META = ['app', 'cmd', 'kernel', 'machine', 'net', 'os', 'version']
@@ -70,6 +70,6 @@ class AppTrace < ApplicationRecord
 	end
 
 	def schedule_import
-		AppTraceImportJob.perform_later(id)
+		TraceImportJob.perform_later(id)
 	end
 end

@@ -1,4 +1,4 @@
-class AppTraceImportJob < ActiveJob::Base
+class TraceImportJob < ActiveJob::Base
 	queue_as :default
 
 	def perform(app_trace_id)
@@ -45,7 +45,7 @@ class AppTraceImportJob < ActiveJob::Base
 			next if Dir["#{dir}/*.json"].empty? # Sockets with no calls (TODO: Handle this in tcpsnitch?)
 			p = ProcessTrace.create!({
 				app_trace_id: @app_trace.id, 
-				process_name: dir.split('/').last
+				name: dir.split('/').last
 			})
 			p.events_count = create_socket_traces!(p.id, dir)
 			p.events_imported!

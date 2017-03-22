@@ -1,4 +1,4 @@
-class SocketTrace < ApplicationRecord
+class SocketTrace < ActiveRecord::Base
 	include Measurable
 	
 	STATS = [

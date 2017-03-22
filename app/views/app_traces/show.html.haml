@@ -14,7 +14,7 @@
   %h5 About trace
   %p
     .row
-      - [:id, :app, :cmd, :connectivity, :description, :events_count, :events_imported, :kernel, :machine, :os, :quantitative_analysis_computed, :version, :workload, :created_at, :updated_at].each do |attr|
+      - [:id, :app, :cmd, :connectivity, :description, :events_count, :events_imported, :kernel, :machine, :os, :analysis_computed, :version, :workload, :created_at, :updated_at].each do |attr|
         = show_property(attr.to_s.humanize, @app_trace.send(attr))
 
       = show_property("Processes swpaned", @app_trace.process_traces.count)
@@ -32,13 +32,13 @@
       %th Events count
     - @app_trace.process_traces.each do |process_trace|
       %tr
-        %td= process_trace.process_name
+        %td= process_trace.name
         %td= process_trace.socket_traces_count
         %td= process_trace.events_count
         %td= link_to('Show', process_trace_path(process_trace)) 
 
 .section.nature_of_sockets
   %h5 Nature of sockets
-  - if @app_trace.quantitative_analysis_computed
+  - if @app_trace.analysis_computed
     - AppTrace::STATS.each do |stat|
       = render 'shared/stat', stat_name: stat, trace: @app_trace

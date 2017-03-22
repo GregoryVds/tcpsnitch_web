@@ -1,10 +1,10 @@
-class QuantitativeAnalysis
+class Analysis
 	include Mongoid::Document
 
 	field :measurable_type, type: String
 	field :measurable_id, type: Integer
 
-	after_create :set_quantitative_analysis_computed_on_measurable
+	after_create :set_analysis_computed_on_measurable
 
 	StatComputation::STATS_DEFINITIONS.keys.each do |stat_name|
 		field stat_name, type: Array
@@ -14,8 +14,8 @@ class QuantitativeAnalysis
 		@measurable ||= measurable_type.classify.constantize.find(measurable_id)
 	end
 
-	def set_quantitative_analysis_computed_on_measurable
-		measurable.quantitative_analysis_computed!
+	def set_analysis_computed_on_measurable
+		measurable.analysis_computed!
 	end
 
 	def self.compute(measurable_type, measurable_id)

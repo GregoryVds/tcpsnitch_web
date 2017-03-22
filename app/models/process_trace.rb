@@ -1,4 +1,4 @@
-class ProcessTrace < ApplicationRecord
+class ProcessTrace < ActiveRecord::Base
 	include Measurable
 
 	STATS = [
@@ -20,5 +20,5 @@ class ProcessTrace < ApplicationRecord
 	belongs_to :app_trace, inverse_of: :process_traces, counter_cache: true
 	has_many :socket_traces, inverse_of: :process_trace, dependent: :destroy
 
-	validates :app_trace, :process_name, presence: true
+	validates :app_trace, :name, presence: true
 end
