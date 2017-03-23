@@ -58,7 +58,7 @@ class TraceImportJob < ActiveJob::Base
   def create_socket_traces!(process_trace_id, process_trace_dir)
       events_count = 0
       Dir.glob("#{process_trace_dir}/*.json").each do |socket_trace|
-        s = SocketTrace.create!(process_trace_id: process_trace_id, index: socket_trace.to_i)
+        s = SocketTrace.create!(process_trace_id: process_trace_id, index: socket_trace.split('/').last.to_i)
         s.events_count, s.socket_type = create_socket_trace_events(socket_trace, process_trace_id, s.id)
         s.events_imported!
         s.save!

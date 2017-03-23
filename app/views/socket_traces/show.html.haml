@@ -12,12 +12,11 @@
         = link_to "Process trace #{@socket_trace.process_trace.id}", process_trace_path(@socket_trace.process_trace), class: 'breadcrumb'
         = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
 
-
 %p
   - [:app_trace_id, :process_trace_id, :socket_type, :events_count, :analysis_computed].each do |attr|
     = show_property(attr.to_s.humanize, @socket_trace.send(attr))
 
 - if @socket_trace.analysis_computed
-  - SocketTrace::STATS.each do |stat|
-    = render 'shared/stat', stat_name: stat, trace: @socket_trace
+  - SocketTrace.stats.each do |stat|
+    = render 'shared/stat', stat: stat, trace: @socket_trace
 

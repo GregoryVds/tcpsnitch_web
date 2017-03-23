@@ -11,13 +11,13 @@ module TcpsnitchWeb
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-		config.generators do |g|
-			g.orm :active_record
-		end
+    config.generators do |g|
+      g.orm :active_record
+    end
 
-		config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :sidekiq
 
-		config.autoload_paths << "#{Rails.root}/lib"
+    config.autoload_paths << "#{Rails.root}/lib"
   end
 end
 

@@ -41,5 +41,23 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
       t.timestamps
     end
 
+    create_table :stat_categories do |t|
+      t.string :name
+      t.string :info
+      t.references :parent_category
+      t.timestamps
+    end
+
+    create_table :stats do |t|
+      t.boolean :apply_to_app_trace, default: false
+      t.boolean :apply_to_process_trace, default: false
+      t.boolean :apply_to_socket_trace, default: false
+      t.text :event_filters
+      t.string :name
+      t.string :node
+      t.references :stat_category
+      t.integer :stat_type
+      t.timestamps
+    end
   end
 end

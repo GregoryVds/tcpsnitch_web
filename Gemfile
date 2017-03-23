@@ -40,6 +40,8 @@ gem 'slim'
 gem 'carrierwave', '~> 1.0'
 gem 'oj'
 gem 'chartkick'
+gem 'activeadmin', '~> 1.0.0.pre5'
+gem 'devise'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

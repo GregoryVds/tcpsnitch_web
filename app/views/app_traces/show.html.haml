@@ -40,5 +40,5 @@
 .section.nature_of_sockets
   %h5 Nature of sockets
   - if @app_trace.analysis_computed
-    - AppTrace::STATS.each do |stat|
-      = render 'shared/stat', stat_name: stat, trace: @app_trace
+    - AppTrace.stats.each do |stat|
+      = render 'shared/stat', stat: stat, trace: @app_trace

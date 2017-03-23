@@ -11,11 +11,15 @@ module Measurable
   end
 
   def events
-    @events ||= Event.where("#{measurable_type}_id": id)
+    @events ||= Event.where(filter)
   end
 
   def measurable_type
     self.class.table_name.singularize
+  end
+
+  def filter
+    {"#{measurable_type}_id": id}
   end
 
   def analysis_computed!
@@ -41,5 +45,12 @@ module Measurable
   end
 
   module ClassMethods
+    def stats
+      Stat.where("apply_to_#{measurable_type}" => true)
+    end
+
+    def measurable_type
+      table_name.singularize
+    end
   end
 end
