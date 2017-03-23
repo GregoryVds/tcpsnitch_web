@@ -1,7 +1,7 @@
 - content_for :page_header_title, "Process trace ##{@process_trace.id}"
 - if @process_trace.events_imported
   - content_for :page_header_text, @process_trace
-- content_for :left_menu, render('left_menu', trace: @process_trace)
+- content_for :left_menu, render('shared/left_menu', trace: @process_trace)
 
 - content_for :main_header do 
   %nav
@@ -11,10 +11,10 @@
         = link_to "App trace #{@process_trace.app_trace.id}", app_trace_path(@process_trace.app_trace), class: 'breadcrumb'
         = link_to "Process trace #{@process_trace.id}", process_trace_path(@process_trace), class: 'breadcrumb'
 
-.section.about
+.section{data: {section: 'about'}}
   %h5 About process trace
 
-.section.sockets
+.section{data: {section: 'about'}}
   %h5 Sockets
   %p
     #{@process_trace.socket_traces_count} sockets opened:

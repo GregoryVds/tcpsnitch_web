@@ -36,7 +36,7 @@
             = yield :left_menu 
         .content
           .container
-            .row 
+            .row
               .section
                 - flash.each do |type, msg|
                   = render 'layouts/flash', type: type, msg: msg

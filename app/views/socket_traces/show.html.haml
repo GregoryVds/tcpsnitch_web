@@ -1,7 +1,7 @@
 - content_for :page_header_title, "Socket trace ##{@socket_trace.id}"
 - if @socket_trace.events_imported
   - content_for :page_header_text, @socket_trace
-- content_for :left_menu, render('left_menu', trace: @socket_trace)
+- content_for :left_menu, render('shared/left_menu', trace: @socket_trace)
 
 - content_for :main_header do 
   %nav
@@ -12,9 +12,12 @@
         = link_to "Process trace #{@socket_trace.process_trace.id}", process_trace_path(@socket_trace.process_trace), class: 'breadcrumb'
         = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
 
-%p
-  - [:app_trace_id, :process_trace_id, :socket_type, :events_count, :analysis_computed].each do |attr|
-    = show_property(attr.to_s.humanize, @socket_trace.send(attr))
+.section{data: {section: 'about'}}
+  %h5 About trace
+  %p
+    .row
+      - [:app_trace_id, :process_trace_id, :socket_type, :events_count, :analysis_computed].each do |attr|
+        = show_property(attr.to_s.humanize, @socket_trace.send(attr))
 
 - if @socket_trace.analysis_computed
   - SocketTrace.stats.each do |stat|

@@ -1,7 +1,7 @@
 - content_for :page_header_title, "App trace ##{@app_trace.id}"
 - if @app_trace.events_imported
   - content_for :page_header_text, @app_trace
-- content_for :left_menu, render('left_menu', trace: @app_trace)
+- content_for :left_menu, render('shared/left_menu', trace: @app_trace)
 
 - content_for :main_header do 
   %nav
@@ -10,7 +10,7 @@
         = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
         = link_to "App trace #{@app_trace.id}", app_trace_path(@app_trace), class: 'breadcrumb'
 
-.section.about
+.section{data: {section: 'about'}}
   %h5 About trace
   %p
     .row
@@ -21,7 +21,7 @@
       = show_property("Sockets opened","TODO")
       = show_property("Download", link_to("#{@app_trace.archive.file.filename}", @app_trace.archive.url))
 
-.section.processes
+.section{data: {section: 'about'}}
   %h5 Processes
   %p
     #{@app_trace.process_traces_count} processes spawned:
@@ -37,8 +37,6 @@
         %td= process_trace.events_count
         %td= link_to('Show', process_trace_path(process_trace)) 
 
-.section.nature_of_sockets
-  %h5 Nature of sockets
-  - if @app_trace.analysis_computed
-    - AppTrace.stats.each do |stat|
-      = render 'shared/stat', stat: stat, trace: @app_trace
+- if @app_trace.analysis_computed
+  - AppTrace.stats.each do |stat|
+    = render 'shared/stat', stat: stat, trace: @app_trace

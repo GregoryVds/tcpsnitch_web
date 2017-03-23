@@ -24,7 +24,17 @@ $(document).on('turbolinks:load', function(event) {
     Materialize.updateTextFields();
 
     $('.alert-close').click(function(event){
-        $(event.target).closest('.alert-box').fadeOut("slow", function() {});
+        $(event.currentTarget).fadeOut("slow", function() {});
+    });
+
+    sections = $('.main-body .content [data-section]');
+    sections.hide()
+    sections.filter('[data-section="about"]').show()
+
+    $('.left-menu li[data-section]').click(function(event){
+        var section = $(event.currentTarget).data('section');
+        sections.hide();
+        sections.filter('[data-section="'+section+'"]').show()
     });
 });
 

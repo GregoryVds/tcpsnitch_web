@@ -5,5 +5,5 @@
       .collapsible-body
         %ul
           - category.subcategories.each do |subcategory|
-            %li= subcategory.name
+            %li{data: {section: subcategory.name}}= subcategory.name
 
