@@ -50,7 +50,7 @@ module Measurable
 
   module ClassMethods
     def stats
-      Stat.where("apply_to_#{measurable_type}" => true)
+      Stat.includes(:stat_category).where("apply_to_#{measurable_type}" => true)
     end
 
     def measurable_type
