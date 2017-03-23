@@ -44,6 +44,10 @@ module Measurable
     AnalysisJob.perform_later(measurable_type, id) 
   end
 
+  def stats
+    self.class.stats
+  end
+
   module ClassMethods
     def stats
       Stat.where("apply_to_#{measurable_type}" => true)

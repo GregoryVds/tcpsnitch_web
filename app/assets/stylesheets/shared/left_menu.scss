@@ -1,0 +1,28 @@
+.left-menu {
+  background-color: white;
+  width: $left-menu-width;
+  min-width: $left-menu-width;
+  border: solid 1px rgba(51,51,51,0.12);
+  border-top: none;
+  border-left: none;
+  a {color: $secondary-color}
+  ul {
+    font-size: 15px;
+    padding-left: 30px;
+    line-height: 44px;
+    list-style-type: none;
+  }
+  .collapsible {
+    border: none;
+    box-shadow: none;
+    .collapsible-body {
+      padding: 0;
+    }
+  }
+  > ul {
+    margin-bottom: 0;
+  }
+  ul.collapsible {
+    margin-top: 0;
+  }
+}

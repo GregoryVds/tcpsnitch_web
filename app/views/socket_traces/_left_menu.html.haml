@@ -1,5 +1,4 @@
-.stats-menu
-  %ul
-    %li
-      = link_to 'About socket trace', '#'
-  = render('shared/stats_submenu')
+%ul
+  %li
+    %a.collapsible-header About socket trace
+= render 'shared/stats_submenu', trace: trace

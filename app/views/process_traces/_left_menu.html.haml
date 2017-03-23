@@ -1,7 +1,6 @@
-.stats-menu
-  %ul
-    %li
-      = link_to 'About process trace', '#'
-    %li
-      %a Sockets
-  = render('shared/stats_submenu')
+%ul
+  %li
+    %a.collapsible-header About process trace
+  %li
+    %a.collapsible-header Sockets
+= render 'shared/stats_submenu', trace: trace

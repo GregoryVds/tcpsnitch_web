@@ -1,30 +1,9 @@
-%ul.collapsible{data: {collapsible: 'expandable'}}>
-  %li 
-    %a.collapsible-header Nature of sockets 
-    .collapsible-body
-      %ul
-        %li Link1
-        %li Link2
-        %li Link3
-  %li 
-    %a.collapsible-header Functions usage 
-    .collapsible-body
-      %ul
-        %li Link1
-        %li Link2
-        %li Link3
-  %li 
-    %a.collapsible-header Usage patterns 
-    .collapsible-body
-      %ul
-        %li Link1
-        %li Link2
-        %li Link3
-  %li 
-    %a.collapsible-header Threads usage 
-    .collapsible-body
-      %ul
-        %li Link1
-        %li Link2
-        %li Link3
+%ul.collapsible{data: {collapsible: 'expandable'}}
+  - StatCategory.top_level.each do |category|
+    %li
+      %a.collapsible-header= category.name
+      .collapsible-body
+        %ul
+          - category.subcategories.each do |subcategory|
+            %li= subcategory.name
 
