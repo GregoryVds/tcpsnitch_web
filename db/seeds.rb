@@ -42,17 +42,6 @@ Stat.create!(sockopt_stat.merge({event_filters: {type: 'setsockopt'}, name: 'Set
 
 
 usage = StatCategory.create!(name: 'Functions usage', info: 'About the usage of functions...', parent_category: nil)
-Stat.create!({
-  apply_to_app_trace: true,
-  apply_to_process_trace: true,
-  apply_to_socket_trace: true,
-  stat_category: usage,
-  name: 'Functions usage',
-  node: 'type',
-  event_filters: {},
-  stat_type: :proportion
-})
-
 send = StatCategory.create!(name: 'Send family', info: 'About the sockets...', parent_category: usage)
 send_stat = {
   apply_to_app_trace: true,
