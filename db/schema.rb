@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.boolean  "analysis_computed",    default: false
     t.integer  "user_id"
     t.text     "version"
-    t.text     "workload",                             null: false
+    t.text     "workload"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.index ["app"], name: "index_app_traces_on_app", using: :btree

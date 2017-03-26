@@ -27,11 +27,10 @@ class AppTrace < ActiveRecord::Base
   has_many :process_traces, inverse_of: :app_trace, dependent: :destroy
   has_many :socket_traces, through: :process_traces
 
-  validates :archive, :connectivity, :workload, presence: true
+  validates :archive, presence: true
   validate :archive_contains_meta_files
   # At creation time, archive is not yet processed
-  validates :app, :kernel, :machine, :os, :version, :workload, 
-            presence: true, on: :update
+  validates :app, :kernel, :machine, :os, :version, presence: true, on: :update
 
   scope :imported, -> { where(events_imported: true) }
 
@@ -46,7 +45,7 @@ class AppTrace < ActiveRecord::Base
   end
 
   def to_s
-    "Trace for #{app.capitalize} on #{os.capitalize} over #{connectivity.capitalize}"
+    "Trace for #{app.capitalize} on #{os.capitalize}"
   end
 
   def archive_is_zip

@@ -6,7 +6,7 @@ class TraceImportJob < ActiveJob::Base
 
     extract_archive
     update_meta_infos
-    return unless @app_trace.valid?
+    @app_trace.save! # Only proceeed if META info valid
 
     @app_trace.events_count = create_process_traces!
     @app_trace.events_imported!

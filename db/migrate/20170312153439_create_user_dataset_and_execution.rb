@@ -17,7 +17,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
       t.boolean :analysis_computed, default: false
       t.references :user, index: true
       t.text :version
-      t.text :workload, null: false
+      t.text :workload
       t.timestamps
     end
 

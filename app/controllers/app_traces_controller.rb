@@ -3,6 +3,8 @@ class AppTracesController < ApplicationController
   IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few seconds..."
   COMPURTED_SHORTLY = "Trace analysis will be computed shortly. Refresh this page in a few seconds..."
 
+  protect_from_forgery except: [:create]
+
   def index
     sanitize_filters
     @app_traces = AppTrace.imported.where(nil)
@@ -13,6 +15,7 @@ class AppTracesController < ApplicationController
 
   def show
     @app_trace = AppTrace.find(params[:id])
+    @stats = @app_trace.analysis_computed ? @app_trace.stats.includes(:stat_category) : []
     flash[:notice] = IMPORTED_SHORTLY unless @app_trace.events_imported
     flash[:notice] = COMPURTED_SHORTLY if @app_trace.events_imported && !@app_trace.analysis_computed
   end
