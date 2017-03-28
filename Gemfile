@@ -43,12 +43,17 @@ gem 'chartkick'
 gem 'activeadmin', '~> 1.0.0.pre5'
 gem 'devise'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'capistrano-ssh-doctor', '~> 1.0'
+  gem 'capistrano-rbenv', '~> 2.0' # required
+  gem 'capistrano-rbenv-install', '~> 1.2.0'
+  gem 'capistrano-rails'
+  gem 'capistrano3-nginx', '~> 2.0'
+  gem 'capistrano3-puma'
+  gem 'capistrano-sidekiq'
+  gem 'capistrano-postgresql', '~> 4.2.0'
 end
 
 group :development do
