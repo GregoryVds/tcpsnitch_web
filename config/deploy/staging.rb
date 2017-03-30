@@ -1,5 +1,6 @@
-set :application, 'tcpsnitch_web'
-set :branch, 'production'
+set :application, 'tcpsnitch_web_staging'
+set :branch, 'master'
+set :pg_database, 'tcpsnitch_web_staging'
 
 # server-based syntax
 # ======================

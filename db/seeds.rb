@@ -18,11 +18,11 @@ creation_stat = {
   stat_category: creation,
   stat_type: :proportion
 }
-Stat.create!(creation_stat.merge({name: 'Domain', node: 'details.domain'}))
-Stat.create!(creation_stat.merge({name: 'Type', node: 'details.types'}))
-Stat.create!(creation_stat.merge({name: 'Protocol', node: 'details.protocol'}))
-Stat.create!(creation_stat.merge({name: 'Close on exec()', node: 'details.SOCK_CLOEXEC'}))
-Stat.create!(creation_stat.merge({name: 'Non-blocking', node: 'details.SOCK_NONBLOCK'}))
+Stat.create!(creation_stat.merge({name: 'Domain', node: 'details.sock_info.domain'}))
+Stat.create!(creation_stat.merge({name: 'Type', node: 'details.sock_info.types'}))
+Stat.create!(creation_stat.merge({name: 'Protocol', node: 'details.sock_info.protocol'}))
+Stat.create!(creation_stat.merge({name: 'Close on exec()', node: 'details.sock_info.SOCK_CLOEXEC'}))
+Stat.create!(creation_stat.merge({name: 'Non-blocking', node: 'details.sock_info.SOCK_NONBLOCK'}))
 
 
 sockopt = StatCategory.create!(name: 'Socket options', info: 'About the sockets...', parent_category: nature)

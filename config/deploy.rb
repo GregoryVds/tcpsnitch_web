@@ -3,8 +3,9 @@ lock '3.8.0'
 
 server 'ns328523.ip-37-187-114.eu', roles: %w{app web db}
 
-set :repo_url, 'git@github.com:GregoryVds/tcpsnitch.git'
+set :repo_url, 'git@github.com:GregoryVds/tcpsnitch_web.git'
 set :rbenv_ruby, '2.3.3'
+set :pg_user, 'gvanderschueren'
 
 set :ssh_options, {
   port: 143,

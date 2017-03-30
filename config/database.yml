@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: tcpsnitch_web_production
-  username: tcpsnitch_web
+  username: gvanderschueren
   password: <%= ENV['TCPSNITCH_WEB_DATABASE_PASSWORD'] %>
