@@ -16,7 +16,7 @@ module TcpsnitchWeb
     end
 
     config.active_job.queue_adapter = :sidekiq
-    config.web_console.whitelisted_ips = '192.168.99.1'
+    config.web_console.whitelisted_ips = '192.168.99.0/24'
     config.autoload_paths << "#{Rails.root}/lib"
   end
 end

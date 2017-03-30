@@ -1,7 +1,8 @@
 class AppTrace < ActiveRecord::Base
   include Measurable
 
-  META = ['app', 'cmd', 'kernel', 'machine', 'net', 'os', 'version']
+  META = [:app, :cmd, :kernel, :machine, :net, :opt_a, :opt_b, :opt_c, :opt_d,
+          :opt_f, :opt_l, :opt_n, :opt_t, :opt_u, :opt_v, :os, :version]
 
   STATS = [
     :socket_domains,
@@ -30,7 +31,9 @@ class AppTrace < ActiveRecord::Base
   validates :archive, presence: true
   validate :archive_contains_meta_files
   # At creation time, archive is not yet processed
-  validates :app, :kernel, :machine, :os, :version, presence: true, on: :update
+  META.each do |meta|
+    validates meta, presence: true, on: :update
+  end
 
   scope :imported, -> { where(events_imported: true) }
 

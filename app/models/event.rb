@@ -6,12 +6,13 @@ class Event
   field :connectivity, type: Integer
   field :details, type: Hash
   field :error_str, type: String
+  field :fake_call, type: Boolean
   field :os, type: Integer
   field :return_value, type: Integer
   field :process_trace_id, type: Integer
   field :socket_trace_id, type: Integer
   field :success, type: Boolean
-  field :timestamp, type: Hash
+  field :timestamp_usec, type: Integer
   field :thread_id, type: Integer
   field :type, type: String
 

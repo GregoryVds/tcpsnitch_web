@@ -75,11 +75,11 @@ class TraceImportJob < ActiveJob::Base
         parse_json_event(line)
       end.map do |hash|
         add_app_trace_info(hash)
-      end.each do |event|
+      end.each_with_index do |event, index|
         event['process_trace_id'] = process_trace_id
         event['socket_trace_id'] = socket_trace_id
         ev = Event.create(event)
-        socket_type = ev.details['type'] if ev.type.eql? 'socket'
+        socket_type = ev.details['sock_info']['type'] if index==0
         events_count += 1
       end
 

@@ -26,15 +26,23 @@ class AppTracesController < ApplicationController
 
   def create
     @app_trace = AppTrace.new(trace_params)
-    if @app_trace.save
-      flash[:notice] = IMPORTED_SHORTLY
-      redirect_to @app_trace
+    if params[:authenticity_token]
+      if @app_trace.save
+        flash[:notice] = IMPORTED_SHORTLY
+        redirect_to @app_trace
+      else
+        flash.now[:error] = @app_trace.errors.full_messages.join('<br/>').html_safe
+        render :new
+      end
     else
-      flash.now[:error] = @app_trace.errors.full_messages.join('<br/>').html_safe
-      render :new
+      if @app_trace.save
+        render :text => "Trace successfully imported! Now available at #{app_trace_url(@app_trace)}.\n"
+      else
+        render :text => "Failed to upload trace: #{@app_trace.errors.full_messages.join(', ')}.\n"
+      end
     end
   end
-  
+
   def destroy
     @app_trace = AppTrace.find(params[:id])
     @app_trace.destroy
