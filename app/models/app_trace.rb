@@ -48,6 +48,10 @@ class AppTrace < ActiveRecord::Base
     AppTrace.connectivities[connectivity]
   end
 
+  def download_link
+    ActionController::Base.helpers.link_to("#{archive.file.filename}", archive.url)
+  end
+
   def to_s
     "Trace for #{app.capitalize} on #{os.capitalize}"
   end
