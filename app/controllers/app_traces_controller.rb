@@ -1,5 +1,7 @@
 class AppTracesController < ApplicationController
   FILTERS = [:os, :app]
+  UPLOADED="Trace successfully uploaded"
+  UPLOAD_FAIL="Failed to upload trace"
   IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few seconds..."
   COMPURTED_SHORTLY = "Trace analysis will be computed shortly. Refresh this page in a few seconds..."
 
@@ -7,7 +9,7 @@ class AppTracesController < ApplicationController
 
   def index
     sanitize_filters
-    @app_traces = AppTrace.order(created_at: :desc).imported.where(nil)
+    @app_traces = AppTrace.order(created_at: :desc).imported.where(nil).paginate(page: params[:page], per_page: 10)
     FILTERS.each do |filter|
       @app_traces = @app_traces.where(filter => params[filter]) if params[filter].present?
     end
@@ -36,9 +38,9 @@ class AppTracesController < ApplicationController
       end
     else
       if @app_trace.save
-        render :text => "Trace successfully imported! Now available at #{app_trace_url(@app_trace)}.\n"
+        render :text => "#{UPLOADED} at #{app_trace_url(@app_trace)}.\n#{IMPORTED_SHORTLY}\n"
       else
-        render :text => "Failed to upload trace: #{@app_trace.errors.full_messages.join(', ')}.\n"
+        render :text => "#{UPLOAD_FAIL}: #{@app_trace.errors.full_messages.join(', ')}.\n"
       end
     end
   end

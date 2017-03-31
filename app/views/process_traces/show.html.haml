@@ -28,7 +28,7 @@
         %td= socket_trace.index
         %td= socket_trace.socket_type
         %td= socket_trace.events_count
-        %td= link_to('Show', socket_trace_path(socket_trace)) 
+        %td= link_to('Show', socket_trace_path(socket_trace))
 
 - @stats.each do |stat|
   = render 'shared/stat', stat: stat, trace: @process_trace
