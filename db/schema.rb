@@ -47,13 +47,17 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   end
 
   create_table "app_traces", force: :cascade do |t|
+    t.boolean  "analysis_computed",    default: false
     t.string   "archive",                              null: false
     t.string   "app"
+    t.string   "app_version"
     t.string   "cmd"
     t.integer  "connectivity"
-    t.text     "description"
+    t.text     "comments"
     t.integer  "events_count"
     t.boolean  "events_imported",      default: false
+    t.string   "git_hash"
+    t.string   "host_id"
     t.string   "kernel"
     t.text     "log"
     t.string   "machine"
@@ -70,7 +74,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.text     "opt_v"
     t.integer  "os"
     t.integer  "process_traces_count"
-    t.boolean  "analysis_computed",    default: false
+    t.integer  "socket_traces_count"
     t.integer  "user_id"
     t.text     "version"
     t.text     "workload"
@@ -95,6 +99,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   end
 
   create_table "socket_traces", force: :cascade do |t|
+    t.integer  "app_trace_id"
     t.integer  "events_count"
     t.boolean  "events_imported",   default: false
     t.integer  "process_trace_id"
@@ -103,6 +108,7 @@ ActiveRecord::Schema.define(version: 20170312153439) do
     t.boolean  "analysis_computed", default: false
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.index ["app_trace_id"], name: "index_socket_traces_on_app_trace_id", using: :btree
     t.index ["process_trace_id"], name: "index_socket_traces_on_process_trace_id", using: :btree
     t.index ["socket_type"], name: "index_socket_traces_on_socket_type", using: :btree
   end

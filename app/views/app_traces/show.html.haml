@@ -11,16 +11,18 @@
         = link_to "App trace #{@app_trace.id}", app_trace_path(@app_trace), class: 'breadcrumb'
 
 .section{data: {section: 'about'}}
-  %h5 About trace
-  %p
-    .row
-      - [:id, :app, :cmd, :connectivity, :description, :events_count, :events_imported, :kernel, :machine, :os, :analysis_computed, :version, :workload, :created_at, :updated_at].each do |attr|
-        = show_property(attr.to_s.humanize, @app_trace.send(attr))
+  = show_properties('General', @app_trace, [:id, :app, :created_at, :events_imported, :analysis_computed])
 
-      = show_property("Processes swpaned", @app_trace.process_traces.count)
-      = show_property("Sockets opened","TODO")
-      = show_property("Download", link_to("#{@app_trace.archive.file.filename}", @app_trace.archive.url))
+  = show_properties('Traces', @app_trace, [:process_traces_count, :socket_traces_count, :events_count])
 
+  = show_properties('Details', @app_trace, [:app_version, :cmd, :connectivity, :workload, :comments])
+
+  = show_properties('System', @app_trace, [:os, :kernel, :host_id, :machine, :connectivity])
+
+  = show_properties('Tcpsnitch', @app_trace, [:version, :git_hash, :opt_a, :opt_b,
+    :opt_c, :opt_d, :opt_f, :opt_l, :opt_l, :opt_n, :opt_t, :opt_u, :opt_v])
+
+// Archive, app_version, log, net
 .section{data: {section: 'about'}}
   %h5 Processes
   %p

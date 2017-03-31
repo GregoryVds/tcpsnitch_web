@@ -1,13 +1,17 @@
-class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
+class CreateInitialSchema < ActiveRecord::Migration[5.0]
   def change
     create_table :app_traces do |t|
+      t.boolean :analysis_computed, default: false
       t.string :archive, null: false
       t.string :app, index: true
+      t.string :app_version
       t.string :cmd
       t.integer :connectivity, index: true
-      t.text :description
+      t.text :comments
       t.integer :events_count
       t.boolean :events_imported, default: false
+      t.string :git_hash
+      t.string :host_id
       t.string :kernel
       t.text :log
       t.string :machine
@@ -24,7 +28,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
       t.text :opt_v
       t.integer :os, index: true
       t.integer :process_traces_count
-      t.boolean :analysis_computed, default: false
+      t.integer :socket_traces_count
       t.references :user, index: true
       t.text :version
       t.text :workload
@@ -42,6 +46,7 @@ class CreateUserDatasetAndExecution < ActiveRecord::Migration[5.0]
     end
 
     create_table :socket_traces do |t|
+      t.references :app_trace, index: true
       t.integer :events_count
       t.boolean :events_imported, default: false
       t.references :process_trace, index: true

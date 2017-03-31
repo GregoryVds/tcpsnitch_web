@@ -7,7 +7,7 @@ class AppTracesController < ApplicationController
 
   def index
     sanitize_filters
-    @app_traces = AppTrace.imported.where(nil)
+    @app_traces = AppTrace.order(created_at: :desc).imported.where(nil)
     FILTERS.each do |filter|
       @app_traces = @app_traces.where(filter => params[filter]) if params[filter].present?
     end

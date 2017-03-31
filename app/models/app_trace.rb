@@ -1,8 +1,9 @@
 class AppTrace < ActiveRecord::Base
   include Measurable
 
-  META = [:app, :cmd, :kernel, :machine, :net, :opt_a, :opt_b, :opt_c, :opt_d,
-          :opt_f, :opt_l, :opt_n, :opt_t, :opt_u, :opt_v, :os, :version]
+  META = [:app, :app_version, :cmd, :host_id, :git_hash, :kernel, :machine,
+          :net, :opt_a, :opt_b, :opt_c, :opt_d, :opt_f, :opt_l, :opt_n, :opt_t,
+          :opt_u, :opt_v, :os, :version]
 
   STATS = [
     :socket_domains,
@@ -26,7 +27,7 @@ class AppTrace < ActiveRecord::Base
   enum os: {linux: 0, android: 1, darwin: 2}
 
   has_many :process_traces, inverse_of: :app_trace, dependent: :destroy
-  has_many :socket_traces, through: :process_traces
+  has_many :socket_traces, inverse_of: :app_trace
 
   validates :archive, presence: true
   validate :archive_contains_meta_files

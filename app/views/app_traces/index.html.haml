@@ -10,19 +10,19 @@
     %tr
       %th App
       %th Os
-      %th Processes count
-      %th Sockets count
-      %th Events count
+      %th #Processes
+      %th #Sockets
+      %th #Events
       %th Version
       %th Created at
   - @app_traces.each do |app_trace|
     %tr
-      %td= app_trace.app.capitalize
+      %td= app_trace.app
       %td= app_trace.os.capitalize
       %td= app_trace.process_traces_count
-      %td= app_trace.socket_traces.count
+      %td= app_trace.socket_traces_count
       %td= app_trace.events_count
       %td= app_trace.version
-      %td= app_trace.created_at.to_date
+      %td= app_trace.created_at.to_formatted_s(:db)
       %td= link_to 'Show', app_trace_path(app_trace)
       %td= link_to 'Delete', app_trace_path(app_trace), method: :delete, data: { confirm: 'Are you sure?' }

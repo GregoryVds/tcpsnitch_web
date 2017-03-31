@@ -5,7 +5,7 @@ class Event
   field :app_trace_id, type: Integer
   field :connectivity, type: Integer
   field :details, type: Hash
-  field :error_str, type: String
+  field :errno, type: String
   field :fake_call, type: Boolean
   field :os, type: Integer
   field :return_value, type: Integer
@@ -33,7 +33,7 @@ class Event
           _id: "$#{group_node}",
           sum: { :$sum => "$#{sum_node}" } 
         }
-      }   
+      }
     ]).map do |r|
       [r["_id"], r["sum"]]
     end
