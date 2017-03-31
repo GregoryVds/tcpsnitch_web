@@ -13,10 +13,10 @@
           = link_to 'Tcpsnitch', root_path
         .nav-wrapper
           %ul.left
-            %li{class: active_on('pages', 'home')}= link_to 'Sockets API usage', root_path
+            -# %li{class: active_on('pages', 'home')}= link_to 'Sockets API usage', root_path
             %li{class: ((params[:controller] == 'app_traces' && params[:action] != 'new') or params[:controller] == 'socket_traces') ? 'active' : ''}= link_to 'Browse traces', app_traces_path
             %li{class: active_on('app_traces', 'new')}= link_to 'Upload trace', new_app_trace_path
-            %li{class: active_on('pages', 'about')}= link_to 'About', about_path 
+            -#%li{class: active_on('pages', 'about')}= link_to 'About', about_path 
       .banner 
         %h1
           - if content_for?(:page_header_title)
@@ -57,11 +57,11 @@
                 Record traces with
                 = link_to 'Tcpsnitch', 'https://github.com/GregoryVds/tcpsnitch'
               %li
-                Get statistics about traces with
+                Visualize traces with
                 = link_to 'Tcpsnitch Web', 'https://github.com/GregoryVds/tcpsnitch_web'
-              %li
-                Analyze traces with
-                = link_to 'Tcpsnitch Analyzer', 'https://github.com/GregoryVds/tcpsnitch_analyzer'
+              -#%li
+                -#Analyze traces with
+                -#= link_to 'Tcpsnitch Analyzer', 'https://github.com/GregoryVds/tcpsnitch_analyzer'
       .footer-copyright
         © 2017 Université catholique de Louvain
         // %a.grey-text.text-lighten-4.right{:href => "#!"} More Links

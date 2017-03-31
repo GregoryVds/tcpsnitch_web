@@ -43,16 +43,10 @@ class AppTracesController < ApplicationController
     end
   end
 
-  def destroy
-    @app_trace = AppTrace.find(params[:id])
-    @app_trace.destroy
-    redirect_to app_traces_path   
-  end
-
   private
 
   def trace_params
-    params.require(:app_trace).permit(:archive, :connectivity, :description, :workload)
+    params.require(:app_trace).permit(:archive, :connectivity, :comments, :workload)
   end
 
   def sanitize_filters

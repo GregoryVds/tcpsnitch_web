@@ -1,13 +1,13 @@
-- content_for :page_header_title, 'Upload trace' 
+- content_for :page_header_title, 'Upload trace'
 - content_for :page_header_text, 'Contribute by uploading a trace archive'
 
 = form_for :app_trace, url: app_traces_path do |f|
   .input-field
-    = f.label :description
-    = f.text_field :description
-  .input-field
     = f.label :workload
     = f.text_field :workload
+  .input-field
+    = f.label :comments
+    = f.text_field :comments
   .input-field
     = f.select(:connectivity, options_for_select(AppTrace.connectivities.keys.to_a), include_blank: '')
     = f.label :connectivity

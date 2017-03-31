@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  root 'pages#home'
+  root 'app_traces#index'
 
   controller :pages do
     get :about
@@ -12,5 +12,8 @@ Rails.application.routes.draw do
   resources :process_traces
 
   require 'sidekiq/web'
-  mount Sidekiq::Web, at: '/jobs'
+  authenticate do
+    mount Sidekiq::Web, at: '/jobs'
+  end
+
 end
