@@ -6,6 +6,7 @@ class Event
   field :connectivity, type: Integer
   field :details, type: Hash
   field :errno, type: String
+  field :index, type: Integer
   field :fake_call, type: Boolean
   field :os, type: Integer
   field :return_value, type: Integer
@@ -57,7 +58,7 @@ class Event
   def self.val_for(hash, keys)
     keys.reduce(hash) { |h, key| h[key] }
   end
-        
+
   def self.keys_from_path(path)
     path.split('.').collect(&:to_sym)
   end

@@ -80,6 +80,7 @@ class TraceImportJob < ActiveJob::Base
       end.map do |hash|
         add_app_trace_info(hash)
       end.each_with_index do |event, index|
+        event['index'] = index
         event['process_trace_id'] = process_trace_id
         event['socket_trace_id'] = socket_trace_id
         ev = Event.create(event)

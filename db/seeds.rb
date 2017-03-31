@@ -24,8 +24,7 @@ Stat.create!(creation_stat.merge({name: 'Protocol', node: 'details.sock_info.pro
 Stat.create!(creation_stat.merge({name: 'Close on exec()', node: 'details.sock_info.SOCK_CLOEXEC'}))
 Stat.create!(creation_stat.merge({name: 'Non-blocking', node: 'details.sock_info.SOCK_NONBLOCK'}))
 
-
-sockopt = StatCategory.create!(name: 'Socket options', info: 'About the sockets...', parent_category: nature)
+sockopt = StatCategory.create!(name: 'Socket options', info: 'About the socket options usage', parent_category: nature)
 sockopt_stat = {
   apply_to_app_trace: true,
   apply_to_process_trace: true,

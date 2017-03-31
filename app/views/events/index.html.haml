@@ -1,0 +1,19 @@
+- content_for :header, javascript_include_tag('https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js', 'data-turbolinks-track': 'reload')
+- content_for :page_header_title, "Events for socket trace ##{@socket_trace.id}"
+- content_for :main_header do
+  %nav
+    .nav-wrapper
+      .col.s12
+        = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
+        = link_to "App trace #{@socket_trace.app_trace.id}", app_trace_path(@socket_trace.app_trace), class: 'breadcrumb'
+        = link_to "Process trace #{@socket_trace.process_trace.id}", process_trace_path(@socket_trace.process_trace), class: 'breadcrumb'
+        = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
+        = link_to 'Events', socket_trace_events_path(@socket_trace), class: 'breadcrumb'
+
+- @events.each do |event|
+  %h5
+    #{event.type}()
+  %pre
+    %code.prettyprint~ JSON.pretty_generate(event.as_json.except('_id', 'type'))
+
+= will_paginate @events

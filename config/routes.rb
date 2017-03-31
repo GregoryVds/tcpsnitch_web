@@ -8,8 +8,10 @@ Rails.application.routes.draw do
   end
 
   resources :app_traces
-  resources :socket_traces
   resources :process_traces
+  resources :socket_traces do
+    resources :events
+  end
 
   require 'sidekiq/web'
   authenticate do

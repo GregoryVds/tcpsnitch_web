@@ -22,7 +22,7 @@ class Analysis
       measurable_id: measurable_id,
       measures: {}
     }
-    measurable.class.stats.each do |stat|
+    measurable.stats.each do |stat|
       attr[:measures][stat.name] = stat.compute(measurable)
     end
     create(attr)

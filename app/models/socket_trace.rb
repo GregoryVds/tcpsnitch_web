@@ -1,15 +1,6 @@
 class SocketTrace < ActiveRecord::Base
   include Measurable
 
-  STATS = [
-    :setsockopt_optname,
-    :setsockopt_level,
-    :fcntl_cmd,
-    :function_calls,
-    :read_bytes,
-    :recv_bytes
-  ]
-
   enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
 
   belongs_to :app_trace, inverse_of: :socket_traces, counter_cache: true

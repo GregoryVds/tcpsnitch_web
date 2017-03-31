@@ -5,22 +5,6 @@ class AppTrace < ActiveRecord::Base
           :net, :opt_a, :opt_b, :opt_c, :opt_d, :opt_f, :opt_l, :opt_n, :opt_t,
           :opt_u, :opt_v, :os, :version]
 
-  STATS = [
-    :socket_domains,
-    :socket_types,
-    :socket_protocols,
-    :socket_cloexec,
-    :socket_nonblock,
-    :getsockopt_level,
-    :getsockopt_optname,
-    :setsockopt_level,
-    :setsockopt_optname,
-    :fcntl_cmd,
-    :function_calls,
-    :read_bytes,
-    :recv_bytes
-  ]
-
   mount_uploader :archive, TraceUploader
 
   enum connectivity: {wifi: 0, lte: 1, ethernet: 2}
