@@ -26,4 +26,4 @@
       %td= app_trace.created_at.to_formatted_s(:db)
       %td= link_to 'Show', app_trace_path(app_trace)
 
-= will_paginate @app_traces
+= will_paginate @app_traces, renderer: MaterializePagination::Rails

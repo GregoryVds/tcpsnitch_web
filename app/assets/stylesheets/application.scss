@@ -114,3 +114,6 @@ footer.page-footer {
   background-color: color("red", "lighten-3");
 }
 
+.pagination a li.active {
+  color: #fff;
+}
