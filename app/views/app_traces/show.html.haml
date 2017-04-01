@@ -55,6 +55,9 @@
       = show_property_xl("Host uid", @app_trace.host_id)
       = show_property_xl("Tcpsnich version", @app_trace.version)
       = show_property_xl("Tcpsnitch git hash", @app_trace.git_hash)
+      = show_property_xl("Opt b", @app_trace.opt_b)
+      = show_property_xl("Opt f", @app_trace.opt_f)
+      = show_property_xl("Opt u", @app_trace.opt_u)
   %p
     = link_to @app_trace.archive.url, class: 'waves-effect waves-light btn' do
 

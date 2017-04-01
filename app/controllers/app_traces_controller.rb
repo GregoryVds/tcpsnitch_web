@@ -2,8 +2,8 @@ class AppTracesController < ApplicationController
   FILTERS = [:os, :app]
   UPLOADED="Trace successfully uploaded"
   UPLOAD_FAIL="Failed to upload trace"
-  IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few seconds..."
-  COMPURTED_SHORTLY = "Trace analysis will be computed shortly. Refresh this page in a few seconds..."
+  IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few minutes..."
+  COMPURTED_SHORTLY = "Trace analysis will be computed shortly. Refresh this page in a few minutes..."
 
   protect_from_forgery except: [:create]
 
@@ -38,9 +38,9 @@ class AppTracesController < ApplicationController
       end
     else
       if @app_trace.save
-        render :text => "#{UPLOADED} at #{app_trace_url(@app_trace)}.\n#{IMPORTED_SHORTLY}\n"
+        render plain: "#{UPLOADED} at #{app_trace_url(@app_trace)}.\n#{IMPORTED_SHORTLY}\n"
       else
-        render :text => "#{UPLOAD_FAIL}: #{@app_trace.errors.full_messages.join(', ')}.\n"
+        render plain: "#{UPLOAD_FAIL}: #{@app_trace.errors.full_messages.join(', ')}.\n"
       end
     end
   end

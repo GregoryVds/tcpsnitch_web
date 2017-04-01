@@ -36,7 +36,7 @@
       %tr
         %td= socket_trace.index
         %td= socket_trace.socket_type
-        %td.right-align= socket_trace.events_count
+        %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
         %td.right-align= link_to('Show', socket_trace_path(socket_trace))
 
 - @stats.each do |stat|

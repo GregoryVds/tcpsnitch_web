@@ -16,16 +16,9 @@ class CreateInitialSchema < ActiveRecord::Migration[5.0]
       t.text :log
       t.string :machine
       t.text :net
-      t.text :opt_a
       t.text :opt_b
-      t.text :opt_c
-      t.text :opt_d
       t.text :opt_f
-      t.text :opt_l
-      t.text :opt_n
-      t.text :opt_t
       t.text :opt_u
-      t.text :opt_v
       t.integer :os, index: true
       t.integer :process_traces_count
       t.integer :socket_traces_count

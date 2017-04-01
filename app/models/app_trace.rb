@@ -2,8 +2,7 @@ class AppTrace < ActiveRecord::Base
   include Measurable
 
   META = [:app, :app_version, :cmd, :host_id, :git_hash, :kernel, :machine,
-          :net, :opt_a, :opt_b, :opt_c, :opt_d, :opt_f, :opt_l, :opt_n, :opt_t,
-          :opt_u, :opt_v, :os, :version]
+          :net, :opt_b, :opt_f, :opt_u, :os, :version]
 
   mount_uploader :archive, TraceUploader
 
