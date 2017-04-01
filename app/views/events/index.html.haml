@@ -16,4 +16,4 @@
   %pre
     %code.prettyprint~ JSON.pretty_generate(event.as_json.except('_id', 'type'))
 
-= will_paginate @events
+= paginate @events

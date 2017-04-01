@@ -9,7 +9,7 @@ class AppTracesController < ApplicationController
 
   def index
     sanitize_filters
-    @app_traces = AppTrace.order(created_at: :desc).imported.where(nil).paginate(page: params[:page], per_page: 10)
+    @app_traces = AppTrace.order(created_at: :desc).imported.where(nil).page(params[:page])
     FILTERS.each do |filter|
       @app_traces = @app_traces.where(filter => params[filter]) if params[filter].present?
     end

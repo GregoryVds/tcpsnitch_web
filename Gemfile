@@ -42,9 +42,8 @@ gem 'oj'
 gem 'chartkick'
 gem 'activeadmin', '~> 1.0.0.pre5'
 gem 'devise'
-gem 'will_paginate', '~> 3.1.0'
-gem 'will_paginate_mongoid'
-gem 'will_paginate-materialize', github: 'harrybournis/will_paginate-materialize'
+gem 'kaminari'
+gem 'kaminari-mongoid'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
