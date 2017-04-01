@@ -22,7 +22,7 @@
       = show_property("Created at", @socket_trace.created_at)
       = show_property("Events imported", @socket_trace.events_imported)
       = show_property("Analysis computed", @socket_trace.analysis_computed)
-      = show_property("Events count", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
+      = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
   %p
     = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'
 

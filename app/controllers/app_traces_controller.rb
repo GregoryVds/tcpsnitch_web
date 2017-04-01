@@ -16,7 +16,7 @@ class AppTracesController < ApplicationController
   end
 
   def show
-    @app_trace = AppTrace.find(params[:id])
+    @app_trace = AppTrace.includes(:process_traces).find(params[:id])
     @stats = @app_trace.analysis_computed ? @app_trace.stats.includes(:stat_category) : []
     flash[:notice] = IMPORTED_SHORTLY unless @app_trace.events_imported
     flash[:notice] = COMPURTED_SHORTLY if @app_trace.events_imported && !@app_trace.analysis_computed

@@ -18,49 +18,49 @@
       = show_property("Application", @app_trace.app)
       = show_property("Command", @app_trace.cmd)
       = show_property("Os", @app_trace.os)
-      = show_property("Kernel", @app_trace.kernel)
-      = show_property("Host uid", @app_trace.host_id)
-      = show_property("Processor", @app_trace.machine)
       = show_property("Connectivity", @app_trace.connectivity)
-
     .col.s6
       = show_property("Created at", @app_trace.created_at)
       = show_property("Archive imported", @app_trace.events_imported)
       = show_property("Analysis computed", @app_trace.analysis_computed)
-      = show_property("Process traces count", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
-      = show_property("Socket traces count", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
-      = show_property("Events count", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
+      = show_property("#Processes", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
+      = show_property("#Sockets", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
+      = show_property("#Events", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
+    .col.s12
+      = show_property_xl("Workload", @app_trace.workload)
+      = show_property_xl("Comments", @app_trace.comments)
 
+.section{data: {section: 'about'}}
+  %h5=pluralize(@app_trace.process_traces_count, 'process')
+  %table
+    %thead
+      %th Process
+      %th.right-align #Sockets
+      %th.right-align #Events
+      %th
+    - @app_trace.process_traces.each do |process_trace|
+      %tr
+        %td= process_trace.name
+        %td.right-align= number_with_delimiter(process_trace.socket_traces_count, delimiter: '.')
+        %td.right-align= number_with_delimiter(process_trace.events_count, delimiter: '.')
+        %td.right-align= link_to('Show', process_trace_path(process_trace)) 
+
+.section{data: {section: 'about'}}
+  %h5 Details
   .row
     .col.s12
       = show_property_xl("App version", @app_trace.app_version)
-      = show_property_xl("Workload", @app_trace.workload)
-      = show_property_xl("Comments", @app_trace.comments)
-  .row
-    .col.s12
+      = show_property("Kernel", @app_trace.kernel)
+      = show_property("Processor", @app_trace.machine)
+      = show_property_xl("Host uid", @app_trace.host_id)
       = show_property_xl("Tcpsnich version", @app_trace.version)
       = show_property_xl("Tcpsnitch git hash", @app_trace.git_hash)
-
   %p
     = link_to @app_trace.archive.url, class: 'waves-effect waves-light btn' do
 
       %i.material-icons.left play_for_work
       Download archive
-.section{data: {section: 'about'}}
-  %h5 Processes
-  %p
-    #{@app_trace.process_traces_count} processes spawned:
-  %table
-    %thead
-      %th Process
-      %th Sockets count
-      %th Events count
-    - @app_trace.process_traces.each do |process_trace|
-      %tr
-        %td= process_trace.name
-        %td= number_with_delimiter(process_trace.socket_traces_count, delimiter: '.')
-        %td= number_with_delimiter(process_trace.events_count, delimiter: '.')
-        %td= link_to('Show', process_trace_path(process_trace)) 
 
 - @stats.each do |stat|
   = render 'shared/stat', stat: stat, trace: @app_trace
+

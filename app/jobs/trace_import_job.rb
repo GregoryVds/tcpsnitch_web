@@ -57,7 +57,7 @@ class TraceImportJob < ActiveJob::Base
 
   def create_socket_traces!(process_trace_id, process_trace_dir)
       events_count = 0
-      Dir.glob("#{process_trace_dir}/*.json").each do |socket_trace|
+      Dir.glob("#{process_trace_dir}/*.json").sort_by { |f| File.mtime(f) }.each do |socket_trace|
         s = SocketTrace.create!({
           app_trace_id: @app_trace.id,
           process_trace_id: process_trace_id,

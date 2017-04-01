@@ -21,24 +21,23 @@
       = show_property("Created at", @process_trace.created_at)
       = show_property("Events imported", @process_trace.events_imported)
       = show_property("Analysis computed", @process_trace.analysis_computed)
-      = show_property("Socket traces count", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))
-      = show_property("Events count", number_with_delimiter(@process_trace.events_count, delimiter: '.'))
+      = show_property("#Sockets", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))
+      = show_property("#Events", number_with_delimiter(@process_trace.events_count, delimiter: '.'))
 
 .section{data: {section: 'about'}}
-  %h5 Sockets
-  %p
-    #{@process_trace.socket_traces_count} sockets opened:
+  %h5=pluralize(@process_trace.socket_traces_count, 'socket')
   %table
     %thead
       %th Socket index
       %th Type
-      %th Events count
+      %th.right-align #Events
+      %tr
     - @process_trace.socket_traces.order(:index).each_with_index do |socket_trace|
       %tr
         %td= socket_trace.index
         %td= socket_trace.socket_type
-        %td= socket_trace.events_count
-        %td= link_to('Show', socket_trace_path(socket_trace))
+        %td.right-align= socket_trace.events_count
+        %td.right-align= link_to('Show', socket_trace_path(socket_trace))
 
 - @stats.each do |stat|
   = render 'shared/stat', stat: stat, trace: @process_trace
