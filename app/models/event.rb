@@ -17,9 +17,14 @@ class Event
   field :thread_id, type: Integer
   field :type, type: String
 
+  index({app_trace_id: 1})
+  index({process_trace_id: 1})
+  index({socket_trace_id: 1})
+  index({socket_trace_id: 1, index: 1})
+
   def self.count_by_val(node, **match)
-    collection.aggregate([ 
-      {:$match => match}, 
+    collection.aggregate([
+      {:$match => match},
       {:$sortByCount => "$#{node}"}
     ]).map do |r|
       [r["_id"], r["count"]]
