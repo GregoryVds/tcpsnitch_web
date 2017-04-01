@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def show_property(property, value, klass='col s6')
+  def show_property(property, value, klass='col s12')
     capture_haml do
       haml_tag :div, class: klass do
         haml_tag :strong, property + ': '
@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def show_property_xl(property, value)
-    show_property(property, value, '')
+    show_property(property, value, 'col s12')
   end
 
   def show_properties(section_name, obj, properties)

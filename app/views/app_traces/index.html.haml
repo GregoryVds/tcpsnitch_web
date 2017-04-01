@@ -19,9 +19,9 @@
     %tr
       %td= app_trace.app
       %td= app_trace.os.capitalize
-      %td= app_trace.process_traces_count
-      %td= app_trace.socket_traces_count
-      %td= app_trace.events_count
+      %td= number_with_delimiter(app_trace.process_traces_count, delimiter: '.')
+      %td= number_with_delimiter(app_trace.socket_traces_count, delimiter: '.')
+      %td= number_with_delimiter(app_trace.events_count, delimiter: '.')
       %td= app_trace.version
       %td= app_trace.created_at.to_formatted_s(:db)
       %td= link_to 'Show', app_trace_path(app_trace)

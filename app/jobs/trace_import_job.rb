@@ -36,7 +36,7 @@ class TraceImportJob < ActiveJob::Base
   end
 
   def process_traces
-    Dir.glob("#{@extract_dir}/*").select{|f| File.directory?(f) }.select{ |f| f !~ /meta$/ }
+    Dir.glob("#{@extract_dir}/*").sort.select{|f| File.directory?(f) }.select{ |f| f !~ /meta$/ }
   end
 
   def create_process_traces!

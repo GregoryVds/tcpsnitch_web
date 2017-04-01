@@ -1,5 +1,6 @@
 class Event
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   field :app, type: String
   field :app_trace_id, type: Integer

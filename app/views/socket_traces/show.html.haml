@@ -13,12 +13,18 @@
         = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
 
 .section{data: {section: 'about'}}
-  %h5 About trace
+  %h5 General
+  .row
+    .col.s6
+      = show_property("Id", @socket_trace.id)
+      = show_property("Socket type", @socket_trace.socket_type)
+    .col.s6
+      = show_property("Created at", @socket_trace.created_at)
+      = show_property("Events imported", @socket_trace.events_imported)
+      = show_property("Analysis computed", @socket_trace.analysis_computed)
+      = show_property("Events count", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
   %p
-    .row
-      - [:app_trace_id, :process_trace_id, :socket_type, :events_count, :analysis_computed].each do |attr|
-        = show_property(attr.to_s.humanize, @socket_trace.send(attr))
-    = link_to 'Browse events', socket_trace_events_path(@socket_trace)
+    = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'
 
 - @stats.each do |stat|
   = render 'shared/stat', stat: stat, trace: @socket_trace
