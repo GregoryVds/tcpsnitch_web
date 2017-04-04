@@ -150,7 +150,7 @@ production:
     default:
       database: tcpsnitch_web_production
       hosts:
-        - localhost:27017
+        - localhost:27018
       options:
         read:
           mode: :primary
