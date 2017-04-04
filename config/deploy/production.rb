@@ -1,6 +1,4 @@
-set :application, 'tcpsnitch_web'
 set :branch, 'master'
-set :pg_database, 'tcpsnitch_web_production'
 
 # role-based syntax
 # ==================
