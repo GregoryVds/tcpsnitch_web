@@ -1,17 +1,10 @@
 ActiveAdmin.register SocketTrace do
-
-# See permitted parameters documentation:
-# https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-#
-# permit_params :list, :of, :attributes, :on, :model
-#
-# or
-#
-# permit_params do
-#   permitted = [:permitted, :attributes]
-#   permitted << :other if params[:action] == 'create' && current_user.admin?
-#   permitted
-# end
-
-
+  filter :app_trace_id
+  filter :process_trace_id
+  filter :events_imported
+  filter :index
+  filter :socket_type
+  filter :analysis_computed
+  filter :created_at
+  filter :updated_at
 end
