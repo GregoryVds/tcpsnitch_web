@@ -22,7 +22,8 @@ class TraceImportJob < ActiveJob::Base
   end
 
   def first_line(path)
-    File.open(path, &:readline).strip
+    first = File.open(path).readlines.first
+    first ? first.strip : ''
   end
 
   def update_meta_infos

@@ -14,10 +14,6 @@ class AppTrace < ActiveRecord::Base
 
   validates :archive, presence: true
   validate :archive_contains_meta_files
-  # At creation time, archive is not yet processed
-  META.each do |meta|
-    validates meta, presence: true, on: :update
-  end
 
   scope :imported, -> { where(events_imported: true) }
 
