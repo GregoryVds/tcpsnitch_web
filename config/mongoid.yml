@@ -154,4 +154,5 @@ production:
       options:
         read:
           mode: :primary
-        max_pool_size: 1
+        max_pool_size: 50
+        wait_queue_timeout: 10
