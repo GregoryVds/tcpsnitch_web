@@ -32,7 +32,7 @@ class AppTrace < ActiveRecord::Base
   end
 
   def to_s
-    "Trace for #{app.capitalize} on #{os.capitalize}"
+    "App trace ##{id}"
   end
 
   def archive_is_zip
@@ -57,7 +57,7 @@ class AppTrace < ActiveRecord::Base
       unless files_in_archive.include?("meta/#{f}") then
         errors.add(:archive, "missing file 'meta/#{f}'")  
       end
-    end 
+  end
   end
 
   def schedule_import

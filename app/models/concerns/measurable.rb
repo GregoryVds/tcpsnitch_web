@@ -23,7 +23,7 @@ module Measurable
   end
 
   def analysis_computed!
-    update_column(:analysis_computed, true) 
+    update_column(:analysis_computed, true)
   end
 
   def destroy_analysis
