@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170312153439) do
+ActiveRecord::Schema.define(version: 20170405155503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,16 +116,17 @@ ActiveRecord::Schema.define(version: 20170312153439) do
   end
 
   create_table "stats", force: :cascade do |t|
-    t.boolean  "apply_to_app_trace",     default: false
-    t.boolean  "apply_to_process_trace", default: false
-    t.boolean  "apply_to_socket_trace",  default: false
+    t.boolean  "apply_to_app_trace",     default: true
+    t.boolean  "apply_to_process_trace", default: true
+    t.boolean  "apply_to_socket_trace",  default: true
     t.text     "event_filters"
     t.string   "name"
     t.string   "node"
     t.integer  "stat_category_id"
     t.integer  "stat_type"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "description"
     t.index ["stat_category_id"], name: "index_stats_on_stat_category_id", using: :btree
   end
 

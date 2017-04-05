@@ -29,16 +29,18 @@ class Event
       {:$sortByCount => "$#{node}"}
     ]).map do |r|
       [r["_id"], r["count"]]
+    end.reject do |val, count|
+      val.nil?
     end
   end
 
   # Event.sum_by_group("type", "details.bytes", type: {:$in => ['read', 'write']} ).to_a
   def self.sum_by_group(group_node, sum_node, **match)
-    collection.aggregate([ 
-      {:$match => match}, 
+    collection.aggregate([
+      {:$match => match},
       {:$group => {
           _id: "$#{group_node}",
-          sum: { :$sum => "$#{sum_node}" } 
+          sum: { :$sum => "$#{sum_node}" }
         }
       }
     ]).map do |r|
@@ -47,8 +49,8 @@ class Event
   end
 
   def self.vals(node, **match)
-    collection.aggregate([ 
-      {:$match => match}, 
+    collection.aggregate([
+      {:$match => match},
       {:$project => {node => 1}},
       {:$sort => {node => 1}}
     ]).map do |r|

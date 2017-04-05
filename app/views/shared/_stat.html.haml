@@ -17,6 +17,6 @@
               - elsif stat.cdf?
                 = line_chart data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
         .card-action
-          This is where we describe what the statistic is about and how it is computed.
+          = stat.description
 
 
