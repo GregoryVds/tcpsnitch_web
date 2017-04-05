@@ -4,6 +4,6 @@
       %a.collapsible-header= parent.name
       .collapsible-body
         %ul
-          - StatCategory.children_of(parent.id).each do |subcategory|
-            %li{data: {section: subcategory.name.to_sym}}= subcategory.name
+          - StatCategory.children_of(parent.id).each do |child|
+            %li{data: {section: child.name}}= child.name
 

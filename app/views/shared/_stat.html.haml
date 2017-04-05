@@ -7,16 +7,14 @@
       .card
         .card-content
           %span.card-title
-            = stat.name
+            = capitalize_first(stat.name)
           .content
             - if data.empty?
-              No data
+              No data for this trace.
             - else
               - if stat.proportion?
                 = pie_chart data
               - elsif stat.cdf?
                 = line_chart data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
-        .card-action
-          = stat.description
-
-
+        - if stat.description.present?
+          .card-action= stat.description
