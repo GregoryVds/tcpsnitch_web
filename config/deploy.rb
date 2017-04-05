@@ -1,7 +1,7 @@
 # config valid only for current version of Capistrano
 lock '3.8.0'
 
-server 'ns328523.ip-37-187-114.eu', roles: %w{app web db}
+server 'tcpsnitch.org', roles: %w{app web db}
 
 set :application, 'tcpsnitch_web'
 set :app_fullname, "#{fetch(:application)}_#{fetch(:stage)}"
