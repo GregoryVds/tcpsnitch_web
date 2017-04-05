@@ -24,7 +24,8 @@
       = show_property("#Sockets", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))
       = show_property("#Events", number_with_delimiter(@process_trace.events_count, delimiter: '.'))
 
-.section{data: {section: 'about'}}
+  = render 'shared/front_stats', trace: @process_trace
+
   %h5=pluralize(@process_trace.socket_traces_count, 'socket')
   %table
     %thead
@@ -39,6 +40,4 @@
         %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
         %td.right-align= link_to('Show', socket_trace_path(socket_trace))
 
-- @stats.each do |stat|
-  = render 'shared/stat', stat: stat, trace: @process_trace
-
+= render 'shared/stats', trace: @process_trace

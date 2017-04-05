@@ -1,4 +1,6 @@
 class Stat < ActiveRecord::Base
+  include CachedCollection
+
   serialize :event_filters, Hash
 
   enum stat_type: {proportion: 0, cdf: 1, descriptive: 2}
@@ -7,6 +9,17 @@ class Stat < ActiveRecord::Base
 
   validates :name, :node, :stat_category, :stat_type, presence: true
   validates :name, uniqueness: true
+
+  scope :front, -> { where(name: "Functions usage") }
+  scope :category, -> (cat_id) { where(stat_category_id: cat_id) }
+
+  def self.front_stats
+    cached_collection(front, "front")
+  end
+
+  def self.with_category_id(id)
+    cached_collection(category(id), "category#{id}")
+  end
 
   def event_filters=(val)
     val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin... Probably a better solution exists

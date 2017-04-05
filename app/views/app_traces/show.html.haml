@@ -30,7 +30,8 @@
       = show_property_xl("Workload", @app_trace.workload)
       = show_property_xl("Comments", @app_trace.comments)
 
-.section{data: {section: 'about'}}
+  = render 'shared/front_stats', trace: @app_trace
+
   %h5=pluralize(@app_trace.process_traces_count, 'process')
   %table
     %thead
@@ -45,7 +46,6 @@
         %td.right-align= number_with_delimiter(process_trace.events_count, delimiter: '.')
         %td.right-align= link_to('Show', process_trace_path(process_trace)) 
 
-.section{data: {section: 'about'}}
   %h5 Details
   .row
     .col.s12
@@ -64,6 +64,4 @@
       %i.material-icons.left play_for_work
       Download archive
 
-- @stats.each do |stat|
-  = render 'shared/stat', stat: stat, trace: @app_trace
-
+= render 'shared/stats', trace: @app_trace

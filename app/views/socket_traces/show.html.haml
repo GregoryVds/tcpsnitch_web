@@ -23,10 +23,10 @@
       = show_property("Events imported", @socket_trace.events_imported)
       = show_property("Analysis computed", @socket_trace.analysis_computed)
       = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
+
+  = render 'shared/front_stats', trace: @socket_trace
+
   %p
     = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'
 
-- @stats.each do |stat|
-  = render 'shared/stat', stat: stat, trace: @socket_trace
-
-
+= render 'shared/stats', trace: @socket_trace

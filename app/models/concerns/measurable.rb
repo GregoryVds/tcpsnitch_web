@@ -41,7 +41,11 @@ module Measurable
   end
 
   def schedule_analysis
-    AnalysisJob.perform_later(measurable_type, id) 
+    AnalysisJob.perform_later(measurable_type, id)
+  end
+
+  def functions_usage_stat
+    stats.where(name: "Functions usage").first
   end
 
   def stats

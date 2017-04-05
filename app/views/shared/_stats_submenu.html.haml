@@ -1,9 +1,9 @@
 %ul.collapsible{data: {collapsible: 'expandable'}}
-  - StatCategory.top_level.each do |category|
+  - StatCategory.root_categories.each do |parent|
     %li
-      %a.collapsible-header= category.name
+      %a.collapsible-header= parent.name
       .collapsible-body
         %ul
-          - category.subcategories.each do |subcategory|
-            %li{data: {section: subcategory.name}}= subcategory.name
+          - StatCategory.children_of(parent.id).each do |subcategory|
+            %li{data: {section: subcategory.name.to_sym}}= subcategory.name
 
