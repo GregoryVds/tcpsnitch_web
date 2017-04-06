@@ -1,6 +1,4 @@
-// Receive trace & stat as argument
-- data = trace.analysis[:measures][stat.name].to_a # to_a cast nil to []
-
+- stat_data = trace.stat_data(stat)
 .section
   .row
     .col.s12
@@ -9,12 +7,12 @@
           %span.card-title
             = capitalize_first(stat.name)
           .content
-            - if data.empty?
+            - if stat_data.empty?
               No data for this trace.
             - else
               - if stat.proportion?
-                = pie_chart data
+                = pie_chart stat_data
               - elsif stat.cdf?
-                = line_chart data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
+                = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
         - if stat.description.present?
           .card-action= stat.description

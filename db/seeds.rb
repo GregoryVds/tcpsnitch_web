@@ -242,7 +242,7 @@ async_families.each do |family|
         name: "#{family.to_s.humanize} #{ev_type.to_s.humanize.downcase}: #{event}",
         node: "details.#{ev_type}.#{event}",
         stat_type: :proportion,
-        description: async_description(family.humanize, ev_type, event)
+        description: async_description(family.to_s.humanize, ev_type, event)
       }))
     end
   end

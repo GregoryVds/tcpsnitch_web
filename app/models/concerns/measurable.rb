@@ -36,7 +36,11 @@ module Measurable
 
   def events_imported!
     self.events_imported = true
-    save!
+    Analysis.create({
+      measurable_type: measurable_type,
+      measurable_id: id,
+      measures: {}
+    })
     schedule_analysis
   end
 
@@ -50,6 +54,10 @@ module Measurable
 
   def stats
     self.class.stats
+  end
+
+  def stat_data(stat)
+    analysis ? analysis[:measures][stat.name].to_a : [] # to_a cast nil to []
   end
 
   module ClassMethods

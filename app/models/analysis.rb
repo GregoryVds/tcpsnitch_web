@@ -17,15 +17,11 @@ class Analysis
 
   def self.compute(measurable_type, measurable_id)
     measurable = measurable_type.classify.constantize.find(measurable_id)
-    attr = {
-      measurable_type: measurable_type,
-      measurable_id: measurable_id,
-      measures: {}
-    }
+    attr = {measures: {}}
     measurable.stats.each do |stat|
       attr[:measures][stat.name] = stat.compute(measurable)
+      measurable.analysis.update_attributes(attr)
     end
-    create(attr)
   end
 end
 
