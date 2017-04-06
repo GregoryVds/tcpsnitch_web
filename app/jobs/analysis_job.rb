@@ -1,7 +1,7 @@
 class AnalysisJob < ActiveJob::Base
   queue_as :default
 
-  def perform(measurable_type, measurable_id)
-    Analysis.compute(measurable_type, measurable_id)
+  def perform(analysable_type, analysable_id)
+    Analysis.compute(analysable_type, analysable_id)
   end
 end

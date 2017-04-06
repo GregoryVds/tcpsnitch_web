@@ -1,27 +1,22 @@
 class Analysis
   include Mongoid::Document
 
-  field :measurable_type, type: String
-  field :measurable_id, type: Integer
+  field :analysable_type, type: String
+  field :analysable_id, type: Integer
   field :measures, type: Hash
 
-  after_create :set_analysis_computed_on_measurable
-
-  def measurable
-    @measurable ||= measurable_type.classify.constantize.find(measurable_id)
+  def analysable
+    @analysable ||= analysable_type.classify.constantize.find(analysable_id)
   end
 
-  def set_analysis_computed_on_measurable
-    measurable.analysis_computed!
-  end
-
-  def self.compute(measurable_type, measurable_id)
-    measurable = measurable_type.classify.constantize.find(measurable_id)
+  def self.compute(analysable_type, analysable_id)
+    analysable = analysable_type.classify.constantize.find(analysable_id)
     attr = {measures: {}}
-    measurable.stats.each do |stat|
-      attr[:measures][stat.name] = stat.compute(measurable)
-      measurable.analysis.update_attributes(attr)
+    Stat.all.each do |stat|
+      attr[:measures][stat.name] = stat.compute(analysable)
+      analysable.analysis.update_attributes(attr)
     end
+    analysable.analysis_computed!
   end
 end
 

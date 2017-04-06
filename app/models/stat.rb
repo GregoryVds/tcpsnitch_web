@@ -26,8 +26,8 @@ class Stat < ActiveRecord::Base
     write_attribute(:event_filters, val)
   end
 
-  def compute(measurable)
-    where = event_filters.merge(measurable.filter).merge(fake_call: false)
+  def compute(trace)
+    where = event_filters.merge(trace.filter).merge(fake_call: false)
     if proportion? then
       Event.count_by_val(node, where)
     elsif cdf? then

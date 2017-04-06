@@ -1,5 +1,5 @@
 class SocketTrace < ActiveRecord::Base
-  include Measurable
+  include Trace
 
   enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
 
