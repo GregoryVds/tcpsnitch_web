@@ -1,7 +1,7 @@
 class SocketTrace < ActiveRecord::Base
   include Trace
 
-  enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1}
+  enum socket_type: {SOCK_DGRAM: 0, SOCK_STREAM: 1, SOCK_RAW: 2}
 
   belongs_to :app_trace, inverse_of: :socket_traces, counter_cache: true
   belongs_to :process_trace, inverse_of: :socket_traces, counter_cache: true
