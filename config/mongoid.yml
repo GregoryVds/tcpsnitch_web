@@ -156,3 +156,14 @@ production:
           mode: :primary
         max_pool_size: 50
         wait_queue_timeout: 10
+staging:
+  clients:
+    default:
+      database: tcpsnitch_web_staging
+      hosts:
+        - localhost:27018
+      options:
+        read:
+          mode: :primary
+        max_pool_size: 50
+        wait_queue_timeout: 10
