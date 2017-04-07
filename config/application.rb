@@ -17,6 +17,8 @@ module TcpsnitchWeb
 
     config.active_job.queue_adapter = :sidekiq
     config.autoload_paths << "#{Rails.root}/lib"
+
+    config.time_zone = 'Brussels'
   end
 end
 

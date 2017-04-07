@@ -44,6 +44,7 @@ gem 'activeadmin', '~> 1.0.0.pre5'
 gem 'devise'
 gem 'kaminari'
 gem 'kaminari-mongoid'
+gem 'redis-namespace'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
