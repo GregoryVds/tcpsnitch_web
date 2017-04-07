@@ -19,6 +19,9 @@ set :ssh_options, {
 
 set :pty, false
 
+set :sidekiq_env, fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+
+
 append :linked_dirs, "public/uploads"
 
 # Default value for :linked_files is []
