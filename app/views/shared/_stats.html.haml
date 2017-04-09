@@ -1,6 +1,6 @@
 - StatCategory.leaf_categories.each do |leaf_category|
   .section{data: {section: leaf_category.name}}
-    %h5= capitalize_first(leaf_category.name)
+    %h5= leaf_category.pretty_name
     %p= leaf_category.description
     - Stat.with_category_id(leaf_category.id).each do |stat|
       = render 'shared/stat', stat: stat, trace: trace

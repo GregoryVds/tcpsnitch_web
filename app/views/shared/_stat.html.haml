@@ -5,7 +5,7 @@
       .card
         .card-content
           %span.card-title
-            = capitalize_first(stat.name)
+            = stat.pretty_name
           .content
             - if stat_data.empty?
               No data for this trace.

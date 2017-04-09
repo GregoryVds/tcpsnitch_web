@@ -21,6 +21,10 @@ class Stat < ActiveRecord::Base
     cached_collection(category(id), "category#{id}")
   end
 
+  def pretty_name
+    name.sub(/^./, &:upcase)
+  end
+
   def event_filters=(val)
     val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin... Probably a better solution exists
     write_attribute(:event_filters, val)

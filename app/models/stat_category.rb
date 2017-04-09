@@ -22,4 +22,8 @@ class StatCategory < ActiveRecord::Base
   def self.children_of(parent_id)
     cached_collection(children(parent_id), "children#{parent_id}")
   end
+
+  def pretty_name
+    name.sub(/^./, &:upcase)
+  end
 end

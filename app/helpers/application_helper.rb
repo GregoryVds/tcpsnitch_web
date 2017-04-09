@@ -27,9 +27,4 @@ module ApplicationHelper
   def active_on(controller, action)
     (params[:controller] == controller && params[:action] == action) ? 'active' : ''
   end
-
-  def capitalize_first(string)
-    string[0] = string[0].capitalize
-    string
-  end
 end
