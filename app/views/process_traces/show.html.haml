@@ -1,9 +1,9 @@
 - content_for :page_header_title, @process_trace
 - if @process_trace.events_imported
   - content_for :page_header_text, @process_trace.long_name
-- content_for :left_menu, render('shared/left_menu', trace: @process_trace)
+- content_for :left_menu, render('left_menu', trace: @process_trace)
 
-- content_for :main_header do 
+- content_for :main_header do
   %nav
     .nav-wrapper
       .col.s12
@@ -26,6 +26,7 @@
 
   = render 'shared/front_stats', trace: @process_trace
 
+.section{data: {section: 'sockets'}, css: {display: 'none'}}
   %h5=pluralize(@process_trace.socket_traces_count, 'socket')
   %table
     %thead
