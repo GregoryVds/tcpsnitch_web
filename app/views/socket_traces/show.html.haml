@@ -12,7 +12,7 @@
         = link_to "Process trace #{@socket_trace.process_trace.id}", process_trace_path(@socket_trace.process_trace), class: 'breadcrumb'
         = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
 
-- cache @socket_trace
+- cache @socket_trace do
   .section{data: {section: 'about'}}
     %h5 General
     .row

@@ -11,7 +11,7 @@
         = link_to "App trace #{@process_trace.app_trace.id}", app_trace_path(@process_trace.app_trace), class: 'breadcrumb'
         = link_to "Process trace #{@process_trace.id}", process_trace_path(@process_trace), class: 'breadcrumb'
 
-- cache @process_trace
+- cache @process_trace do
   .section{data: {section: 'about'}}
     %h5 General
     .row

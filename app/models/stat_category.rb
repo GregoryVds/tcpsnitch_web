@@ -2,7 +2,7 @@ class StatCategory < ActiveRecord::Base
   include CachedCollection
 
   has_many :subcategories, class_name: :StatCategory, foreign_key: :parent_category_id, dependent: :destroy
-  belongs_to :parent_category, class_name: :StatCategory, optional: true
+  belongs_to :parent_category, class_name: :StatCategory, optional: true, touch: true
   has_many :stats, inverse_of: :stat_category, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
