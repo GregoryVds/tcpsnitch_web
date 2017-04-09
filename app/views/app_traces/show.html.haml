@@ -7,7 +7,7 @@
   %nav
     .nav-wrapper
       .col.s12
-        = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
+        = link_to 'Browse traces', root_path, class: 'breadcrumb'
         = link_to "App trace #{@app_trace.id}", app_trace_path(@app_trace), class: 'breadcrumb'
 
 .section{data: {section: 'about'}}
