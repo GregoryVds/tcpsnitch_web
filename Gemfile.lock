@@ -108,6 +108,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
+    dalli (2.7.6)
     debug_inspector (0.0.2)
     devise (4.2.1)
       bcrypt (~> 3.0)
@@ -324,6 +325,7 @@ DEPENDENCIES
   carrierwave (~> 1.0)
   chartkick
   coffee-rails (~> 4.2)
+  dalli
   devise
   haml-rails (~> 0.9)
   jbuilder (~> 2.5)
