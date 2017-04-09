@@ -20,7 +20,7 @@ set :ssh_options, {
 set :pty, false
 
 set :sidekiq_env, fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
-set :sidekiq_config, Rails.root.join('config','sidekiq.yml')
+set :sidekiq_config, 'config/sidekiq.yml'
 
 append :linked_dirs, "public/uploads"
 
