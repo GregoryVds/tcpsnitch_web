@@ -11,7 +11,6 @@ socket_cat = StatCategory.create!({
 })
 [:domain, :type, :protocol, :SOCK_CLOEXEC, :SOCK_NONBLOCK].each do |field|
   Stat.create!({
-    apply_to_socket_trace: false,
     event_filters: {type: :socket},
     stat_category: socket_cat,
     stat_type: :proportion,
