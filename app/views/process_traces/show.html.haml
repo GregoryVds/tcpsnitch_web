@@ -11,34 +11,35 @@
         = link_to "App trace #{@process_trace.app_trace.id}", app_trace_path(@process_trace.app_trace), class: 'breadcrumb'
         = link_to "Process trace #{@process_trace.id}", process_trace_path(@process_trace), class: 'breadcrumb'
 
-.section{data: {section: 'about'}}
-  %h5 General
-  .row
-    .col.s6
-      = show_property("Id", @process_trace.id)
-      = show_property("Created at", @process_trace.created_at.to_s(:long))
-      = show_property("Process", @process_trace.name)
-    .col.s6
-      = show_property("Events imported", @process_trace.events_imported)
-      = show_property("Analysis computed", @process_trace.analysis_computed)
-      = show_property("#Sockets", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))
-      = show_property("#Events", number_with_delimiter(@process_trace.events_count, delimiter: '.'))
+- cache @process_trace
+  .section{data: {section: 'about'}}
+    %h5 General
+    .row
+      .col.s6
+        = show_property("Id", @process_trace.id)
+        = show_property("Created at", @process_trace.created_at.to_s(:long))
+        = show_property("Process", @process_trace.name)
+      .col.s6
+        = show_property("Events imported", @process_trace.events_imported)
+        = show_property("Analysis computed", @process_trace.analysis_computed)
+        = show_property("#Sockets", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))
+        = show_property("#Events", number_with_delimiter(@process_trace.events_count, delimiter: '.'))
 
-  = render 'shared/front_stats', trace: @process_trace
+    = render 'shared/front_stats', trace: @process_trace
 
-.section{data: {section: 'sockets'}, css: {display: 'none'}}
-  %h5=pluralize(@process_trace.socket_traces_count, 'socket')
-  %table
-    %thead
-      %th Socket index
-      %th Type
-      %th.right-align #Events
-      %tr
-    - @process_trace.socket_traces.order(:index).each_with_index do |socket_trace|
-      %tr
-        %td= socket_trace.index
-        %td= socket_trace.socket_type
-        %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
-        %td.right-align= link_to('Show', socket_trace_path(socket_trace))
+  .section{data: {section: 'sockets'}, style: "display:none;"}
+    %h5=pluralize(@process_trace.socket_traces_count, 'socket')
+    %table
+      %thead
+        %th Socket index
+        %th Type
+        %th.right-align #Events
+        %tr
+      - @process_trace.socket_traces.order(:index).each_with_index do |socket_trace|
+        %tr
+          %td= socket_trace.index
+          %td= socket_trace.socket_type
+          %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
+          %td.right-align= link_to('Show', socket_trace_path(socket_trace))
 
-= render 'shared/stats', trace: @process_trace
+  = render 'shared/stats', trace: @process_trace

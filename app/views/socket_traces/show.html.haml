@@ -12,21 +12,22 @@
         = link_to "Process trace #{@socket_trace.process_trace.id}", process_trace_path(@socket_trace.process_trace), class: 'breadcrumb'
         = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
 
-.section{data: {section: 'about'}}
-  %h5 General
-  .row
-    .col.s6
-      = show_property("Id", @socket_trace.id)
-      = show_property("Created at", @socket_trace.created_at.to_s(:long))
-      = show_property("Socket type", @socket_trace.socket_type)
-    .col.s6
-      = show_property("Events imported", @socket_trace.events_imported)
-      = show_property("Analysis computed", @socket_trace.analysis_computed)
-      = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
+- cache @socket_trace
+  .section{data: {section: 'about'}}
+    %h5 General
+    .row
+      .col.s6
+        = show_property("Id", @socket_trace.id)
+        = show_property("Created at", @socket_trace.created_at.to_s(:long))
+        = show_property("Socket type", @socket_trace.socket_type)
+      .col.s6
+        = show_property("Events imported", @socket_trace.events_imported)
+        = show_property("Analysis computed", @socket_trace.analysis_computed)
+        = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
 
-  = render 'shared/front_stats', trace: @socket_trace
+    = render 'shared/front_stats', trace: @socket_trace
 
-  %p
-    = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'
+    %p
+      = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'
 
-= render 'shared/stats', trace: @socket_trace
+  = render 'shared/stats', trace: @socket_trace

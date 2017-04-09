@@ -1,5 +1,5 @@
 - StatCategory.leaf_categories.each do |leaf_category|
-  .section{data: {section: leaf_category.name}, css: {display: 'none'}}
+  .section{data: {section: leaf_category.name}, style: "display:none;"}
     %h5= leaf_category.pretty_name
     %p= leaf_category.description
     - Stat.with_category_id(leaf_category.id).each do |stat|

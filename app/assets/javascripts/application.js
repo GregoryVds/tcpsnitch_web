@@ -22,7 +22,6 @@ $(document).on('turbolinks:load', function(event) {
     // Hacky solution to avoid duplicate material_select on "back".
     $('select').material_select();
     $('.select-wrapper:not(:first-child)').remove();
-    console.log($('.select-wrapper:not(:first-child)').length);
 
     Materialize.updateTextFields();
 
@@ -33,9 +32,6 @@ $(document).on('turbolinks:load', function(event) {
 
     // Left menu
     sections = $('.main-body .content [data-section]');
-    sections.hide()
-    sections.filter('[data-section="about"]').show()
-
     $('.left-menu li[data-section]').click(function(event){
         var section = $(event.currentTarget).data('section');
         sections.hide();
