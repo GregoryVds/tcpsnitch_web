@@ -28,4 +28,16 @@ ActiveAdmin.register AppTrace do
                 :comments,
                 :connectivity,
                 :workload
+
+  index do
+    id_column
+    column :app
+    column :os
+    column :cmd
+    column :analysis_computed
+    column :events_imported
+    column :created_at
+    column :updated_at
+    actions
+  end
 end
