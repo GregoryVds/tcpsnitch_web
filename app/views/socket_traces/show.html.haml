@@ -1,6 +1,6 @@
-- content_for :page_header_title, "Socket trace ##{@socket_trace.id}"
+- content_for :page_header_title, @socket_trace
 - if @socket_trace.events_imported
-  - content_for :page_header_text, @socket_trace
+  - content_for :page_header_text, @socket_trace.long_name
 - content_for :left_menu, render('shared/left_menu', trace: @socket_trace)
 
 - content_for :main_header do 
@@ -17,9 +17,9 @@
   .row
     .col.s6
       = show_property("Id", @socket_trace.id)
+      = show_property("Created at", @socket_trace.created_at.to_s(:long))
       = show_property("Socket type", @socket_trace.socket_type)
     .col.s6
-      = show_property("Created at", @socket_trace.created_at)
       = show_property("Events imported", @socket_trace.events_imported)
       = show_property("Analysis computed", @socket_trace.analysis_computed)
       = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))

@@ -13,4 +13,8 @@ class SocketTrace < ActiveRecord::Base
   def to_s
     "Socket trace ##{id}"
   end
+
+  def long_name
+    "#{socket_type} socket opened by process #{process_trace.name}"
+  end
 end

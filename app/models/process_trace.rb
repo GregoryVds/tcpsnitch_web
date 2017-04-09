@@ -7,6 +7,10 @@ class ProcessTrace < ActiveRecord::Base
   validates :app_trace, :name, presence: true
 
   def to_s
-    "Trace for process #{name.capitalize} spawned by app #{app_trace.app.capitalize}"
+    "Process trace ##{id}"
+  end
+
+  def long_name
+    "#{name.capitalize} process spawned by #{app_trace.app.capitalize} on #{app_trace.os.capitalize}"
   end
 end

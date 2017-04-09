@@ -1,6 +1,6 @@
-- content_for :page_header_title, "Process trace ##{@process_trace.id}"
+- content_for :page_header_title, @process_trace
 - if @process_trace.events_imported
-  - content_for :page_header_text, @process_trace
+  - content_for :page_header_text, @process_trace.long_name
 - content_for :left_menu, render('shared/left_menu', trace: @process_trace)
 
 - content_for :main_header do 
@@ -16,9 +16,9 @@
   .row
     .col.s6
       = show_property("Id", @process_trace.id)
+      = show_property("Created at", @process_trace.created_at.to_s(:long))
       = show_property("Process", @process_trace.name)
     .col.s6
-      = show_property("Created at", @process_trace.created_at)
       = show_property("Events imported", @process_trace.events_imported)
       = show_property("Analysis computed", @process_trace.analysis_computed)
       = show_property("#Sockets", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))

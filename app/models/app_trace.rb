@@ -19,4 +19,8 @@ class AppTrace < ActiveRecord::Base
   def to_s
     "App trace ##{id}"
   end
+
+  def long_name
+    "#{app.capitalize} on #{os.capitalize}"
+  end
 end

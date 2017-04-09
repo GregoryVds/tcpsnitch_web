@@ -1,6 +1,6 @@
-- content_for :page_header_title, "App trace ##{@app_trace.id}"
+- content_for :page_header_title, @app_trace
 - if @app_trace.events_imported
-  - content_for :page_header_text, @app_trace
+  - content_for :page_header_text, @app_trace.long_name
 - content_for :left_menu, render('shared/left_menu', trace: @app_trace)
 
 - content_for :main_header do
@@ -15,21 +15,17 @@
   .row
     .col.s6
       = show_property("Id", @app_trace.id)
+      = show_property("Created at", @app_trace.created_at.to_s(:long))
       = show_property("Application", @app_trace.app)
       = show_property("Command", @app_trace.cmd)
       = show_property("Os", @app_trace.os)
-      = show_property("Connectivity", @app_trace.connectivity)
     .col.s6
-      = show_property("Created at", @app_trace.created_at)
       = show_property("Archive imported", @app_trace.events_imported)
       = show_property("Analysis computed", @app_trace.analysis_computed)
       = show_property("#Processes", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
       = show_property("#Sockets", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
       = show_property("#Events", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
     .col.s12
-      = show_property_xl("Workload", @app_trace.workload)
-      = show_property_xl("Comments", @app_trace.comments)
-
   = render 'shared/front_stats', trace: @app_trace
 
   %h5=pluralize(@app_trace.process_traces_count, 'process')
@@ -50,6 +46,7 @@
   .row
     .col.s12
       = show_property_xl("App version", @app_trace.app_version)
+      = show_property("Connectivity", @app_trace.connectivity)
       = show_property("Kernel", @app_trace.kernel)
       = show_property("Processor", @app_trace.machine)
       = show_property_xl("Host uid", @app_trace.host_id)
@@ -58,6 +55,8 @@
       = show_property_xl("Opt b", @app_trace.opt_b)
       = show_property_xl("Opt f", @app_trace.opt_f)
       = show_property_xl("Opt u", @app_trace.opt_u)
+      = show_property_xl("Workload", @app_trace.workload)
+      = show_property_xl("Comments", @app_trace.comments)
   %p
     = link_to @app_trace.archive.url, class: 'waves-effect waves-light btn' do
       %i.material-icons.left play_for_work
