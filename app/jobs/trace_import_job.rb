@@ -21,14 +21,14 @@ class TraceImportJob < ActiveJob::Base
     system("cd #{@extract_dir} && #{extract_cmd} #{@app_trace.archive.file.path}")
   end
 
-  def first_line(path)
-    first = File.open(path).readlines.first
-    first ? first.strip : ''
+  def read_file(path)
+    str = File.read(path)
+    str ? str.strip : ''
   end
 
   def update_meta_infos
     AppTrace::META.each do |meta|
-      @app_trace.send("#{meta}=", first_line("#{@extract_dir}/meta/#{meta}").downcase) 
+      @app_trace.send("#{meta}=", read_file("#{@extract_dir}/meta/#{meta}").downcase) 
     end
   end
 
@@ -48,7 +48,7 @@ class TraceImportJob < ActiveJob::Base
         app_trace_id: @app_trace.id, 
         name: dir.split('/').last
       })
-      p.logs = File.read("#{dir}/logs.txt")
+      p.logs = read_file("#{dir}/logs.txt")
       p.events_count = create_socket_traces!(p.id, dir)
       p.events_imported!
       p.save!
