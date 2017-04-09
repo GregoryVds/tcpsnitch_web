@@ -48,6 +48,7 @@ class TraceImportJob < ActiveJob::Base
         app_trace_id: @app_trace.id, 
         name: dir.split('/').last
       })
+      p.logs = File.read("#{dir}/logs.txt")
       p.events_count = create_socket_traces!(p.id, dir)
       p.events_imported!
       p.save!

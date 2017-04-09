@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170406004202) do
+ActiveRecord::Schema.define(version: 20170409141025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,7 +59,6 @@ ActiveRecord::Schema.define(version: 20170406004202) do
     t.string   "git_hash"
     t.string   "host_id"
     t.string   "kernel"
-    t.text     "log"
     t.string   "machine"
     t.text     "net"
     t.text     "opt_b"
@@ -88,6 +87,7 @@ ActiveRecord::Schema.define(version: 20170406004202) do
     t.boolean  "analysis_computed",   default: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.text     "logs"
     t.index ["app_trace_id"], name: "index_process_traces_on_app_trace_id", using: :btree
   end
 
