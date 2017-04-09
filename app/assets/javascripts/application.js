@@ -19,14 +19,19 @@
 //= require_tree .
 
 $(document).on('turbolinks:load', function(event) {
+    // Hacky solution to avoid duplicate material_select on "back".
     $('select').material_select();
+    $('.select-wrapper:not(:first-child)').remove();
+    console.log($('.select-wrapper:not(:first-child)').length);
 
     Materialize.updateTextFields();
 
+    // Alert boxes
     $('.alert-close').click(function(event){
         $(event.target).closest('.alert-box').fadeOut("slow", function() {});
     });
 
+    // Left menu
     sections = $('.main-body .content [data-section]');
     sections.hide()
     sections.filter('[data-section="about"]').show()
