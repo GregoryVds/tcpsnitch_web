@@ -3,6 +3,12 @@ class TraceImportJob < ActiveJob::Base
 
   def perform(app_trace_id)
     @app_trace = AppTrace.find(app_trace_id)
+    # Destroy anything that is already in database. This is convenient for
+    # reimporting traces and for import jobs that fail and would otherwise
+    # duplicate data. This means we can import a trace as often as we like.
+    @app_trace.process_traces.all.each(&:destroy)
+    @app_trace.events_imported = false
+    @app_trace.analysis_computed = false
 
     extract_archive
     update_meta_infos
@@ -11,7 +17,6 @@ class TraceImportJob < ActiveJob::Base
     @app_trace.events_count = create_process_traces!
     @app_trace.events_imported!
     @app_trace.save!
-
     rm_extracted_archive
   end
 
@@ -28,7 +33,7 @@ class TraceImportJob < ActiveJob::Base
 
   def update_meta_infos
     AppTrace::META.each do |meta|
-      @app_trace.send("#{meta}=", read_file("#{@extract_dir}/meta/#{meta}").downcase) 
+      @app_trace.send("#{meta}=", read_file("#{@extract_dir}/meta/#{meta}").downcase)
     end
   end
 
