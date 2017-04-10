@@ -27,7 +27,7 @@ class Event
     collection.aggregate([
       {:$match => match},
       {:$sortByCount => "$#{node}"}
-    ]).map do |r|
+    ], allow_disk_use: true).map do |r|
       [r["_id"], r["count"]]
     end.reject do |val, count|
       val.nil?
@@ -43,7 +43,7 @@ class Event
           sum: { :$sum => "$#{sum_node}" }
         }
       }
-    ]).map do |r|
+    ], allow_disk_use: true).map do |r|
       [r["_id"], r["sum"]]
     end
   end
@@ -53,7 +53,7 @@ class Event
       {:$match => match},
       {:$project => {node => 1}},
       {:$sort => {node => 1}}
-    ]).map do |r|
+    ], allow_disk_use: true).map do |r|
       node_val(r, node)
     end
   end
