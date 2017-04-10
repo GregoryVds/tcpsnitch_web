@@ -22,7 +22,7 @@ class TraceImportJob < ActiveJob::Base
   end
 
   def extract_archive
-    @extract_dir = `mktemp -p ~/tmp -d`.chomp("\n")
+    @extract_dir = `mktemp -p ./tmp -d`.chomp("\n")
     extract_cmd = @app_trace.archive_is_zip ? "unzip" : "tar -xzf"
     system("cd #{@extract_dir} && #{extract_cmd} #{@app_trace.archive.file.path}")
   end
