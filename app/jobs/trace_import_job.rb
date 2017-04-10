@@ -82,8 +82,9 @@ class TraceImportJob < ActiveJob::Base
   end
 
   def create_socket_trace_events(file, process_trace_id, socket_trace_id)
-      events_count = 0
       socket_type = nil
+      events_count = 0
+      batch = []
 
       File.open(file).lazy.map do |line|
         parse_json_event(line)
@@ -93,11 +94,15 @@ class TraceImportJob < ActiveJob::Base
         event['index'] = index
         event['process_trace_id'] = process_trace_id
         event['socket_trace_id'] = socket_trace_id
-        ev = Event.create(event)
-        socket_type = ev.details['sock_info']['type'] if index==0
+        socket_type = event['details']['sock_info']['type'] if index==0
+        batch.push(event)
         events_count += 1
+        if batch.size == 100000 then
+          Event.collection.insert_many(batch)
+          batch = []
+        end
       end
-
+      Event.collection.insert_many(batch)
       return events_count, socket_type
   end
 
