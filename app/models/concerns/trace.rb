@@ -21,9 +21,4 @@ module Trace
   def destroy_events
     events.delete_all if events
   end
-
-  def events_imported!
-    self.events_imported = true
-    schedule_analysis
-  end
 end

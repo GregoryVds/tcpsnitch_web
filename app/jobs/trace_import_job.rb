@@ -15,9 +15,10 @@ class TraceImportJob < ActiveJob::Base
     @app_trace.save! # Only proceeed if META info valid
 
     @app_trace.events_count = create_process_traces!
-    @app_trace.events_imported!
+    @app_trace.events_imported = true
     @app_trace.save!
     rm_extracted_archive
+    @app_trace.schedule_analysis
   end
 
   def extract_archive
@@ -55,8 +56,9 @@ class TraceImportJob < ActiveJob::Base
       })
       p.logs = read_file("#{dir}/logs.txt")
       p.events_count = create_socket_traces!(p.id, dir)
-      p.events_imported!
+      p.events_imported = true
       p.save!
+      p.schedule_analysis
       events_count += p.events_count
     end
     events_count
@@ -71,8 +73,9 @@ class TraceImportJob < ActiveJob::Base
           index: socket_trace.split('/').last.to_i
         })
         s.events_count, s.socket_type = create_socket_trace_events(socket_trace, process_trace_id, s.id)
-        s.events_imported!
+        s.events_imported = true
         s.save!
+        s.schedule_analysis
         events_count += s.events_count
       end
       events_count
