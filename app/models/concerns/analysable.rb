@@ -15,7 +15,8 @@ module Analysable
   end
 
   def analysis_computed!
-    update_column(:analysis_computed, true)
+    self.analysis_computed = true
+    self.save!
   end
 
   def create_analysis
