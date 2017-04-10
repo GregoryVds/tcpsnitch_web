@@ -32,7 +32,13 @@ module Analysable
   end
 
   def schedule_analysis
-    AnalysisJob.perform_later(analysable_type, id)
+    if analysable_type.eql?("app_trace")
+      AppAnalysisJob.perform_later(analysable_type, id)
+    elsif analysable_type.eql?("process_trace")
+      ProcessAnalysisJob.perform_later(analysable_type, id)
+    else
+      SocketAnalysisJob.perform_later(analysable_type, id)
+    end
   end
 
   def stat_data(stat)

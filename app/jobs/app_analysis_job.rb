@@ -1,4 +1,4 @@
-class AnalysisJob < ActiveJob::Base
+class AppAnalysisJob < ActiveJob::Base
   queue_as :low
 
   def perform(analysable_type, analysable_id)
