@@ -19,7 +19,7 @@
         = show_property("Created at", @app_trace.created_at.to_s(:long))
         = show_property("Application", @app_trace.app)
         = show_property("Command", @app_trace.cmd)
-        = show_property("Os", @app_trace.os.capitalize)
+        = show_property("Os", @app_trace.os ? @app_trace.os.capitalize : "")
       .col.s6
         = show_property("Archive imported", @app_trace.events_imported)
         = show_property("Analysis computed", @app_trace.analysis_computed)

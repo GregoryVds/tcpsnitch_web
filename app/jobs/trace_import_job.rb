@@ -5,20 +5,25 @@ class TraceImportJob < ActiveJob::Base
     @app_trace = AppTrace.find(app_trace_id)
     # Destroy anything that is already in database. This is convenient for
     # reimporting traces and for import jobs that fail and would otherwise
-    # duplicate data. This means we can import a trace as often as we like.
+    # duplicate data. This task is thus indempotent.
     @app_trace.process_traces.all.each(&:destroy)
     @app_trace.events_imported = false
     @app_trace.analysis_computed = false
+    @app_trace.save! # Need a save to expire cache quickly.
 
     extract_archive
     update_meta_infos
-    @app_trace.save! # Only proceeed if META info valid
+    @app_trace.save! # Only proceeed if meta info valid.
 
-    @app_trace.events_count = create_process_traces!
-    @app_trace.events_imported = true
+    # Now create all Postgresql object (process traces & socket traces).
+    # We however do not imported the events yet.
+    @jobs = []
+    create_process_traces!
     @app_trace.save!
-    rm_extracted_archive
-    @app_trace.schedule_analysis
+
+    @jobs.each do |process_id, socket_id, trace|
+      SocketTraceImportJob.perform_later(@app_trace.id, process_id, socket_id, trace)
+    end
   end
 
   def extract_archive
@@ -38,81 +43,31 @@ class TraceImportJob < ActiveJob::Base
     end
   end
 
-  def parse_json_event(line)
-    Oj.load(line.chomp("\n"))
-  end
-
   def process_traces
     Dir.glob("#{@extract_dir}/*").sort.select{|f| File.directory?(f) }.select{ |f| f !~ /meta$/ }
   end
 
   def create_process_traces!
-    events_count = 0
     process_traces.each do |dir|
-      next if Dir["#{dir}/*.json"].empty? # Sockets with no calls (TODO: Handle this in tcpsnitch?)
+      next if Dir["#{dir}/*.json"].empty? # Sockets with no calls. Does it still happen with tcpsnitch?
       p = ProcessTrace.create!({
-        app_trace_id: @app_trace.id, 
-        name: dir.split('/').last
+        app_trace_id: @app_trace.id,
+        name: dir.split('/').last,
+        logs: read_file("#{dir}/logs.txt")
       })
-      p.logs = read_file("#{dir}/logs.txt")
-      p.events_count = create_socket_traces!(p.id, dir)
-      p.events_imported = true
-      p.save!
-      p.schedule_analysis
-      events_count += p.events_count
+      create_socket_traces!(p.id, dir)
     end
-    events_count
   end
 
-  def create_socket_traces!(process_trace_id, process_trace_dir)
-      events_count = 0
-      Dir.glob("#{process_trace_dir}/*.json").sort_by { |f| File.mtime(f) }.each do |socket_trace|
-        s = SocketTrace.create!({
-          app_trace_id: @app_trace.id,
-          process_trace_id: process_trace_id,
-          index: socket_trace.split('/').last.to_i
-        })
-        s.events_count, s.socket_type = create_socket_trace_events(socket_trace, process_trace_id, s.id)
-        s.events_imported = true
-        s.save!
-        s.schedule_analysis
-        events_count += s.events_count
-      end
-      events_count
-  end
-
-  def create_socket_trace_events(file, process_trace_id, socket_trace_id)
-      socket_type = nil
-      events_count = 0
-      batch = []
-
-      File.open(file).lazy.map do |line|
-        parse_json_event(line)
-      end.map do |hash|
-        add_app_trace_info(hash)
-      end.each_with_index do |event, index|
-        event['index'] = index
-        event['process_trace_id'] = process_trace_id
-        event['socket_trace_id'] = socket_trace_id
-        socket_type = event['details']['sock_info']['type'] if index==0
-        batch.push(event)
-        events_count += 1
-        if batch.size == 100000 then
-          Event.collection.insert_many(batch)
-          batch = []
-        end
-      end
-      Event.collection.insert_many(batch)
-      return events_count, socket_type
-  end
-
-  def add_app_trace_info(event_hash)
-    event_hash['app'] = @app_trace.app
-    event_hash['connectivity'] = @app_trace.connectivity_int
-    event_hash['os'] = @app_trace.os_int
-    event_hash['app_trace_id'] = @app_trace.id
-    # TODO: time_since
-    event_hash
+  def create_socket_traces!(process_trace_id, dir)
+    Dir.glob("#{dir}/*.json").sort_by { |f| File.mtime(f) }.each do |socket_trace|
+      s = SocketTrace.create!({
+        app_trace_id: @app_trace.id,
+        process_trace_id: process_trace_id,
+        index: socket_trace.split('/').last.to_i
+      })
+      @jobs.push([process_trace_id, s.id, socket_trace])
+    end
   end
 
   def rm_extracted_archive
