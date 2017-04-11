@@ -55,7 +55,6 @@ class SocketTraceImportJob < ActiveJob::Base
   end
 
   def dump_to_mongo
-    puts "dump_to_mongo"
     Event.collection.insert_many(@batch)
     @batch = []
   end

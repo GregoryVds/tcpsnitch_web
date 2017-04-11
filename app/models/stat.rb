@@ -35,14 +35,19 @@ class Stat < ActiveRecord::Base
     if proportion? then
       Event.count_by_val(node, where)
     elsif cdf? then
-      cdf(Event.vals(node, where))
+      count = Event.count(where)
+      cdf(Event.count_by_val(node, where), count)
     end
   end
 
-  def cdf(sorted_val)
-    sorted_val.map do |el|
-      pc = ((sorted_val.rindex { |v| v <= el } || -1.0) + 1.0) / sorted_val.size * 100.0
-      [el, pc]
-    end.uniq
+  def cdf(count_by_val, total_count)
+    sorted_on_val= count_by_val.sort
+    cdf = []
+    running_count = 0
+    sorted_on_val.each do |val, count|
+      running_count += count
+      cdf.push([val, running_count.to_f/total_count * 100.0])
+    end
+    return cdf
   end
 end

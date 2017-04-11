@@ -19,7 +19,7 @@ class TraceImportJob < ActiveJob::Base
     # We however do not imported the events yet.
     @jobs = []
     create_process_traces!
-    @app_trace.save!
+    @app_trace.touch
 
     @jobs.each do |process_id, socket_id, trace|
       SocketTraceImportJob.perform_later(@app_trace.id, process_id, socket_id, trace)
