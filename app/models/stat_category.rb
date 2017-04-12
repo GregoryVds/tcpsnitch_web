@@ -7,9 +7,9 @@ class StatCategory < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
 
-  scope :root, -> { where(parent_category_id: nil) }
-  scope :leaf, -> { where.not(parent_category: nil) }
-  scope :children, -> (parent_id) { where(parent_category_id: parent_id) }
+  scope :root, -> { where(parent_category_id: nil).order(:id) }
+  scope :leaf, -> { where.not(parent_category: nil).order(:id) }
+  scope :children, -> (parent_id) { where(parent_category_id: parent_id).order(:id) }
 
   def self.root_categories
     cached_collection(root, "leaf")

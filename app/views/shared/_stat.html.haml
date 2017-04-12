@@ -14,5 +14,8 @@
                 = pie_chart stat_data
               - elsif stat.cdf?
                 = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
+              - elsif stat.sum_by_group?
+                = column_chart stat_data
+
         - if stat.description.present?
           .card-action= stat.description

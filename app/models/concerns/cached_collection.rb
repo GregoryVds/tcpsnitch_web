@@ -1,6 +1,6 @@
 module CachedCollection
   extend ActiveSupport::Concern
-  REFRESH_RATE = 600
+  REFRESH_RATE = Rails.env.development? ? 0 : 600
 
   module ClassMethods
     def cached_collection(scope, name)

@@ -34,17 +34,25 @@ class Event
     end
   end
 
-  # Event.sum_by_group("type", "details.bytes", type: {:$in => ['read', 'write']} ).to_a
-  def self.sum_by_group(group_node, sum_node, **match)
+  def self.sum(sum_node, **match)
     collection.aggregate([
       {:$match => match},
       {:$group => {
-          _id: "$#{group_node}",
+          :_id => '',
           sum: { :$sum => "$#{sum_node}" }
-        }
-      }
+      }}
+    ], allow_disk_use: true).to_a
+  end
+
+  def self.sum_by_group(group, sum_node, **match)
+    collection.aggregate([
+      {:$match => match},
+      {:$group => {
+          :_id => "$#{group}",
+          sum: { :$sum => "$#{sum_node}" }
+      }}
     ], allow_disk_use: true).map do |r|
-      [r["_id"], r["sum"]]
+      [r['_id'],r['sum']]
     end
   end
 

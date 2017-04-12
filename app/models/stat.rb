@@ -3,14 +3,14 @@ class Stat < ActiveRecord::Base
 
   serialize :event_filters, Hash
 
-  enum stat_type: {proportion: 0, cdf: 1, descriptive: 2}
+  enum stat_type: {proportion: 0, cdf: 1, descriptive: 2, sum_by_group: 3}
 
   belongs_to :stat_category, inverse_of: :stats
 
   validates :name, :node, :stat_category, :stat_type, presence: true
   validates :name, uniqueness: true
 
-  scope :front, -> { where(name: "Functions usage") }
+  scope :front, -> { where(name: ["Functions usage", "Bytes sent/received"]) }
   scope :category, -> (cat_id) { where(stat_category_id: cat_id) }
 
   def self.front_stats
@@ -37,6 +37,8 @@ class Stat < ActiveRecord::Base
     elsif cdf? then
       count = Event.count(where)
       cdf(Event.count_by_val(node, where), count)
+    elsif sum_by_group?
+      Event.sum_by_group(group_by, node, where)
     end
   end
 

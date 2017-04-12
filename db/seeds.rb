@@ -1,3 +1,5 @@
+StatCategory.all.each(&:destroy)
+
 ######################
 # NATURE OF SOCKETS #
 ####################
@@ -81,6 +83,10 @@ end
 ###################
 # FUNCTIONS USAGE #
 ##################
+
+send_family = [:send, :sendto, :sendmsg, :sendmmsg, :write, :writev, :sendfile]
+recv_family = [:recv, :recvfrom, :recvmsg, :recvmmsg, :read, :readv]
+
 usage_cat = StatCategory.create!(name: 'Functions usage', description: 'Statistics about the usage of various functions of the sockets API', parent_category: nil)
 
 # Global usage
@@ -100,6 +106,18 @@ Stat.create!(global_usage_cat_attr.merge({
   description: "Breakdown of functions usage."
 }))
 Stat.create!(global_usage_cat_attr.merge({
+  stat_type: :sum_by_group,
+  event_filters: {
+    type: { '$in': send_family+recv_family },
+    return_value: { '$ne': -1 }
+  },
+  name: 'Bytes sent/received',
+  node: 'return_value',
+  group_by: 'type',
+  description: 'Sum of bytes sent or received per function type.'
+}))
+
+Stat.create!(global_usage_cat_attr.merge({
   name: 'Success rate',
   node: 'success',
   description: "Proportion of function calls that return successfully."
@@ -111,7 +129,6 @@ Stat.create!(global_usage_cat_attr.merge({
 }))
 
 # Send family
-send_family = [:send, :sendto, :sendmsg, :sendmmsg, :write, :writev, :sendfile]
 send_flags = [:MSG_CONFIRM, :MSG_DONTROUTE, :MSG_DONTWAIT, :MSG_EOR, :MSG_MORE, :MSG_NOSIGNAL, :MSG_OOB]
 send_family_cat = StatCategory.create!({
   name: 'Send-like functions',
@@ -125,13 +142,24 @@ send_family_cat_attr = {
 }
 Stat.create!(send_family_cat_attr.merge({
   name: 'Send-like functions usage',
-  node: 'type',
+  node: :type,
   stat_type: :proportion,
   description: "Breakdown of send-like functions usage."
 }))
 Stat.create!(send_family_cat_attr.merge({
+  stat_type: :sum_by_group,
+  event_filters: {
+    type: { '$in': send_family },
+    return_value: { '$ne': -1 }
+  },
+  name: 'Send-like functions sum of bytes sent',
+  node: 'details.bytes',
+  group_by: :type,
+  description: 'Sum of bytes sent per function type.'
+}))
+Stat.create!(send_family_cat_attr.merge({
   name: 'Send-like functions success-rate',
-  node: 'success',
+  node: :success,
   stat_type: :proportion,
   description: "Success rate of send-like functions calls."
 }))
@@ -142,11 +170,16 @@ Stat.create!(send_family_cat_attr.merge({
   description: "Cumulative distribution function for the buffer size argument of send-like function calls."
 }))
 Stat.create!(send_family_cat_attr.merge({
+  event_filters: {
+    type: { '$in': send_family },
+    return_value: { '$ne': -1 }
+  },
   name: 'Send-like functions bytes sent',
-  node: 'return_value',
+  node: :return_value,
   stat_type: :cdf,
   description: "Cumulative distribution function for the return value of send-like function calls. This corresponds to the number of bytes actually sent."
 }))
+
 send_flags.each do |flag|
   Stat.create!(send_family_cat_attr.merge({
     name: "Sending flags #{flag}",
@@ -157,7 +190,6 @@ send_flags.each do |flag|
 end
 
 # Recv family
-recv_family = [:recv, :recvfrom, :recvmsg, :recvmmsg, :read, :readv]
 recv_flags = [:MSG_CMSG_CLOEXEC, :MSG_DONTWAIT, :MSG_ERRQUEUE, :MSG_OOB, :MSG_PEEK, :MSG_TRUNC, :MSG_WAITALL]
 recv_family_cat = StatCategory.create!({
   name: 'Recv-like functions',
@@ -171,13 +203,24 @@ recv_family_cat_attr = {
 }
 Stat.create!(recv_family_cat_attr.merge({
   name: 'Recv-like functions usage',
-  node: 'type',
+  node: :type,
   stat_type: :proportion,
   description: "Breakdown of recv-like functions usage."
 }))
 Stat.create!(recv_family_cat_attr.merge({
+  stat_type: :sum_by_group,
+  event_filters: {
+    type: { '$in': recv_family },
+    return_value: { '$ne': -1 }
+  },
+  name: 'Recv-like functions sum of bytes received',
+  node: 'details.bytes',
+  group_by: :type,
+  description: 'Sum of bytes received per function type.'
+}))
+Stat.create!(recv_family_cat_attr.merge({
   name: 'Recv-family success-rate',
-  node: 'success',
+  node: :success,
   stat_type: :proportion,
   description: "Success rate of recv-like functions calls."
 }))
@@ -188,8 +231,12 @@ Stat.create!(recv_family_cat_attr.merge({
   description: "Cumulative distribution function the buffer size argument of recv-like function calls."
 }))
 Stat.create!(recv_family_cat_attr.merge({
+  event_filters: {
+    type: { '$in': recv_family },
+    return_value: { '$ne': -1 }
+  },
   name: 'Recv-family bytes received',
-  node: 'return_value',
+  node: :return_value,
   stat_type: :cdf,
   description: "Cumulative distribution function for the return value of recv-like function calls. This corresponds to the number of bytes actually received."
 }))
@@ -246,3 +293,19 @@ async_families.each do |family|
     end
   end
 end
+
+# Ioctl
+ioctl_cat = StatCategory.create!({
+  name: 'ioctl()',
+  description: "Statistic about the usage of the ioctl() function",
+  parent_category: usage_cat
+})
+Stat.create!({
+  stat_category: ioctl_cat,
+  event_filters: {type: 'ioctl'},
+  name: 'ioctl() requests',
+  stat_type: :proportion,
+  node: 'details.request',
+  description: "Breakdown of arguments used for the 'request' parameter of ioctl()."
+})
+
