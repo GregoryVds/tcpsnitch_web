@@ -17,14 +17,15 @@
     = render 'shared/about_head', trace: @socket_trace
     = render 'shared/front_stats', trace: @socket_trace
 
-    %h5 Details
-    .row
-      .col.s6
-        = show_property("Id", @socket_trace.id)
-        = show_property("Created at", @socket_trace.created_at.to_s(:long))
-        = show_property("Socket type", @socket_trace.socket_type)
-      .col.s6
-        = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
+    .card
+      .card-content
+        %span.card-title Trace details
+        .row
+          .col.s6
+            = show_property("Created at", @socket_trace.created_at.to_s(:long))
+            = show_property("Socket type", @socket_trace.socket_type)
+          .col.s6
+            = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
 
     %p
       = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'

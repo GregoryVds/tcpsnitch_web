@@ -9,10 +9,6 @@ module ApplicationHelper
     end
   end
 
-  def show_property_xl(property, value)
-    show_property(property, value, 'col s12')
-  end
-
   def show_properties(section_name, obj, properties)
     capture_haml do
       haml_tag :div, class: 'row' do

@@ -63,12 +63,12 @@ header .banner {
   .container {width: 80%};
 }
 
-span.badge{ color: white };
 
 main .main-header {
   font-size: 24px;
   background-color: $ternary-color;
   padding: 0px $horizontal-padding;
+  border-bottom: solid 1px rgba(51, 51, 51, 0.12);
   .filters{
     padding: 15px;
   }
@@ -132,4 +132,10 @@ footer.page-footer {
     text-align: center;
   }
   .card-action {min-height: 77px;}
+}
+
+span.badge{ color: white };
+
+.content .front-stats {
+  margin-bottom: 0;
 }

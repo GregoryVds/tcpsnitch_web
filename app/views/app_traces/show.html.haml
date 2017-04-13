@@ -14,38 +14,44 @@
   .section{data: {section: 'about'}}
     = render 'shared/about_head', trace: @app_trace
     = render 'shared/front_stats', trace: @app_trace
+    .card
+      .card-content
+        %span.card-title
+          Trace details
+          %span.download.right
+            = link_to @app_trace.archive.url do
+              Download
+              %i.material-icons.right play_for_work
+        .row
+          .col.s6
+            = show_property("Created at", @app_trace.created_at.to_s(:long))
+            = show_property("Application", @app_trace.app)
+            = show_property("Command", @app_trace.cmd)
+          .col.s6
+            = show_property("#Processes", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
+            = show_property("#Sockets", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
+            = show_property("#Events", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
+    .card
+      .card-content
+        %span.card-title System details
+        .row
+          .col.s12
+            = show_property("Os", @app_trace.os ? @app_trace.os.capitalize : "")
+            = show_property("Kernel", @app_trace.kernel)
+            = show_property("Host uid", @app_trace.host_id)
+            = show_property("App version", @app_trace.app_version)
 
-    %h5 Details
-    .row
-      .col.s6
-        = show_property("Id", @app_trace.id)
-        = show_property("Created at", @app_trace.created_at.to_s(:long))
-        = show_property("Application", @app_trace.app)
-      .col.s6
-        = show_property("#Processes", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
-        = show_property("#Sockets", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
-        = show_property("#Events", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
-      .col.s12
-        = show_property("Command", @app_trace.cmd)
-        = show_property_xl("App version", @app_trace.app_version)
-        = show_property_xl("Workload", @app_trace.workload)
-        = show_property_xl("Comments", @app_trace.comments)
-        = show_property("Connectivity", @app_trace.connectivity)
-        %br
-        = show_property("Os", @app_trace.os ? @app_trace.os.capitalize : "")
-        = show_property("Kernel", @app_trace.kernel)
-        = show_property("Processor", @app_trace.machine)
-        = show_property_xl("Host uid", @app_trace.host_id)
-        %p
-          = show_property_xl("Tcpsnich version", @app_trace.version)
-          = show_property_xl("Tcpsnitch git hash", @app_trace.git_hash)
-          = show_property_xl("Opt b", @app_trace.opt_b)
-          = show_property_xl("Opt f", @app_trace.opt_f)
-          = show_property_xl("Opt u", @app_trace.opt_u)
-    %p
-      = link_to @app_trace.archive.url, class: 'waves-effect waves-light btn' do
-        %i.material-icons.left play_for_work
-        Download archive
+    .card
+      .card-content
+        %span.card-title Tcpsnitch details
+        .row
+          .col.s6
+            = show_property("Version", @app_trace.version)
+            = show_property("Git hash", @app_trace.git_hash)
+          .col.s6
+            = show_property("Option -b", @app_trace.opt_b)
+            = show_property("Option -f", @app_trace.opt_f)
+            = show_property("Option -u", @app_trace.opt_u)
 
   .section{data: {section: 'processes'}, style: "display:none;"}
     %h5=pluralize(@app_trace.process_traces_count, 'process')
