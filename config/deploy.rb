@@ -34,3 +34,4 @@ append :linked_dirs, "public/uploads"
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
