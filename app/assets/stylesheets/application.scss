@@ -114,3 +114,10 @@ footer.page-footer {
   background-color: color("red", "lighten-3");
 }
 
+.card.stat {
+  .card-content {height: 370px;}
+  .no-data {
+    line-height: 300px;
+    text-align: center;
+  }
+}

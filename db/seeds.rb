@@ -69,15 +69,17 @@ Stat.create!(fcntl_cat_attr.merge({
   }))
 end
 
+fcntl_fl_flags = [:O_APPEND, :O_ASYNC, :O_DIRECT, :O_NOATIME, :O_NONBLOCK]
+
 [:F_GETFL, :F_SETFL].each do |cmd|
-  [:O_APPEND, :O_ASYNC, :O_DIRECT, :O_NOATIME, :O_NONBLOCK].each do |flag|
-    Stat.create!(fcntl_cat_attr.merge({
-      event_filters: {type: 'fcntl', 'details.cmd': cmd},
-      name: "Command #{cmd}: #{flag}",
-      node: "details.#{flag}",
-      description: "Proportion of fcntl() #{cmd} commands that set the flag #{flag}."
-    }))
-  end
+  Stat.create!({
+    stat_category: fcntl_cat,
+    stat_type: :pc_true_for_nodes,
+    event_filters: {type: 'fcntl', 'details.cmd': cmd},
+    node: fcntl_fl_flags.map{|flag| "details.#{flag}"}.join(','),
+    name: "Command #{cmd} flags",
+    description: "Proportion of fcntl() #{cmd} commands that set the flag."
+  })
 end
 
 ###################
@@ -179,15 +181,12 @@ Stat.create!(send_family_cat_attr.merge({
   stat_type: :cdf,
   description: "Cumulative distribution function for the return value of send-like function calls. This corresponds to the number of bytes actually sent."
 }))
-
-send_flags.each do |flag|
-  Stat.create!(send_family_cat_attr.merge({
-    name: "Sending flags #{flag}",
-    node: "details.flags.#{flag}",
-    stat_type: :proportion,
-    description: "Proportion of send-like functions calls that set the flag #{flag}."
-  }))
-end
+Stat.create!(send_family_cat_attr.merge({
+  name: "Sending flags popularity",
+  node: send_flags.map{|flag| "details.flags.#{flag}"}.join(','),
+  stat_type: :pc_true_for_nodes,
+  description: "Proportion of send-like functions calls that set the flag."
+}))
 
 # Recv family
 recv_flags = [:MSG_CMSG_CLOEXEC, :MSG_DONTWAIT, :MSG_ERRQUEUE, :MSG_OOB, :MSG_PEEK, :MSG_TRUNC, :MSG_WAITALL]
@@ -240,14 +239,12 @@ Stat.create!(recv_family_cat_attr.merge({
   stat_type: :cdf,
   description: "Cumulative distribution function for the return value of recv-like function calls. This corresponds to the number of bytes actually received."
 }))
-recv_flags.each do |flag|
-  Stat.create!(recv_family_cat_attr.merge({
-    name: "Receiving flags #{flag}",
-    node: "details.flags.#{flag}",
-    stat_type: :proportion,
-    description: "Proportion of recv-like functions calls that set the flag #{flag}."
-  }))
-end
+Stat.create!(recv_family_cat_attr.merge({
+  name: "Receiving flags popularity",
+  node: recv_flags.map{|flag| "details.flags.#{flag}"}.join(','),
+  stat_type: :pc_true_for_nodes,
+  description: "Proportion of recv-like functions calls that set the flag."
+}))
 
 # Async family
 async_families = [:select_like_functions, :poll_like_functions, :epoll_like_functions]
@@ -267,30 +264,26 @@ async_family_cat = StatCategory.create!({
   description: "Statistic about the usage of functions designed to perform async I/O (#{async_family.join(", ")}).",
   parent_category: usage_cat
 })
-async_family_cat_attr = {
-  stat_category: async_family_cat,
-  stat_type: :proportion,
-}
 
-def async_description(family, ev_type, event)
+def async_description(family, ev_type)
   if ev_type == :requested_events
-    "Proportion of #{family} calls that request the event #{event}."
+    "Proportion of #{family} calls that ask for a type of event."
   else
-    "Proportion of #{family} calls for which the event #{event} is returned."
+    "Proportion of #{family} calls for which a type of event is returned."
   end
 end
+# TODO function calls popularity
 
 async_families.each do |family|
   [:requested_events, :returned_events].each do |ev_type|
-    events[family].each do |event|
-      Stat.create!(async_family_cat_attr.merge({
-        event_filters: {type: { '$in': async_functions[family] }},
-        name: "#{family.to_s.humanize} #{ev_type.to_s.humanize.downcase}: #{event}",
-        node: "details.#{ev_type}.#{event}",
-        stat_type: :proportion,
-        description: async_description(family.to_s.humanize, ev_type, event)
-      }))
-    end
+    Stat.create!({
+      stat_category: async_family_cat,
+      stat_type: :pc_true_for_nodes,
+      event_filters: {type: { '$in': async_functions[family] }},
+      node: events[family].map{|event| "details.#{ev_type}.#{event}"}.join(','),
+      name: "#{family.to_s.humanize} #{ev_type.to_s.humanize.downcase} popularity",
+      description: async_description(family.to_s.humanize, ev_type)
+    })
   end
 end
 

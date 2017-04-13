@@ -3,7 +3,8 @@ class Stat < ActiveRecord::Base
 
   serialize :event_filters, Hash
 
-  enum stat_type: {proportion: 0, cdf: 1, descriptive: 2, sum_by_group: 3}
+  enum stat_type: {proportion: 0, cdf: 1, descriptive: 2, sum_by_group: 3,
+                   pc_true_for_nodes: 4}
 
   belongs_to :stat_category, inverse_of: :stats
 
@@ -39,6 +40,8 @@ class Stat < ActiveRecord::Base
       cdf(Event.count_by_val(node, where), count)
     elsif sum_by_group?
       Event.sum_by_group(group_by, node, where)
+    elsif pc_true_for_nodes?
+      node.split(',').map{|n| pc_true_for_node(n, where)}.compact
     end
   end
 
@@ -51,5 +54,19 @@ class Stat < ActiveRecord::Base
       cdf.push([val, running_count.to_f/total_count * 100.0])
     end
     return cdf
+  end
+
+  def pc_true_for_node(node, **where)
+    cbv = Event.count_by_val(node, where)
+    return nil if cbv.empty?
+    # cbv is like [[true, true_count], [false, false_count]] with order not
+    # fixed, and also no guarantees to have 2 values.
+    pc_true = if cbv.size == 1
+      cbv[0][0] ? 1.0 : 0.0
+    else
+      true_count = cbv[0][0] ? cbv[0][1] : cbv[1][1]
+      true_count.to_f / (cbv[0][1] + cbv[1][1])
+    end
+    [node.split('.').last, pc_true]
   end
 end
