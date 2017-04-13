@@ -43,24 +43,33 @@ header nav {
 }
 
 header .banner {
-  padding: 30px $horizontal-padding;
+  padding: 20px $horizontal-padding;
   background-color: $primary-color;
   h1 {
     color: white;
+    margin-top: 20px;
     line-height: 110%;
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 300;
   }
   h4 {
     font-weight: 300;
+    font-size: 28px;
     color: $primary-color-light; 
   }
 }
 
+@media only screen and (min-width: 993px) {
+  .container {width: 80%};
+}
+
 main .main-header {
   font-size: 24px;
-  background-color: $ternary-color; 
-  padding: 15px $horizontal-padding;
+  background-color: $ternary-color;
+  padding: 0px $horizontal-padding;
+  .filters{
+    padding: 15px;
+  }
   nav {
     background-color: $ternary-color;
     box-shadow: none;
