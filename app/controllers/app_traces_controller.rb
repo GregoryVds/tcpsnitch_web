@@ -3,7 +3,6 @@ class AppTracesController < ApplicationController
   UPLOADED="Trace successfully uploaded"
   UPLOAD_FAIL="Failed to upload trace"
   IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few minutes..."
-  COMPURTED_SHORTLY = "Trace analysis will be computed shortly. Refresh this page in a few minutes..."
 
   protect_from_forgery except: [:create]
 
@@ -17,8 +16,6 @@ class AppTracesController < ApplicationController
 
   def show
     @app_trace = AppTrace.find(params[:id])
-    flash.now[:notice] = IMPORTED_SHORTLY unless @app_trace.events_imported
-    flash.now[:notice] = COMPURTED_SHORTLY if @app_trace.events_imported && !@app_trace.analysis_computed
   end
 
   def new
@@ -29,7 +26,6 @@ class AppTracesController < ApplicationController
     @app_trace = AppTrace.new(trace_params)
     if params[:authenticity_token]
       if @app_trace.save
-        flash[:notice] = IMPORTED_SHORTLY
         redirect_to @app_trace
       else
         flash.now[:error] = @app_trace.errors.full_messages.join('<br/>').html_safe

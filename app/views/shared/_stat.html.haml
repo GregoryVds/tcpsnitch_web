@@ -4,7 +4,10 @@
     %span.card-title
       = stat.pretty_name
     .content
-      - if stat_data.empty?
+      - if !trace.analysis_computed?
+        .no-data
+          Analysis is being computed...
+      - elsif stat_data.empty?
         .no-data
           No data for this trace.
       - else
