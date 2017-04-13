@@ -13,19 +13,18 @@
 
 - cache @process_trace do
   .section{data: {section: 'about'}}
-    %h5 General
+    = render 'shared/about_head', trace: @process_trace
+    = render 'shared/front_stats', trace: @process_trace
+
+    %h5 Details
     .row
       .col.s6
         = show_property("Id", @process_trace.id)
         = show_property("Created at", @process_trace.created_at.to_s(:long))
         = show_property("Process", @process_trace.name)
       .col.s6
-        = show_property("Events imported", @process_trace.events_imported)
-        = show_property("Analysis computed", @process_trace.analysis_computed)
         = show_property("#Sockets", number_with_delimiter(@process_trace.socket_traces_count, delimiter: '.'))
         = show_property("#Events", number_with_delimiter(@process_trace.events_count, delimiter: '.'))
-
-    = render 'shared/front_stats', trace: @process_trace
 
   .section{data: {section: 'sockets'}, style: "display:none;"}
     %h5=pluralize(@process_trace.socket_traces_count, 'socket')
