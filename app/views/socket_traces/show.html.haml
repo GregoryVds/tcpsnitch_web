@@ -27,7 +27,12 @@
           .col.s6
             = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
 
-    %p
-      = link_to 'Browse events', socket_trace_events_path(@socket_trace), class: 'waves-effect waves-light btn'
 
+  .section{data: {section: 'events'}}
+    .infinite-list
+      .events
+        = render 'events/index'
+      %p.pagination
+        - unless @events.last_page?
+          = link_to('Next page', socket_trace_events_path(@socket_trace, page: @events.next_page), remote: true, rel: 'next')
   = render 'shared/stats', trace: @socket_trace

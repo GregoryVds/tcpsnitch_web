@@ -16,6 +16,7 @@
 //= require materialize-sprockets
 //= require highcharts
 //= require chartkick
+//= require jquery.infinite-pages
 //= require_tree .
 
 $(document).on('turbolinks:load', function(event) {
@@ -30,6 +31,8 @@ $(document).on('turbolinks:load', function(event) {
         $(event.target).closest('.alert-box').fadeOut("slow", function() {});
     });
 
+    $('.infinite-list').infinitePages();
+
     // Left menu
     sections = $('.main-body .content [data-section]');
     sections.hide()
@@ -41,6 +44,7 @@ $(document).on('turbolinks:load', function(event) {
         sections.filter('[data-section="'+section+'"]').show()
         window.dispatchEvent(new Event('resize'));
     });
+
 });
 
 

@@ -1,0 +1,5 @@
+- @events.each do |event|
+  %h5="#{event.type}()"
+  %pre
+    %code.prettyprint~ JSON.pretty_generate(event.as_json.except('_id', 'type'))
+
