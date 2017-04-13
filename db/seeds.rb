@@ -1,5 +1,9 @@
 StatCategory.all.each(&:destroy)
 
+def nodes_list(nodes, prefix)
+  nodes.map{|node| "#{prefix}.#{node}"}.join(',')
+end
+
 ######################
 # NATURE OF SOCKETS #
 ####################
@@ -11,7 +15,7 @@ socket_cat = StatCategory.create!({
   description: 'Statistics about the socket() function usage.',
   parent_category: nature_of_sockets_cat
 })
-[:domain, :type, :protocol, :SOCK_CLOEXEC, :SOCK_NONBLOCK].each do |field|
+[:domain, :type, :protocol].each do |field|
   Stat.create!({
     event_filters: {type: :socket},
     stat_category: socket_cat,
@@ -21,6 +25,16 @@ socket_cat = StatCategory.create!({
     description: "Breakdown of arguments used for the '#{field}' parameter of socket()."
   })
 end
+
+socket_flags = [:SOCK_CLOEXEC, :SOCK_NONBLOCK]
+Stat.create!({
+  event_filters: {type: :socket},
+  stat_category: socket_cat,
+  stat_type: :pc_true_for_nodes,
+  node: nodes_list(socket_flags, "details.sock_info"),
+  name: "Socket() flags popularity",
+  description: "Proportion of socket() calls that set each flag."
+})
 
 # getsockopt() & setsockopt()
 sockopt_cat = StatCategory.create!({
@@ -60,25 +74,28 @@ Stat.create!(fcntl_cat_attr.merge({
   node: 'details.cmd',
   description: "Breakdown of arguments for the 'cmd' parameter of fnctl()"
 }))
-[:F_GETFD, :F_SET_FD].each do |cmd|
+
+fcntl_fd_flags = [:O_CLOEXEC]
+[:F_GETFD, :F_SETFD].each do |cmd|
   Stat.create!(fcntl_cat_attr.merge({
+    stat_category: fcntl_cat,
+    stat_type: :pc_true_for_nodes,
     event_filters: {type: 'fcntl', 'details.cmd': cmd},
-    name: "#{cmd}: O_CLOEXEC",
-    node: 'details.O_CLOEXEC',
-    description: "Proportion of fcntl() #{cmd} commands that set the flag O_CLOEXEC."
+    node: nodes_list(fcntl_fd_flags, "details"),
+    name: "Command #{cmd} flags",
+    description: "Proportion of fcntl() #{cmd} commands that sets each flag."
   }))
 end
 
 fcntl_fl_flags = [:O_APPEND, :O_ASYNC, :O_DIRECT, :O_NOATIME, :O_NONBLOCK]
-
 [:F_GETFL, :F_SETFL].each do |cmd|
   Stat.create!({
     stat_category: fcntl_cat,
     stat_type: :pc_true_for_nodes,
     event_filters: {type: 'fcntl', 'details.cmd': cmd},
-    node: fcntl_fl_flags.map{|flag| "details.#{flag}"}.join(','),
+    node: nodes_list(fcntl_fl_flags, "details"),
     name: "Command #{cmd} flags",
-    description: "Proportion of fcntl() #{cmd} commands that set the flag."
+    description: "Proportion of fcntl() #{cmd} commands that sets each flag."
   })
 end
 
@@ -183,9 +200,9 @@ Stat.create!(send_family_cat_attr.merge({
 }))
 Stat.create!(send_family_cat_attr.merge({
   name: "Sending flags popularity",
-  node: send_flags.map{|flag| "details.flags.#{flag}"}.join(','),
+  node: nodes_list(send_flags, "details.flags"),
   stat_type: :pc_true_for_nodes,
-  description: "Proportion of send-like functions calls that set the flag."
+  description: "Proportion of send-like functions calls that sets each flag."
 }))
 
 # Recv family
@@ -241,22 +258,25 @@ Stat.create!(recv_family_cat_attr.merge({
 }))
 Stat.create!(recv_family_cat_attr.merge({
   name: "Receiving flags popularity",
-  node: recv_flags.map{|flag| "details.flags.#{flag}"}.join(','),
+  node: nodes_list(recv_flags, "details.flags"),
   stat_type: :pc_true_for_nodes,
-  description: "Proportion of recv-like functions calls that set the flag."
+  description: "Proportion of recv-like functions calls that sets each flag."
 }))
 
 # Async family
-async_families = [:select_like_functions, :poll_like_functions, :epoll_like_functions]
+select = '(p)select'
+poll = '(p)poll'
+epoll = 'epoll_(p)wait & epoll_ctl'
+async_families = [select, poll, epoll]
 async_functions = {
-  select_like_functions: [:select, :pselect],
-  poll_like_functions:   [:poll, :ppoll],
-  epoll_like_functions:  [:epoll_ctl, :epoll_wait, :epoll_pwait]
+  select  => [:select, :pselect],
+  poll    => [:poll, :ppoll],
+  epoll   => [:epoll_ctl, :epoll_wait, :epoll_pwait]
 }
 events = {
-  select_like_functions: [:READ, :WRITE, :EXCEPT],
-  poll_like_functions:   [:POLLIN, :POLLPRI, :POLLOUT, :POLLRDHUP, :POLLERR, :POLLHUP, :POLLNVAL],
-  epoll_like_functions:  [:EPOLLIN, :EPOLLOUT, :EPOLLRDHUP, :EPOLLPRI, :EPOLLERR, :EPOLLHUP, :EPOLLET, :EPOLLONESHOT, :EPOLLWAKEUP]
+  select  => [:READ, :WRITE, :EXCEPT],
+  poll    => [:POLLIN, :POLLPRI, :POLLOUT, :POLLRDHUP, :POLLERR, :POLLHUP, :POLLNVAL],
+  epoll   => [:EPOLLIN, :EPOLLOUT, :EPOLLRDHUP, :EPOLLPRI, :EPOLLERR, :EPOLLHUP, :EPOLLET, :EPOLLONESHOT, :EPOLLWAKEUP]
 }
 async_family = async_functions.values.flatten
 async_family_cat = StatCategory.create!({
@@ -280,9 +300,9 @@ async_families.each do |family|
       stat_category: async_family_cat,
       stat_type: :pc_true_for_nodes,
       event_filters: {type: { '$in': async_functions[family] }},
-      node: events[family].map{|event| "details.#{ev_type}.#{event}"}.join(','),
-      name: "#{family.to_s.humanize} #{ev_type.to_s.humanize.downcase} popularity",
-      description: async_description(family.to_s.humanize, ev_type)
+      node: nodes_list(events[family], "details.#{ev_type}"),
+      name: "#{family} #{ev_type.to_s.humanize.downcase} popularity",
+      description: async_description(family, ev_type)
     })
   end
 end

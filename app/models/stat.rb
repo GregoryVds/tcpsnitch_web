@@ -65,7 +65,7 @@ class Stat < ActiveRecord::Base
       cbv[0][0] ? 1.0 : 0.0
     else
       true_count = cbv[0][0] ? cbv[0][1] : cbv[1][1]
-      true_count.to_f / (cbv[0][1] + cbv[1][1])
+      (true_count.to_f / (cbv[0][1] + cbv[1][1])).round(4)
     end
     [node.split('.').last, pc_true]
   end

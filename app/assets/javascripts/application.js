@@ -39,6 +39,7 @@ $(document).on('turbolinks:load', function(event) {
         var section = $(event.currentTarget).data('section');
         sections.hide();
         sections.filter('[data-section="'+section+'"]').show()
+        window.dispatchEvent(new Event('resize'));
     });
 });
 
