@@ -1,8 +1,8 @@
-- StatCategory.leaf_categories.each do |leaf_category|
-  .section{data: {section: leaf_category.name}}
+- StatCategory.all.each do |cat|
+  .section{data: {section: cat.name}}
     .row
       .col.s12
-        %h5= leaf_category.pretty_name
-        %p= leaf_category.description
-      - Stat.with_category_id(leaf_category.id).each do |stat|
+        %h5= cat.pretty_name
+        %p= cat.description
+      - Stat.with_category_id(cat.id).each do |stat|
         .col.s6= render 'shared/stat', stat: stat, trace: trace

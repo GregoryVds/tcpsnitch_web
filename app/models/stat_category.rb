@@ -26,4 +26,11 @@ class StatCategory < ActiveRecord::Base
   def pretty_name
     name.sub(/^./, &:upcase)
   end
+
+  def applies_to?(trace)
+    if trace.class == AppTrace then applies_to_app_trace
+    elsif trace.class == ProcessTrace then applies_to_process_trace
+    else applies_to_socket_trace
+    end
+  end
 end

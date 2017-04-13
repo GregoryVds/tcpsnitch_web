@@ -4,17 +4,15 @@ def nodes_list(nodes, prefix)
   nodes.map{|node| "#{prefix}.#{node}"}.join(',')
 end
 
-######################
-# NATURE OF SOCKETS #
-####################
-nature_of_sockets_cat = StatCategory.create!(name: 'Nature of sockets', description: 'About the sockets...', parent_category: nil)
+##########
+# Socket #
+##########
 
-# socket()
 socket_cat = StatCategory.create!({
   name: 'socket()',
-  description: 'Statistics about the socket() function usage.',
-  parent_category: nature_of_sockets_cat
+  description: 'Statistics about the socket() function usage.'
 })
+
 [:domain, :type, :protocol].each do |field|
   Stat.create!({
     event_filters: {type: :socket},
@@ -36,12 +34,15 @@ Stat.create!({
   description: "Proportion of socket() calls that set each flag."
 })
 
-# getsockopt() & setsockopt()
+##################
+# Socket options #
+##################
+
 sockopt_cat = StatCategory.create!({
   name: 'Socket options',
-  description: 'Statistics about the usage of socket options.',
-  parent_category: nature_of_sockets_cat
+  description: 'Statistics about the usage of socket options.'
 })
+
 sockopt_cat_attr = {
   stat_category: sockopt_cat,
   stat_type: :proportion
@@ -58,12 +59,15 @@ sockopt_cat_attr = {
   end
 end
 
-# fcntl()
+#########
+# Fcntl #
+#########
+
 fcntl_cat = StatCategory.create!({
   name: 'fcntl()',
-  description: 'Statistics about the fcntl() function usage.',
-  parent_category: nature_of_sockets_cat
+  description: 'Statistics about the fcntl() function usage.'
 })
+
 fcntl_cat_attr = {
   stat_category: fcntl_cat,
   stat_type: :proportion
@@ -100,31 +104,29 @@ fcntl_fl_flags = [:O_APPEND, :O_ASYNC, :O_DIRECT, :O_NOATIME, :O_NONBLOCK]
 end
 
 ###################
-# FUNCTIONS USAGE #
-##################
+# Functions usage #
+###################
 
 send_family = [:send, :sendto, :sendmsg, :sendmmsg, :write, :writev, :sendfile]
 recv_family = [:recv, :recvfrom, :recvmsg, :recvmmsg, :read, :readv]
 
-usage_cat = StatCategory.create!(name: 'Functions usage', description: 'Statistics about the usage of various functions of the sockets API', parent_category: nil)
-
-# Global usage
-global_usage_cat = StatCategory.create!({
-  name: 'Global usage',
-  description: 'General statistic about functions usage.',
-  parent_category: usage_cat
+functions_usage_cat = StatCategory.create!({
+  name: 'Functions usage',
+  description: 'General statistic about functions usage.'
 })
-global_usage_cat_attr = {
-  stat_category: global_usage_cat,
+
+functions_usage_cat_attr = {
+  stat_category: functions_usage_cat,
   stat_type: :proportion,
   event_filters: {}
 }
-Stat.create!(global_usage_cat_attr.merge({
+
+Stat.create!(functions_usage_cat_attr.merge({
   name: 'Functions usage',
   node: 'type',
   description: "Breakdown of functions usage."
 }))
-Stat.create!(global_usage_cat_attr.merge({
+Stat.create!(functions_usage_cat_attr.merge({
   stat_type: :sum_by_group,
   event_filters: {
     type: { '$in': send_family+recv_family },
@@ -136,23 +138,25 @@ Stat.create!(global_usage_cat_attr.merge({
   description: 'Sum of bytes sent or received per function type.'
 }))
 
-Stat.create!(global_usage_cat_attr.merge({
+Stat.create!(functions_usage_cat_attr.merge({
   name: 'Success rate',
   node: 'success',
   description: "Proportion of function calls that return successfully."
 }))
-Stat.create!(global_usage_cat_attr.merge({
+Stat.create!(functions_usage_cat_attr.merge({
   name: 'errno',
   node: 'errno',
   description: "Breakdown of errno error codes."
 }))
 
-# Send family
+#######################
+# Send-like functions #
+#######################
+
 send_flags = [:MSG_CONFIRM, :MSG_DONTROUTE, :MSG_DONTWAIT, :MSG_EOR, :MSG_MORE, :MSG_NOSIGNAL, :MSG_OOB]
 send_family_cat = StatCategory.create!({
   name: 'Send-like functions',
-  description: "Statistic about the usage of functions designed to send data over a socket (#{send_family.join(", ")}).",
-  parent_category: usage_cat
+  description: "Statistic about the usage of functions designed to send data over a socket (#{send_family.join(", ")})."
 })
 send_family_cat_attr = {
   stat_category: send_family_cat,
@@ -205,12 +209,14 @@ Stat.create!(send_family_cat_attr.merge({
   description: "Proportion of send-like functions calls that sets each flag."
 }))
 
-# Recv family
+#######################
+# Recv-like functions #
+#######################
+
 recv_flags = [:MSG_CMSG_CLOEXEC, :MSG_DONTWAIT, :MSG_ERRQUEUE, :MSG_OOB, :MSG_PEEK, :MSG_TRUNC, :MSG_WAITALL]
 recv_family_cat = StatCategory.create!({
   name: 'Recv-like functions',
-  description: "Statistic about the usage of functions designed to receive data over a socket (#{recv_family.join(", ")}).",
-  parent_category: usage_cat
+  description: "Statistic about the usage of functions designed to receive data over a socket (#{recv_family.join(", ")})."
 })
 recv_family_cat_attr = {
   stat_category: recv_family_cat,
@@ -263,7 +269,10 @@ Stat.create!(recv_family_cat_attr.merge({
   description: "Proportion of recv-like functions calls that sets each flag."
 }))
 
-# Async family
+#######################
+# Async I/O functions #
+#######################
+
 select = '(p)select'
 poll = '(p)poll'
 epoll = 'epoll_(p)wait & epoll_ctl'
@@ -281,8 +290,7 @@ events = {
 async_family = async_functions.values.flatten
 async_family_cat = StatCategory.create!({
   name: 'Async I/O functions',
-  description: "Statistic about the usage of functions designed to perform async I/O (#{async_family.join(", ")}).",
-  parent_category: usage_cat
+  description: "Statistic about the usage of functions designed to perform async I/O (#{async_family.join(", ")})."
 })
 
 def async_description(family, ev_type)
@@ -307,11 +315,13 @@ async_families.each do |family|
   end
 end
 
-# Ioctl
+#########
+# ioctl #
+#########
+
 ioctl_cat = StatCategory.create!({
   name: 'ioctl()',
-  description: "Statistic about the usage of the ioctl() function",
-  parent_category: usage_cat
+  description: "Statistic about the usage of the ioctl() function"
 })
 Stat.create!({
   stat_category: ioctl_cat,
@@ -321,4 +331,16 @@ Stat.create!({
   node: 'details.request',
   description: "Breakdown of arguments used for the 'request' parameter of ioctl()."
 })
+
+#################
+# THREADS USAGE #
+#################
+
+threads_usage = StatCategory.create!({
+  name: 'Threads usage',
+  description: 'About threads usage...',
+  applies_to_app_trace: false,
+  applies_to_process_trace: false
+})
+
 

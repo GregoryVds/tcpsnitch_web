@@ -14,24 +14,21 @@
     }
   }
   ul {
+    margin-top: 0;
     font-size: 15px;
-    padding-left: 30px;
     line-height: 44px;
     list-style-type: none;
-    li {cursor: pointer};
-  }
-  > ul:first-child {
-    margin-bottom: 0;
     li {
+      cursor: pointer;
+      padding: 0 30px;
       display: block;
       min-height: 3rem;
       line-height: 3rem;
-      padding: 0 1rem;
       background-color: #fff;
       border-bottom: 1px solid #ddd;
+      &.active{
+        background-color: $primary-color-light;
+      }
     }
-  }
-  ul.collapsible {
-    margin-top: 0;
   }
 }

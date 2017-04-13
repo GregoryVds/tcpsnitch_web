@@ -1,6 +1,6 @@
 %ul
-  %li{data: {section: 'about'}}
+  %li.active{data: {section: 'about'}}
     %a About trace
   %li{data: {section: 'events'}}
-    %a Events
-= render 'shared/stats_submenu', trace: trace
+    %a Browse trace
+  = render 'shared/stats_submenu', trace: trace

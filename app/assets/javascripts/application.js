@@ -38,7 +38,9 @@ $(document).on('turbolinks:load', function(event) {
     sections.hide()
     sections.filter('[data-section="about"]').show()
 
-    $('.left-menu li[data-section]').click(function(event){
+    $('.left-menu li').click(function(event){
+        $('.left-menu li').removeClass('active')
+        $(event.currentTarget).addClass('active')
         var section = $(event.currentTarget).data('section');
         sections.hide();
         sections.filter('[data-section="'+section+'"]').show()

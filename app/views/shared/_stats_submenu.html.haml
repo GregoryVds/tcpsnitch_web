@@ -1,9 +1,4 @@
-%ul.collapsible{data: {collapsible: 'expandable'}}
-  - StatCategory.root_categories.each do |parent|
-    - cache parent do
-      %li
-        %a.collapsible-header= parent.pretty_name
-        .collapsible-body
-          %ul
-            - StatCategory.children_of(parent.id).each do |child|
-              %li{data: {section: child.name}}= child.pretty_name
+- StatCategory.all.each do |root|
+  - if root.applies_to?(trace)
+    %li{data: {section: root.name}}
+      %a= root.pretty_name
