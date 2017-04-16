@@ -343,4 +343,15 @@ threads_usage = StatCategory.create!({
   applies_to_process_trace: false
 })
 
+Stat.create!({
+  stat_category: threads_usage,
+  event_filters: {},
+  stat_type: :count_distinct,
+  node: 'thread_id',
+  name: 'Distinct threads count',
+  description: 'Count of distinct threads interacting with the socket.'
+})
+
+
+
 

@@ -74,6 +74,15 @@ class Event
     coll.empty? ? 0 : coll.first['count']
   end
 
+  def self.count_distinct(node, **match)
+    collection.aggregate([
+      {:$match => match},
+      {:$project => {node => 1}},
+      {:$group => {:_id => "$#{node}"}},
+      {:$count => 'count'}
+    ], allow_disk_use: true).first['count']
+  end
+
   # Helpers to access path in hash
   def self.node_val(hash, path)
     val_for(hash, keys_from_path(path))

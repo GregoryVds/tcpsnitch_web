@@ -4,7 +4,7 @@ class Stat < ActiveRecord::Base
   serialize :event_filters, Hash
 
   enum stat_type: {proportion: 0, cdf: 1, descriptive: 2, sum_by_group: 3,
-                   pc_true_for_nodes: 4}
+                   pc_true_for_nodes: 4, count_distinct: 5}
 
   belongs_to :stat_category, inverse_of: :stats
 

@@ -5,7 +5,7 @@ class StatCategory < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
   def self.all_cached
-    cached_collection(all, "all")
+    cached_collection(all.order(id: :asc), "all")
   end
 
   def pretty_name
