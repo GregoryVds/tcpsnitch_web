@@ -21,35 +21,42 @@ functions_usage_cat = StatCategory.create!({
 
 functions_usage_cat_attr = {
   stat_category: functions_usage_cat,
-  stat_type: :count_by_group,
   event_filters: {}
 }
 
 Stat.create!(functions_usage_cat_attr.merge({
-  name: 'Functions usage',
+  stat_type: :count_by_group,
   group_by: 'type',
+  name: 'Functions usage',
   description: "Breakdown of functions usage."
 }))
 Stat.create!(functions_usage_cat_attr.merge({
-  stat_type: :sum_by_group,
-  event_filters: {
-    type: { '$in': send_family+recv_family },
-    return_value: { '$ne': -1 }
-  },
-  name: 'Bytes sent/received',
+  stat_type: :sum_for_filters,
   node: 'return_value',
-  group_by: 'type',
-  description: 'Sum of bytes sent or received per function type.'
+  custom: {
+    'Bytes sent': {
+      type: { '$in': send_family },
+      return_value: { '$ne': -1 }
+    },
+    'Bytes received': {
+      type: { '$in': recv_family },
+      return_value: { '$ne': -1 }
+    }
+  },
+  name: 'Bytes sent & received',
+  description: 'Sum of bytes sent & received.'
 }))
 
 Stat.create!(functions_usage_cat_attr.merge({
-  name: 'Success rate',
+  stat_type: :count_by_group,
   group_by: 'success',
+  name: 'Success rate',
   description: "Proportion of function calls that return successfully."
 }))
 Stat.create!(functions_usage_cat_attr.merge({
-  name: 'errno',
+  stat_type: :count_by_group,
   group_by: 'errno',
+  name: 'errno',
   description: "Breakdown of errno error codes."
 }))
 

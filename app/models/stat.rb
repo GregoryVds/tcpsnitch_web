@@ -2,17 +2,25 @@ class Stat < ActiveRecord::Base
   include CachedCollection
 
   serialize :event_filters, Hash
+  serialize :custom, Hash
 
-  enum stat_type: {count_by_group: 0, cdf: 1, descriptive: 2,
-                   sum_by_group: 3, pc_true_for_nodes: 4,
-                   count_distinct: 5, count_distinct_by_group: 6}
+  enum stat_type: {
+    count_by_group: 0,
+    cdf: 1,
+    descriptive: 2,
+    sum_by_group: 3,
+    pc_true_for_nodes: 4,
+    count_distinct: 5,
+    count_distinct_by_group: 6,
+    sum_for_filters: 7
+  }
 
   belongs_to :stat_category, inverse_of: :stats
 
   validates :name, :stat_category, :stat_type, presence: true
   validates :name, uniqueness: true
 
-  scope :front, -> { where(name: ["Functions usage", "Bytes sent/received"]) }
+  scope :front, -> { where(name: ["Functions usage", "Bytes sent & received"]) }
   scope :category, -> (cat_id) { where(stat_category_id: cat_id).order(id: :asc) }
 
   def self.front_stats
@@ -29,6 +37,11 @@ class Stat < ActiveRecord::Base
 
   def pretty_name
     name.sub(/^./, &:upcase)
+  end
+
+  def custom=(val)
+    val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin... Probably a better solution exists
+    write_attribute(:custom, val)
   end
 
   def event_filters=(val)
@@ -51,6 +64,8 @@ class Stat < ActiveRecord::Base
       Event.count_distinct(where, node)
     elsif count_distinct_by_group?
       Event.count_distinct_by_group(where, node, group_by)
+    elsif sum_for_filters?
+      Event.sum_for_filters(where, node, custom)
     end
   end
 

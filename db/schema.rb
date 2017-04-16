@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170413231344) do
+ActiveRecord::Schema.define(version: 20170416144558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(version: 20170413231344) do
     t.datetime "updated_at",       null: false
     t.string   "description"
     t.string   "group_by"
+    t.text     "custom"
     t.index ["stat_category_id"], name: "index_stats_on_stat_category_id", using: :btree
   end
 

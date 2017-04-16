@@ -15,7 +15,7 @@
           = pie_chart stat_data
         - elsif stat.cdf?
           = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
-        - elsif stat.sum_by_group?
+        - elsif stat.sum_by_group? or stat.sum_for_filters?
           = column_chart stat_data
         - elsif stat.pc_true_for_nodes?
           = column_chart stat_data, max: 1

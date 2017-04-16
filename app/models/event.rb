@@ -35,13 +35,20 @@ class Event
   end
 
   def self.sum(match, sum_node)
-    collection.aggregate([
+    coll = collection.aggregate([
       {:$match => match},
       {:$group => {
           :_id => '',
           sum: { :$sum => "$#{sum_node}" }
       }}
     ], allow_disk_use: true).to_a
+    coll.empty? ? 0 : coll.first['sum']
+  end
+
+  def self.sum_for_filters(match, sum_node, filters)
+    filters.map do |filter_name, filter|
+      [filter_name, sum(match.merge(filter), sum_node)]
+    end
   end
 
   def self.sum_by_group(match, group_by, sum_node)
