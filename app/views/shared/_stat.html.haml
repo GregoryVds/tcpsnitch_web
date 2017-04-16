@@ -7,11 +7,11 @@
       - if !trace.analysis_computed?
         .no-data
           Analysis is being computed...
-      - elsif stat_data.empty?
+      - elsif stat_data.nil?
         .no-data
           No data for this trace.
       - else
-        - if stat.proportion?
+        - if stat.count_by_group?
           = pie_chart stat_data
         - elsif stat.cdf?
           = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
@@ -19,6 +19,10 @@
           = column_chart stat_data
         - elsif stat.pc_true_for_nodes?
           = column_chart stat_data, max: 1
+        - elsif stat.count_distinct?
+          = stat_data
+        - elsif stat.count_distinct_by_group?
+          = bar_chart stat_data
 
   - if stat.description.present?
     .card-action= stat.description

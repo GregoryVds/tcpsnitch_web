@@ -23,10 +23,10 @@ class Event
   index({socket_trace_id: 1})
   index({socket_trace_id: 1, index: 1})
 
-  def self.count_by_val(node, **match)
+  def self.count_by_group(match, group_by)
     collection.aggregate([
       {:$match => match},
-      {:$sortByCount => "$#{node}"}
+      {:$sortByCount => "$#{group_by}"}
     ], allow_disk_use: true).map do |r|
       [r["_id"], r["count"]]
     end.reject do |val, count|
@@ -34,7 +34,7 @@ class Event
     end
   end
 
-  def self.sum(sum_node, **match)
+  def self.sum(match, sum_node)
     collection.aggregate([
       {:$match => match},
       {:$group => {
@@ -44,11 +44,11 @@ class Event
     ], allow_disk_use: true).to_a
   end
 
-  def self.sum_by_group(group, sum_node, **match)
+  def self.sum_by_group(match, group_by, sum_node)
     collection.aggregate([
       {:$match => match},
       {:$group => {
-          :_id => "$#{group}",
+          :_id => "$#{group_by}",
           sum: { :$sum => "$#{sum_node}" }
       }}
     ], allow_disk_use: true).map do |r|
@@ -56,7 +56,7 @@ class Event
     end
   end
 
-  def self.vals(node, **match)
+  def self.vals(match, node)
     collection.aggregate([
       {:$match => match},
       {:$project => {node => 1}},
@@ -66,7 +66,7 @@ class Event
     end
   end
 
-  def self.count(**match)
+  def self.count(match)
     coll = collection.aggregate([
       {:$match => match},
       {:$count => 'count'}
@@ -74,13 +74,28 @@ class Event
     coll.empty? ? 0 : coll.first['count']
   end
 
-  def self.count_distinct(node, **match)
+  def self.count_distinct(match, node)
     collection.aggregate([
       {:$match => match},
       {:$project => {node => 1}},
       {:$group => {:_id => "$#{node}"}},
       {:$count => 'count'}
     ], allow_disk_use: true).first['count']
+  end
+
+  def self.count_distinct_by_group(match, node, group_by)
+    collection.aggregate([
+      {:$match => match},
+      {:$group => {
+        :_id => "$#{group_by}",
+        :distinct_values => {:$addToSet => "$#{node}"}
+      }},
+      {:$project => {
+        :distinct_count => { :$size => "$distinct_values" }
+      }}
+    ], allow_disk_use: true).map do |r|
+      [r['_id'],r['distinct_count']]
+    end
   end
 
   # Helpers to access path in hash

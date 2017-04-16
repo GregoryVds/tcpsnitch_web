@@ -42,7 +42,13 @@ module Analysable
   end
 
   def stat_data(stat)
-    analysis ? analysis[:measures][stat.name].to_a : [] # to_a cast nil to []
+    return nil unless analysis
+    data = analysis[:measures][stat.name]
+    if stat.collection?
+      data.nil? or data.empty? ? nil : data # We don't want an empty array, but nil.
+    else
+      data
+    end
   end
 end
 
