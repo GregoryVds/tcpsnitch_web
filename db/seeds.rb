@@ -68,7 +68,7 @@ socket_cat = StatCategory.create!({
     stat_type: :count_by_group,
     event_filters: {type: :socket},
     stat_category: socket_cat,
-    name: field,
+    name: "Socket() #{field}",
     group_by: "details.sock_info.#{field}",
     description: "Breakdown of arguments used for the '#{field}' parameter of socket()."
   })
@@ -124,7 +124,7 @@ fcntl_cat_attr = {
 }
 Stat.create!(fcntl_cat_attr.merge({
   event_filters: {type: 'fcntl'},
-  name: 'fcntl() cmd',
+  name: 'fcntl() commands',
   group_by: 'details.cmd',
   description: "Breakdown of arguments for the 'cmd' parameter of fnctl()"
 }))
@@ -177,6 +177,12 @@ Stat.create!(send_family_cat_attr.merge({
   group_by: :success,
   name: 'Send-like success-rate',
   description: "Success rate of send-like functions calls."
+}))
+Stat.create!(send_family_cat_attr.merge({
+  stat_type: :count_by_group,
+  group_by: :errno,
+  name: 'Send-like errnos',
+  description: "Breakdown of errno error codes for send-like functions."
 }))
 Stat.create!(send_family_cat_attr.merge({
   stat_type: :pc_true_for_nodes,
@@ -232,18 +238,6 @@ Stat.create!(recv_family_cat_attr.merge({
   description: "Breakdown of recv-like functions usage."
 }))
 Stat.create!(recv_family_cat_attr.merge({
-  stat_type: :count_by_group,
-  group_by: :success,
-  name: 'Recv-like success-rate',
-  description: "Success rate of recv-like functions calls."
-}))
-Stat.create!(recv_family_cat_attr.merge({
-  stat_type: :pc_true_for_nodes,
-  node: nodes_list(recv_flags, "details.flags"),
-  name: "Receiving flags popularity",
-  description: "Proportion of recv-like functions calls that sets each flag."
-}))
-Stat.create!(recv_family_cat_attr.merge({
   stat_type: :sum_by_group,
   event_filters: {
     type: { '$in': recv_family },
@@ -253,6 +247,24 @@ Stat.create!(recv_family_cat_attr.merge({
   group_by: :type,
   name: 'Recv-like sum of bytes received',
   description: 'Sum of bytes received per function type.'
+}))
+Stat.create!(recv_family_cat_attr.merge({
+  stat_type: :count_by_group,
+  group_by: :success,
+  name: 'Recv-like success-rate',
+  description: "Success rate of recv-like functions calls."
+}))
+Stat.create!(recv_family_cat_attr.merge({
+  stat_type: :count_by_group,
+  group_by: :errno,
+  name: 'Recv-like errnos',
+  description: "Breakdown of errno error codes for recv-like functions."
+}))
+Stat.create!(recv_family_cat_attr.merge({
+  stat_type: :pc_true_for_nodes,
+  node: nodes_list(recv_flags, "details.flags"),
+  name: "Receiving flags popularity",
+  description: "Proportion of recv-like functions calls that sets each flag."
 }))
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :cdf,
@@ -401,4 +413,27 @@ Stat.create!({
   description: 'Count of threads.'
 })
 
+##########
+# Errnos #
+##########
 
+errno_cat = StatCategory.create!({
+  name: 'Errnos',
+  description: 'Breakdown of errno error codes by function.'
+})
+
+[:bind, :connect, :shutdown, :listen, :accept, :accept4, :getsockopt,
+ :setsockopt, :send, :recv, :sendto, :recvfrom, :sendmsg, :recvmsg, :sendmmsg,
+ :recvmmsg, :getsockname, :getpeername, :sockatmark, :isfdtype, :write, :read,
+ :close, :dup, :dup2, :dup3, :writev, :readv, :ioctl, :sendfile, :poll, :ppoll,
+ :select, :pselect, :fcntl, :epoll_ctl, :epoll_wait, :epoll_pwait, :fdopen
+].each do |function|
+  Stat.create!({
+    stat_type: :count_by_group,
+    stat_category: errno_cat,
+    event_filters: {type: function},
+    group_by: :errno,
+    name: "#{function}() errno",
+    description: "Breakdown of errno error codes for #{function}."
+  })
+end
