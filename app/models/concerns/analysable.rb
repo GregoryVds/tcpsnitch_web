@@ -45,7 +45,7 @@ module Analysable
     return nil unless analysis
     data = analysis[:measures][stat.name]
     if stat.collection?
-      data.nil? or data.empty? ? nil : data # We don't want an empty array, but nil.
+      (data.nil? or data.empty?) ? nil : data # We don't want an empty array, but nil.
     else
       data
     end
