@@ -17,6 +17,7 @@ module Analysable
   def analysis_computed!
     self.analysis_computed = true
     self.save!
+    self.touch
   end
 
   def create_analysis
