@@ -4,8 +4,8 @@ class StatCategory < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
 
-  def self.all_cached
-    cached_collection(all.order(id: :asc), "all")
+  def self.left_menu
+    cached_collection(where.not(name: 'about').order(id: :asc), 'left_menu')
   end
 
   def pretty_name

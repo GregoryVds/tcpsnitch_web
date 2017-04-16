@@ -7,30 +7,28 @@ end
 def functions_list(functions)
   functions.map{|f|"#{f}()"}.join(', ')
 end
-###################
-# Functions usage #
-###################
+
+#########
+# About #
+#########
 
 send_family = [:send, :sendto, :sendmsg, :sendmmsg, :write, :writev, :sendfile]
 recv_family = [:recv, :recvfrom, :recvmsg, :recvmmsg, :read, :readv]
 
-functions_usage_cat = StatCategory.create!({
-  name: 'Functions usage',
-  description: 'General statistic about functions usage.'
-})
+about_cat = StatCategory.create!({name: 'about'})
 
-functions_usage_cat_attr = {
-  stat_category: functions_usage_cat,
+about_cat_attr = {
+  stat_category: about_cat,
   event_filters: {}
 }
 
-Stat.create!(functions_usage_cat_attr.merge({
+Stat.create!(about_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: 'type',
   name: 'Functions usage',
   description: "Breakdown of functions usage."
 }))
-Stat.create!(functions_usage_cat_attr.merge({
+Stat.create!(about_cat_attr.merge({
   stat_type: :sum_for_filters,
   node: 'return_value',
   custom: {
@@ -45,19 +43,6 @@ Stat.create!(functions_usage_cat_attr.merge({
   },
   name: 'Bytes sent & received',
   description: 'Sum of bytes sent & received.'
-}))
-
-Stat.create!(functions_usage_cat_attr.merge({
-  stat_type: :count_by_group,
-  group_by: 'success',
-  name: 'Success rate',
-  description: "Proportion of function calls that return successfully."
-}))
-Stat.create!(functions_usage_cat_attr.merge({
-  stat_type: :count_by_group,
-  group_by: 'errno',
-  name: 'errno',
-  description: "Breakdown of errno error codes."
 }))
 
 
@@ -180,6 +165,17 @@ Stat.create!(send_family_cat_attr.merge({
   description: "Breakdown of send-like functions usage."
 }))
 Stat.create!(send_family_cat_attr.merge({
+  stat_type: :sum_by_group,
+  event_filters: {
+    type: { '$in': send_family },
+    return_value: { '$ne': -1 }
+  },
+  node: 'details.bytes',
+  group_by: :type,
+  name: 'Send-like sum of bytes sent',
+  description: 'Sum of bytes sent per function type.'
+}))
+Stat.create!(send_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :success,
   name: 'Send-like success-rate',
@@ -196,17 +192,6 @@ Stat.create!(send_family_cat_attr.merge({
   node: nodes_list(send_flags, "details.flags"),
   name: "Sending flags popularity",
   description: "Proportion of send-like functions calls that sets each flag."
-}))
-Stat.create!(send_family_cat_attr.merge({
-  stat_type: :sum_by_group,
-  event_filters: {
-    type: { '$in': send_family },
-    return_value: { '$ne': -1 }
-  },
-  node: 'details.bytes',
-  group_by: :type,
-  name: 'Send-like sum of bytes sent',
-  description: 'Sum of bytes sent per function type.'
 }))
 Stat.create!(send_family_cat_attr.merge({
   stat_type: :cdf,
@@ -426,8 +411,23 @@ Stat.create!({
 
 errno_cat = StatCategory.create!({
   name: 'Errnos',
-  description: 'Breakdown of errno error codes by function.'
+  description: 'Breakdown of errno error codes.'
 })
+
+Stat.create!(about_cat_attr.merge({
+  stat_category: errno_cat,
+  stat_type: :count_by_group,
+  group_by: 'success',
+  name: 'Success rate',
+  description: "Proportion of function calls that return successfully."
+}))
+Stat.create!(about_cat_attr.merge({
+  stat_category: errno_cat,
+  stat_type: :count_by_group,
+  group_by: 'errno',
+  name: 'errno',
+  description: "Breakdown of errno error codes for all functions."
+}))
 
 [:bind, :connect, :shutdown, :listen, :accept, :accept4, :getsockopt,
  :setsockopt, :send, :recv, :sendto, :recvfrom, :sendmsg, :recvmsg, :sendmmsg,

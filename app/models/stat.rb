@@ -20,11 +20,11 @@ class Stat < ActiveRecord::Base
   validates :name, :stat_category, :stat_type, presence: true
   validates :name, uniqueness: true
 
-  scope :front, -> { where(name: ["Functions usage", "Bytes sent & received"]) }
+  scope :about_scope, -> { where(name: ["Functions usage", "Bytes sent & received"]) }
   scope :category, -> (cat_id) { where(stat_category_id: cat_id).order(id: :asc) }
 
-  def self.front_stats
-    cached_collection(front, "front")
+  def self.about
+    cached_collection(about_scope, "about")
   end
 
   def self.with_category_id(id)

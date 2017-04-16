@@ -13,7 +13,7 @@
 - cache @app_trace do
   .section{data: {section: 'about'}}
     = render 'shared/about_head', trace: @app_trace
-    = render 'shared/front_stats', trace: @app_trace
+    = render 'shared/about_stats', trace: @app_trace
     .card
       .card-content
         %span.card-title

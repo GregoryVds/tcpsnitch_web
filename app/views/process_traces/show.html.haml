@@ -14,7 +14,7 @@
 - cache @process_trace do
   .section{data: {section: 'about'}}
     = render 'shared/about_head', trace: @process_trace
-    = render 'shared/front_stats', trace: @process_trace
+    = render 'shared/about_stats', trace: @process_trace
 
     .card
       .card-content
