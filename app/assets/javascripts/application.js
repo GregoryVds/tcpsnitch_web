@@ -17,6 +17,7 @@
 //= require highcharts
 //= require chartkick
 //= require jquery.infinite-pages
+//= require masonry.pkgd.min
 //= require_tree .
 
 $(document).on('turbolinks:load', function(event) {
@@ -33,6 +34,12 @@ $(document).on('turbolinks:load', function(event) {
 
     $('.infinite-list').infinitePages();
 
+    $('.grid').masonry({
+        itemSelector: '.grid-item',
+        columnWidth: 390,
+        gutter: 20
+    });
+
     // Left menu
     sections = $('.main-body .content [data-section]');
     sections.hide()
@@ -47,7 +54,6 @@ $(document).on('turbolinks:load', function(event) {
         sections.filter('[data-section="'+section+'"]').show()
         window.dispatchEvent(new Event('resize'));
     });
-
 });
 
 

@@ -14,6 +14,7 @@ $horizontal-padding: 70px;
 @import 'materialize';
 @import 'shared/filters';
 @import 'shared/left_menu';
+@import 'shared/stats';
 @import 'app_traces';
 
 html,body {
@@ -62,7 +63,6 @@ header .banner {
 @media only screen and (min-width: 993px) {
   .container {width: 80%};
 }
-
 
 main .main-header {
   font-size: 24px;
@@ -125,17 +125,6 @@ footer.page-footer {
   background-color: color("red", "lighten-3");
 }
 
-.card.stat {
-  .card-content {height: 370px;}
-  .no-data {
-    line-height: 300px;
-    text-align: center;
-  }
-  .card-action {min-height: 77px;}
-}
-
 span.badge{ color: white };
 
-.content .front-stats {
-  margin-bottom: 0;
-}
+

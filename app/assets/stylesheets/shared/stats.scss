@@ -1,0 +1,24 @@
+$grid-width: 800px;
+$gutter: 20px;
+$grid-item-width: $grid-width/2-$gutter;
+
+.content .front-stats {
+  margin-bottom: 0;
+}
+.card.stat {
+  .no-data {
+    text-align: center;
+  }
+}
+.section.stats{
+  width: $grid-width;
+}
+
+.grid {
+  width: 100%;
+  .grid-item {
+    width: $grid-item-width;
+    margin-top: $gutter 0 0 0;
+  }
+}
+

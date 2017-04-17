@@ -19,7 +19,7 @@
             %li{class: ((params[:controller] == 'app_traces' && params[:action] != 'new') or params[:controller] == 'socket_traces') ? 'active' : ''}= link_to 'Browse traces', app_traces_path
             %li{class: active_on('app_traces', 'new')}= link_to 'Upload trace', new_app_trace_path
             -#%li{class: active_on('pages', 'about')}= link_to 'About', about_path
-      .banner 
+      .banner
         %h1
           - if content_for?(:page_header_title)
             = yield :page_header_title
@@ -35,7 +35,7 @@
       .main-body
         - if content_for?(:left_menu)
           .left-menu
-            = yield :left_menu 
+            = yield :left_menu
         .content
           .container
             .row

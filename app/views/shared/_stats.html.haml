@@ -1,9 +1,8 @@
 - stat_categories.each do |cat|
-  .section{data: {section: cat.name}}
-    .row
-      .col.s12
-        %h5= cat.pretty_name
-        %p= cat.description
+  .section.stats{data: {section: cat.name}}
+    %h5= cat.pretty_name
+    %p= cat.description
+    .grid
       - Stat.category(cat.id).each do |stat|
         - unless stat.number?
-          .col.s6= render 'shared/stat', stat: stat, analysis: analysis
+          = render 'shared/stat', stat: stat, analysis: analysis
