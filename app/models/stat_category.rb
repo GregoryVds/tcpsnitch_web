@@ -8,11 +8,11 @@ class StatCategory < ActiveRecord::Base
   scope :left_menu_scope, -> (analysable_type) { applies_to_scope(analysable_type).where.not(name: 'Overview').order(id: :asc) }
 
   def self.applies_to(analysable)
-    cached_collection(applies_to_scope(analysable.analysable_type), 'applies_to')
+    cached_collection(applies_to_scope(analysable.analysable_type), "applies_to_#{analysable.analysable_type}")
   end
 
   def self.left_menu(analysable)
-    cached_collection(left_menu_scope(analysable.analysable_type), 'left_menu')
+    cached_collection(left_menu_scope(analysable.analysable_type), "left_menu_#{analysable.analysable_type}")
   end
 
   def pretty_name

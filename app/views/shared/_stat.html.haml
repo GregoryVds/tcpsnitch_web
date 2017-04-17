@@ -13,7 +13,7 @@
       - else
         - if stat.count_by_group?
           = pie_chart stat_data
-        - elsif stat.count_distinct_node_val?
+        - elsif stat.number?
           = stat_data
         - elsif stat.count_distinct_node_val_by_group?
           = bar_chart stat_data

@@ -5,6 +5,7 @@ class Stat < ActiveRecord::Base
   serialize :custom, Hash
 
   enum stat_type: [
+    :simple_count,
     :count_by_group,
     :count_distinct_node_val,
     :count_distinct_node_val_by_group,
@@ -27,13 +28,16 @@ class Stat < ActiveRecord::Base
   end
 
   def self.category(id)
-    cached_collection(category_scope(id), "category#{id}")
+    cached_collection(category_scope(id), "category_#{id}")
   end
 
   def collection?
-    !count_distinct_node_val?
+    !(count_distinct_node_val? or simple_count?)
   end
 
+  def number?
+    !collection?
+  end
   def pretty_name
     name.sub(/^./, &:upcase)
   end
@@ -46,6 +50,10 @@ class Stat < ActiveRecord::Base
   def event_filters=(val)
     val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin
     write_attribute(:event_filters, val)
+  end
+
+  def simple_count(filter)
+    Event.count(filter)
   end
 
   def count_by_group(filter)

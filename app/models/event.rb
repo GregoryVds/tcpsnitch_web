@@ -23,6 +23,14 @@ class Event
   index({socket_trace_id: 1})
   index({socket_trace_id: 1, index: 1})
 
+  def self.count(filter)
+    coll = collection.aggregate([
+      {:$match => filter},
+      {:$count => 'count'}
+    ], allow_disk_use: true).to_a
+    coll.empty? ? 0 : coll.first['count']
+  end
+
   def self.count_by_group(filter, group_by)
     collection.aggregate([
       {:$match => filter},
@@ -57,14 +65,6 @@ class Event
     ], allow_disk_use: true).map do |r|
       [r['_id'],r['distinct_count']]
     end
-  end
-
-  def self.count(filter)
-    coll = collection.aggregate([
-      {:$match => filter},
-      {:$count => 'count'}
-    ], allow_disk_use: true).to_a
-    coll.empty? ? 0 : coll.first['count']
   end
 
   def self.sum_node_val_by_group(filter, group_by, sum_node)

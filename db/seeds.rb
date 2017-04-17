@@ -47,6 +47,25 @@ Stat.create!(overview_cat_attr.merge({
   description: 'Sum of bytes sent & received.'
 }))
 
+Stat.create!(overview_cat_attr.merge({
+  stat_type: :count_distinct_node_val,
+  node: :app_trace_id,
+  name: 'App traces count',
+  description: 'App traces count.'
+}))
+
+Stat.create!(overview_cat_attr.merge({
+  stat_type: :count_distinct_node_val,
+  node: :socket_trace_id,
+  name: 'Socket traces count',
+  description: 'Socket traces count.'
+}))
+
+Stat.create!(overview_cat_attr.merge({
+  stat_type: :simple_count,
+  name: 'Events count',
+  description: 'Events count.'
+}))
 
 ##########
 # Socket #
