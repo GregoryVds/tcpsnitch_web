@@ -35,4 +35,4 @@
       %p.pagination
         - unless @events.last_page?
           = link_to('Next page', socket_trace_events_path(@socket_trace, page: @events.next_page), remote: true, rel: 'next')
-  = render 'shared/stats', stat_categories: StatCategory.left_menu(@socket_trace), analysable: @socket_trace
+  = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis

@@ -68,4 +68,4 @@
           %td.right-align= number_with_delimiter(process_trace.events_count, delimiter: '.')
           %td.right-align= link_to('Show', process_trace_path(process_trace))
 
-  = render 'shared/stats', stat_categories: StatCategory.left_menu(@app_trace), analysable: @app_trace
+  = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis

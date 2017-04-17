@@ -4,6 +4,5 @@
       .col.s12
         %h5= cat.pretty_name
         %p= cat.description
-      - analysis = analysable.analysis
       - Stat.category(cat.id).each do |stat|
         .col.s6= render 'shared/stat', stat: stat, analysis: analysis

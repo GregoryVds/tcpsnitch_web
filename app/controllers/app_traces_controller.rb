@@ -15,7 +15,9 @@ class AppTracesController < ApplicationController
   end
 
   def show
-    @app_trace = AppTrace.find(params[:id])
+    @app_trace = AppTrace.includes(:process_traces).find(params[:id])
+    @stat_categories = StatCategory.left_menu(@app_trace)
+    @analysis = @app_trace.analysis
   end
 
   def new

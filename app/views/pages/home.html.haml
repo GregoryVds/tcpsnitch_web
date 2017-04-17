@@ -1,8 +1,8 @@
 - content_for :page_header_title, 'Sockets API usage'
 - content_for :page_header_text, 'Statistics about the real usage of the sockets API'
-- content_for :left_menu, render('left_menu', analysable: Dataset.get)
+- content_for :left_menu, render('left_menu', analysable: @dataset)
 
 //- content_for :main_header, "Main header"
 
 - cache Dataset.get.analysis do
-  = render 'shared/stats', stat_categories: StatCategory.applies_to(Dataset.get), analysable: Dataset.get
+  = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis

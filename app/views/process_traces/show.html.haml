@@ -42,4 +42,4 @@
           %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
           %td.right-align= link_to('Show', socket_trace_path(socket_trace))
 
-  = render 'shared/stats', stat_categories: StatCategory.left_menu(@process_trace), analysable: @process_trace
+  = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis
