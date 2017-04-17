@@ -83,14 +83,11 @@ class Stat < ActiveRecord::Base
   end
 
   def cdf(count_by_group, total_count)
-    sorted_on_val= count_by_group.sort
-    cdf = []
     running_count = 0
-    sorted_on_val.each do |val, count|
+    count_by_group.sort.map do |val, count|
       running_count += count
-      cdf.push([val, running_count.to_f/total_count * 100.0])
+      [val, running_count.to_f/total_count * 100.0]
     end
-    cdf
   end
 
   def pc_true_for_node(where, node)
