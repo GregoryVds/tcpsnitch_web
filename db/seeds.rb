@@ -29,7 +29,7 @@ Stat.create!(about_cat_attr.merge({
   description: "Breakdown of functions usage."
 }))
 Stat.create!(about_cat_attr.merge({
-  stat_type: :sum_for_filters,
+  stat_type: :sum_node_val_for_filters,
   node: 'return_value',
   custom: {
     'Bytes sent': {
@@ -165,7 +165,7 @@ Stat.create!(send_family_cat_attr.merge({
   description: "Breakdown of send-like functions usage."
 }))
 Stat.create!(send_family_cat_attr.merge({
-  stat_type: :sum_by_group,
+  stat_type: :sum_node_val_by_group,
   event_filters: {
     type: { '$in': send_family },
     return_value: { '$ne': -1 }
@@ -194,13 +194,13 @@ Stat.create!(send_family_cat_attr.merge({
   description: "Proportion of send-like functions calls that sets each flag."
 }))
 Stat.create!(send_family_cat_attr.merge({
-  stat_type: :cdf,
+  stat_type: :node_val_cdf,
   node: 'details.bytes',
   name: 'Send-like buffer size CDF',
   description: "Cumulative distribution function for the buffer size argument of send-like function calls."
 }))
 Stat.create!(send_family_cat_attr.merge({
-  stat_type: :cdf,
+  stat_type: :node_val_cdf,
   event_filters: {
     type: { '$in': send_family },
     return_value: { '$ne': -1 }
@@ -230,7 +230,7 @@ Stat.create!(recv_family_cat_attr.merge({
   description: "Breakdown of recv-like functions usage."
 }))
 Stat.create!(recv_family_cat_attr.merge({
-  stat_type: :sum_by_group,
+  stat_type: :sum_node_val_by_group,
   event_filters: {
     type: { '$in': recv_family },
     return_value: { '$ne': -1 }
@@ -259,13 +259,13 @@ Stat.create!(recv_family_cat_attr.merge({
   description: "Proportion of recv-like functions calls that sets each flag."
 }))
 Stat.create!(recv_family_cat_attr.merge({
-  stat_type: :cdf,
+  stat_type: :node_val_cdf,
   node: 'details.bytes',
   name: 'Recv-like buffer size CDF',
   description: "Cumulative distribution function the buffer size argument of recv-like function calls."
 }))
 Stat.create!(recv_family_cat_attr.merge({
-  stat_type: :cdf,
+  stat_type: :node_val_cdf,
   event_filters: {
     type: { '$in': recv_family },
     return_value: { '$ne': -1 }
@@ -357,7 +357,7 @@ Stat.create!({
     type: { '$in': send_family },
     return_value: { '$ne': -1 }
   },
-  stat_type: :sum_by_group,
+  stat_type: :sum_node_val_by_group,
   group_by: :thread_id,
   node: :return_value,
   name: 'Bytes sent per thread',
@@ -370,7 +370,7 @@ Stat.create!({
     type: { '$in': recv_family },
     return_value: { '$ne': -1 }
   },
-  stat_type: :sum_by_group,
+  stat_type: :sum_node_val_by_group,
   group_by: :thread_id,
   node: :return_value,
   name: 'Bytes received per thread',
@@ -387,7 +387,7 @@ Stat.create!({
 })
 
 Stat.create!({
-  stat_type: :count_distinct_by_group,
+  stat_type: :count_distinct_node_val_by_group,
   stat_category: threads_usage,
   event_filters: {},
   node: :socket_trace_id,
@@ -397,7 +397,7 @@ Stat.create!({
 })
 
 Stat.create!({
-  stat_type: :count_distinct,
+  stat_type: :count_distinct_node_val,
   stat_category: threads_usage,
   event_filters: {},
   node: :thread_id,

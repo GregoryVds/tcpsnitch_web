@@ -13,7 +13,7 @@ class Analysis
     analysable = analysable_type.classify.constantize.find(analysable_id)
     attr = {measures: {}}
     Stat.all.each do |stat|
-      attr[:measures][stat.name] = stat.compute(analysable)
+      attr[:measures][stat.name] = stat.compute(analysable.filter)
       analysable.analysis.update_attributes(attr)
     end
     analysable.analysis_computed!

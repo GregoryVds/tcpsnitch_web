@@ -4,16 +4,15 @@ class Stat < ActiveRecord::Base
   serialize :event_filters, Hash
   serialize :custom, Hash
 
-  enum stat_type: {
-    count_by_group: 0,
-    cdf: 1,
-    descriptive: 2,
-    sum_by_group: 3,
-    pc_true_for_nodes: 4,
-    count_distinct: 5,
-    count_distinct_by_group: 6,
-    sum_for_filters: 7
-  }
+  enum stat_type: [
+    :count_by_group,
+    :count_distinct_node_val,
+    :count_distinct_node_val_by_group,
+    :node_val_cdf,
+    :sum_node_val_by_group,
+    :sum_node_val_for_filters,
+    :pc_true_for_nodes
+  ]
 
   belongs_to :stat_category, inverse_of: :stats
 
@@ -40,33 +39,47 @@ class Stat < ActiveRecord::Base
   end
 
   def custom=(val)
-    val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin... Probably a better solution exists
+    val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin
     write_attribute(:custom, val)
   end
 
   def event_filters=(val)
-    val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin... Probably a better solution exists
+    val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin
     write_attribute(:event_filters, val)
   end
 
-  def compute(trace)
-    where = event_filters.merge(trace.filter).merge(fake_call: false)
-    if count_by_group? then
-      Event.count_by_group(where, group_by)
-    elsif cdf? then
-      count = Event.count(where)
-      cdf(Event.count_by_group(where, node), count)
-    elsif sum_by_group?
-      Event.sum_by_group(where, group_by, node)
-    elsif pc_true_for_nodes?
-      node.split(',').map{|n| pc_true_for_node(where, n)}.compact
-    elsif count_distinct?
-      Event.count_distinct(where, node)
-    elsif count_distinct_by_group?
-      Event.count_distinct_by_group(where, node, group_by)
-    elsif sum_for_filters?
-      Event.sum_for_filters(where, node, custom)
-    end
+  def count_by_group(filter)
+    Event.count_by_group(filter, group_by)
+  end
+
+  def count_distinct_node_val(filter)
+    Event.count_distinct_node_val(filter, node)
+  end
+
+  def count_distinct_node_val_by_group(filter)
+    Event.count_distinct_node_val_by_group(filter, node, group_by)
+  end
+
+  def node_val_cdf(filter)
+    total_count = Event.count(filter)
+    cdf(Event.count_by_group(filter, node), total_count)
+  end
+
+  def sum_node_val_by_group(filter)
+    Event.sum_node_val_by_group(filter, group_by, node)
+  end
+
+  def sum_node_val_for_filters(filter)
+    Event.sum_node_val_for_filters(filter, node, custom)
+  end
+
+  def pc_true_for_nodes(filter)
+    node.split(',').map{|n| pc_true_for_node(filter, n)}.compact
+  end
+
+  def compute(filter)
+    where = event_filters.merge(filter).merge(fake_call: false)
+    send(stat_type, where)
   end
 
   def cdf(count_by_group, total_count)
@@ -77,7 +90,7 @@ class Stat < ActiveRecord::Base
       running_count += count
       cdf.push([val, running_count.to_f/total_count * 100.0])
     end
-    return cdf
+    cdf
   end
 
   def pc_true_for_node(where, node)

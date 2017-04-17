@@ -23,9 +23,9 @@ class Event
   index({socket_trace_id: 1})
   index({socket_trace_id: 1, index: 1})
 
-  def self.count_by_group(match, group_by)
+  def self.count_by_group(filter, group_by)
     collection.aggregate([
-      {:$match => match},
+      {:$match => filter},
       {:$sortByCount => "$#{group_by}"}
     ], allow_disk_use: true).map do |r|
       [r["_id"], r["count"]]
@@ -34,65 +34,18 @@ class Event
     end
   end
 
-  def self.sum(match, sum_node)
-    coll = collection.aggregate([
-      {:$match => match},
-      {:$group => {
-          :_id => '',
-          sum: { :$sum => "$#{sum_node}" }
-      }}
-    ], allow_disk_use: true).to_a
-    coll.empty? ? 0 : coll.first['sum']
-  end
-
-  def self.sum_for_filters(match, sum_node, filters)
-    filters.map do |filter_name, filter|
-      [filter_name, sum(match.merge(filter), sum_node)]
-    end
-  end
-
-  def self.sum_by_group(match, group_by, sum_node)
+  def self.count_distinct_node_val(filter, node)
     collection.aggregate([
-      {:$match => match},
-      {:$group => {
-          :_id => "$#{group_by}",
-          sum: { :$sum => "$#{sum_node}" }
-      }}
-    ], allow_disk_use: true).map do |r|
-      [r['_id'],r['sum']]
-    end
-  end
-
-  def self.vals(match, node)
-    collection.aggregate([
-      {:$match => match},
-      {:$project => {node => 1}},
-      {:$sort => {node => 1}}
-    ], allow_disk_use: true).map do |r|
-      node_val(r, node)
-    end
-  end
-
-  def self.count(match)
-    coll = collection.aggregate([
-      {:$match => match},
-      {:$count => 'count'}
-    ], allow_disk_use: true).to_a
-    coll.empty? ? 0 : coll.first['count']
-  end
-
-  def self.count_distinct(match, node)
-    collection.aggregate([
-      {:$match => match},
+      {:$match => filter},
       {:$project => {node => 1}},
       {:$group => {:_id => "$#{node}"}},
       {:$count => 'count'}
     ], allow_disk_use: true).first['count']
   end
 
-  def self.count_distinct_by_group(match, node, group_by)
+  def self.count_distinct_node_val_by_group(filter, node, group_by)
     collection.aggregate([
-      {:$match => match},
+      {:$match => filter},
       {:$group => {
         :_id => "$#{group_by}",
         :distinct_values => {:$addToSet => "$#{node}"}
@@ -105,16 +58,40 @@ class Event
     end
   end
 
-  # Helpers to access path in hash
-  def self.node_val(hash, path)
-    val_for(hash, keys_from_path(path))
+  def self.count(filter)
+    coll = collection.aggregate([
+      {:$match => filter},
+      {:$count => 'count'}
+    ], allow_disk_use: true).to_a
+    coll.empty? ? 0 : coll.first['count']
   end
 
-  def self.val_for(hash, keys)
-    keys.reduce(hash) { |h, key| h[key] }
+  def self.sum_node_val_by_group(filter, group_by, sum_node)
+    collection.aggregate([
+      {:$match => filter},
+      {:$group => {
+          :_id => "$#{group_by}",
+          sum: { :$sum => "$#{sum_node}" }
+      }}
+    ], allow_disk_use: true).map do |r|
+      [r['_id'],r['sum']]
+    end
   end
 
-  def self.keys_from_path(path)
-    path.split('.').collect(&:to_sym)
+  def self.sum(filter, sum_node)
+    coll = collection.aggregate([
+      {:$match => filter},
+      {:$group => {
+          :_id => '',
+          sum: { :$sum => "$#{sum_node}" }
+      }}
+    ], allow_disk_use: true).to_a
+    coll.empty? ? 0 : coll.first['sum']
+  end
+
+  def self.sum_node_val_for_filters(filter, sum_node, filters)
+    filters.map do |group_name, group_filter|
+      [group_name, sum(filter.merge(group_filter), sum_node)]
+    end
   end
 end
