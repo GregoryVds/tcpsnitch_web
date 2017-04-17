@@ -32,12 +32,13 @@ class Stat < ActiveRecord::Base
   end
 
   def collection?
-    !(count_distinct_node_val? or simple_count?)
+    !number?
   end
 
   def number?
-    !collection?
+    count_distinct_node_val? or simple_count?
   end
+
   def pretty_name
     name.sub(/^./, &:upcase)
   end

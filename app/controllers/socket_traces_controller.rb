@@ -1,6 +1,6 @@
 class SocketTracesController < ApplicationController
   def show
-    @socket_trace = SocketTrace.include(:socket_traces).find(params[:id])
+    @socket_trace = SocketTrace.find(params[:id])
     @stat_categories = StatCategory.left_menu(@socket_trace)
     @analysis = @socket_trace.analysis
     @events = Event.only(:details, :errno, :return_value, :success,

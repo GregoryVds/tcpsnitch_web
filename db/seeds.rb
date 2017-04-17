@@ -56,6 +56,13 @@ Stat.create!(overview_cat_attr.merge({
 
 Stat.create!(overview_cat_attr.merge({
   stat_type: :count_distinct_node_val,
+  node: :process_trace_id,
+  name: 'Process traces count',
+  description: 'Process traces count.'
+}))
+
+Stat.create!(overview_cat_attr.merge({
+  stat_type: :count_distinct_node_val,
   node: :socket_trace_id,
   name: 'Socket traces count',
   description: 'Socket traces count.'
