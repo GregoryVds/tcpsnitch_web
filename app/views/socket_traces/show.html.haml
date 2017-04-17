@@ -7,15 +7,15 @@
   %nav
     .nav-wrapper
       .col.s12
-        = link_to 'Browse traces', root_path, class: 'breadcrumb'
+        = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
         = link_to "App trace #{@socket_trace.app_trace.id}", app_trace_path(@socket_trace.app_trace), class: 'breadcrumb'
         = link_to "Process trace #{@socket_trace.process_trace.id}", process_trace_path(@socket_trace.process_trace), class: 'breadcrumb'
         = link_to "Socket trace #{@socket_trace.id}", socket_trace_path(@socket_trace), class: 'breadcrumb'
 
 - cache @socket_trace do
-  .section{data: {section: 'about'}}
-    = render 'shared/about_head', trace: @socket_trace
-    = render 'shared/about_stats', trace: @socket_trace
+  .section{data: {section: 'Overview'}}
+    = render 'shared/overview_head', trace: @socket_trace
+    = render 'shared/front_stats', analysable: @socket_trace
 
     .card
       .card-content
@@ -35,4 +35,4 @@
       %p.pagination
         - unless @events.last_page?
           = link_to('Next page', socket_trace_events_path(@socket_trace, page: @events.next_page), remote: true, rel: 'next')
-  = render 'shared/stats', trace: @socket_trace
+  = render 'shared/stats', stat_categories: StatCategory.left_menu(@socket_trace), analysable: @socket_trace

@@ -36,7 +36,8 @@ $(document).on('turbolinks:load', function(event) {
     // Left menu
     sections = $('.main-body .content [data-section]');
     sections.hide()
-    sections.filter('[data-section="about"]').show()
+    $('.left-menu li[data-section="Overview"]').addClass('active')
+    sections.filter('[data-section="Overview"]').show()
 
     $('.left-menu li').click(function(event){
         $('.left-menu li').removeClass('active')

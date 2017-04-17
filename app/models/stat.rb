@@ -19,19 +19,19 @@ class Stat < ActiveRecord::Base
   validates :name, :stat_category, :stat_type, presence: true
   validates :name, uniqueness: true
 
-  scope :about_scope, -> { where(name: ["Functions usage", "Bytes sent & received"]) }
-  scope :category, -> (cat_id) { where(stat_category_id: cat_id).order(id: :asc) }
+  scope :front_scope, -> { where(name: ["Functions usage", "Bytes sent & received"]) }
+  scope :category_scope, -> (cat_id) { where(stat_category_id: cat_id).order(id: :asc) }
 
-  def self.about
-    cached_collection(about_scope, "about")
+  def self.front
+    cached_collection(front_scope, "about")
   end
 
-  def self.with_category_id(id)
-    cached_collection(category(id), "category#{id}")
+  def self.category(id)
+    cached_collection(category_scope(id), "category#{id}")
   end
 
   def collection?
-    !count_distinct?
+    !count_distinct_node_val?
   end
 
   def pretty_name
@@ -102,5 +102,15 @@ class Stat < ActiveRecord::Base
       (true_count.to_f / (cbv[0][1] + cbv[1][1])).round(4)
     end
     [node.split('.').last, pc_true]
+  end
+
+  def data(analysis)
+    return nil unless analysis
+    data = analysis[:measures][name]
+    if collection?
+      (data.nil? or data.empty?) ? nil : data # We don't want an empty array, but nil.
+    else
+      data
+    end
   end
 end

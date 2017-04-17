@@ -8,27 +8,29 @@ def functions_list(functions)
   functions.map{|f|"#{f}()"}.join(', ')
 end
 
-#########
-# About #
-#########
+############
+# Overview #
+############
 
 send_family = [:send, :sendto, :sendmsg, :sendmmsg, :write, :writev, :sendfile]
 recv_family = [:recv, :recvfrom, :recvmsg, :recvmmsg, :read, :readv]
 
-about_cat = StatCategory.create!({name: 'about'})
+overview_cat = StatCategory.create!({
+  name: 'Overview'
+})
 
-about_cat_attr = {
-  stat_category: about_cat,
+overview_cat_attr = {
+  stat_category: overview_cat,
   event_filters: {}
 }
 
-Stat.create!(about_cat_attr.merge({
+Stat.create!(overview_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: 'type',
   name: 'Functions usage',
   description: "Breakdown of functions usage."
 }))
-Stat.create!(about_cat_attr.merge({
+Stat.create!(overview_cat_attr.merge({
   stat_type: :sum_node_val_for_filters,
   node: 'return_value',
   custom: {
@@ -349,6 +351,7 @@ threads_usage = StatCategory.create!({
   name: 'Threads usage',
   description: 'About threads usage...',
   applies_to_app_trace: false,
+  applies_to_dataset: false
 })
 
 Stat.create!({
@@ -414,20 +417,20 @@ errno_cat = StatCategory.create!({
   description: 'Breakdown of errno error codes.'
 })
 
-Stat.create!(about_cat_attr.merge({
+Stat.create!({
   stat_category: errno_cat,
   stat_type: :count_by_group,
   group_by: 'success',
   name: 'Success rate',
   description: "Proportion of function calls that return successfully."
-}))
-Stat.create!(about_cat_attr.merge({
+})
+Stat.create!({
   stat_category: errno_cat,
   stat_type: :count_by_group,
   group_by: 'errno',
   name: 'errno',
   description: "Breakdown of errno error codes for all functions."
-}))
+})
 
 [:bind, :connect, :shutdown, :listen, :accept, :accept4, :getsockopt,
  :setsockopt, :send, :recv, :sendto, :recvfrom, :sendmsg, :recvmsg, :sendmmsg,

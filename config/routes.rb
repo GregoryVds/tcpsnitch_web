@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   default_url_options protocol: (Rails.env.production? ? :https : :http)
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  root 'app_traces#index'
+  root 'pages#home'
 
   controller :pages do
     get :about

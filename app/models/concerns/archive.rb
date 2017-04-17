@@ -24,11 +24,11 @@ module Archive
   end
 
   def targz_files
-      `tar -tf #{archive.file.path}`.split("\n").map{|s| s.gsub("./", "")}
+    `tar -tf #{archive.file.path}`.split("\n").map{|s| s.gsub("./", "")}
   end
 
   def zip_files
-      `zipinfo -1 #{archive.file.path}`.split("\n")
+    `zipinfo -1 #{archive.file.path}`.split("\n")
   end
 
   def archive_contains_meta_files
@@ -41,6 +41,6 @@ module Archive
   end
 
   def schedule_import
-    TraceImportJob.perform_later(id)
+    ArchiveImportJob.perform_later(id)
   end
 end

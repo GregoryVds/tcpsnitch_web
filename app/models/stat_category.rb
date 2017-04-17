@@ -4,18 +4,18 @@ class StatCategory < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
 
-  def self.left_menu
-    cached_collection(where.not(name: 'about').order(id: :asc), 'left_menu')
+  scope :applies_to_scope, -> (analysable_type) { where("applies_to_#{analysable_type}": true) }
+  scope :left_menu_scope, -> (analysable_type) { applies_to_scope(analysable_type).where.not(name: 'Overview').order(id: :asc) }
+
+  def self.applies_to(analysable)
+    cached_collection(applies_to_scope(analysable.analysable_type), 'applies_to')
+  end
+
+  def self.left_menu(analysable)
+    cached_collection(left_menu_scope(analysable.analysable_type), 'left_menu')
   end
 
   def pretty_name
     name.sub(/^./, &:upcase)
-  end
-
-  def applies_to?(trace)
-    if trace.class == AppTrace then applies_to_app_trace
-    elsif trace.class == ProcessTrace then applies_to_process_trace
-    else applies_to_socket_trace
-    end
   end
 end

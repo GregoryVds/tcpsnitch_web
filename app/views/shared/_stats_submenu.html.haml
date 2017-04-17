@@ -1,4 +1,3 @@
-- StatCategory.left_menu.each do |root|
-  - if root.applies_to?(trace)
-    %li{data: {section: root.name}}
-      %a= root.pretty_name
+- stat_categories.each do |cat|
+  %li{data: {section: cat.name}}
+    %a= cat.pretty_name

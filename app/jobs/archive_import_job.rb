@@ -1,4 +1,4 @@
-class TraceImportJob < ActiveJob::Base
+class ArchiveImportJob < ActiveJob::Base
   queue_as :default
 
   def perform(app_trace_id)

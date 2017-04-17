@@ -7,14 +7,14 @@
   %nav
     .nav-wrapper
       .col.s12
-        = link_to 'Browse traces', root_path, class: 'breadcrumb'
+        = link_to 'Browse traces', app_traces_path, class: 'breadcrumb'
         = link_to "App trace #{@process_trace.app_trace.id}", app_trace_path(@process_trace.app_trace), class: 'breadcrumb'
         = link_to "Process trace #{@process_trace.id}", process_trace_path(@process_trace), class: 'breadcrumb'
 
 - cache @process_trace do
-  .section{data: {section: 'about'}}
-    = render 'shared/about_head', trace: @process_trace
-    = render 'shared/about_stats', trace: @process_trace
+  .section{data: {section: 'Overview'}}
+    = render 'shared/overview_head', trace: @process_trace
+    = render 'shared/front_stats', analysable: @process_trace
 
     .card
       .card-content
@@ -42,4 +42,4 @@
           %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
           %td.right-align= link_to('Show', socket_trace_path(socket_trace))
 
-  = render 'shared/stats', trace: @process_trace
+  = render 'shared/stats', stat_categories: StatCategory.left_menu(@process_trace), analysable: @process_trace

@@ -1,22 +1,18 @@
 class Analysis
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   field :analysable_type, type: String
   field :analysable_id, type: Integer
   field :measures, type: Hash
 
-  def analysable
-    @analysable ||= analysable_type.classify.constantize.find(analysable_id)
-  end
-
-  def self.compute(analysable_type, analysable_id)
-    analysable = analysable_type.classify.constantize.find(analysable_id)
-    attr = {measures: {}}
-    Stat.all.each do |stat|
-      attr[:measures][stat.name] = stat.compute(analysable.filter)
-      analysable.analysis.update_attributes(attr)
+  def update(analysable)
+    measure_attr = {measures: measures.to_h}
+    StatCategory.applies_to(analysable).pluck(:id).each do |stat_category_id|
+      Stat.category(stat_category_id).each do |stat|
+        measure_attr[:measures][stat.name] = stat.compute(analysable.filter)
+        update_attributes(measure_attr)
+      end
     end
-    analysable.analysis_computed!
   end
 end
-

@@ -18,13 +18,14 @@ class SocketTraceImportJob < ActiveJob::Base
     @socket_trace.schedule_analysis
 
     @process_trace.increment!(:events_count, @events_count)
+    @app_trace.increment!(:events_count, @events_count)
+
     if SocketTrace.where(process_trace_id: @process_trace.id, events_imported: false).empty?
       @process_trace.events_imported = true
       @process_trace.save!
       @process_trace.schedule_analysis unless @process_trace.analysis_computed
     end
 
-    @app_trace.increment!(:events_count, @events_count)
     if ProcessTrace.where(app_trace_id: @app_trace.id, events_imported: false).empty?
       @app_trace.events_imported = true
       @app_trace.save!

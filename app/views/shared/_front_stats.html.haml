@@ -1,0 +1,3 @@
+.row.front-stats
+  - Stat.front.each do |stat|
+    .col.s6= render 'shared/stat', stat: stat, analysis: analysable.analysis

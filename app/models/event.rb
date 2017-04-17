@@ -35,12 +35,13 @@ class Event
   end
 
   def self.count_distinct_node_val(filter, node)
-    collection.aggregate([
+    coll = collection.aggregate([
       {:$match => filter},
       {:$project => {node => 1}},
       {:$group => {:_id => "$#{node}"}},
       {:$count => 'count'}
-    ], allow_disk_use: true).first['count']
+    ], allow_disk_use: true).to_a
+    coll.empty? ? 0 : coll.first['count']
   end
 
   def self.count_distinct_node_val_by_group(filter, node, group_by)

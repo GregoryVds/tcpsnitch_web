@@ -1,28 +1,28 @@
-- stat_data = trace.stat_data(stat)
+- stat_data = stat.data(analysis)
 .card.stat
   .card-content
     %span.card-title
       = stat.pretty_name
     .content
-      - if !trace.analysis_computed?
+      - if analysis.nil?
         .no-data
           Analysis is being computed...
       - elsif stat_data.nil?
         .no-data
-          No data for this trace.
+          No data
       - else
         - if stat.count_by_group?
           = pie_chart stat_data
-        - elsif stat.cdf?
+        - elsif stat.count_distinct_node_val?
+          = stat_data
+        - elsif stat.count_distinct_node_val_by_group?
+          = bar_chart stat_data
+        - elsif stat.node_val_cdf?
           = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
-        - elsif stat.sum_by_group? or stat.sum_for_filters?
+        - elsif stat.sum_node_val_by_group? or stat.sum_node_val_for_filters?
           = column_chart stat_data
         - elsif stat.pc_true_for_nodes?
           = column_chart stat_data, max: 1
-        - elsif stat.count_distinct?
-          = stat_data
-        - elsif stat.count_distinct_by_group?
-          = bar_chart stat_data
 
   - if stat.description.present?
     .card-action= stat.description

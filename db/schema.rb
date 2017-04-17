@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170416144558) do
+ActiveRecord::Schema.define(version: 20170417120815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20170416144558) do
     t.boolean  "applies_to_socket_trace",  default: true
     t.boolean  "applies_to_process_trace", default: true
     t.boolean  "applies_to_app_trace",     default: true
+    t.boolean  "applies_to_dataset",       default: true
   end
 
   create_table "stats", force: :cascade do |t|
