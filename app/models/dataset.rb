@@ -8,7 +8,7 @@ class Dataset
 
   def analysis
     a = Analysis.where(analysable_type: :dataset).first
-    a ? a : Analysis.create!(analysable_type: :dataset)
+    a ? a : Analysis.create!(analysable_type: :dataset, measures: {})
   end
 
   def analysis_updated_at
