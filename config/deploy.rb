@@ -24,6 +24,8 @@ set :sidekiq_config, 'config/sidekiq.yml'
 
 append :linked_dirs, "public/uploads"
 
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+
 # Default value for :linked_files is []
 # append :linked_files, "config/database.yml", "config/secrets.yml"
 
