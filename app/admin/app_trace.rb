@@ -30,6 +30,7 @@ ActiveAdmin.register AppTrace do
                 :workload
 
   index do
+    selectable_column
     id_column
     column :app
     column :os

@@ -8,6 +8,7 @@ ActiveAdmin.register ProcessTrace do
   filter :updated_at
 
   index do
+    selectable_column
     id_column
     column :name
     column :analysis_computed

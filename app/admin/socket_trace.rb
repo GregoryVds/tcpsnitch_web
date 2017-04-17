@@ -9,6 +9,7 @@ ActiveAdmin.register SocketTrace do
   filter :updated_at
 
   index do
+    selectable_column
     id_column
     column :socket_type
     column :index
