@@ -114,7 +114,7 @@ class Stat < ActiveRecord::Base
   end
 
   def data(analysis)
-    return nil unless analysis
+    return nil if (analysis.nil? or analysis.measures.nil?)
     data = analysis[:measures][name]
     if collection?
       (data.nil? or data.empty?) ? nil : data # We don't want an empty array, but nil.
