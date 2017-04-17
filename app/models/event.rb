@@ -7,7 +7,6 @@ class Event
   field :connectivity, type: Integer
   field :details, type: Hash
   field :errno, type: String
-  field :index, type: Integer
   field :fake_call, type: Boolean
   field :os, type: Integer
   field :return_value, type: Integer
@@ -18,10 +17,10 @@ class Event
   field :thread_id, type: Integer
   field :type, type: String
 
-  index({app_trace_id: 1})
-  index({process_trace_id: 1})
-  index({socket_trace_id: 1})
-  index({socket_trace_id: 1, index: 1})
+  index({app_trace_id: 1, fake_call: 1})
+  index({process_trace_id: 1, fake_call: 1})
+  index({socket_trace_id: 1, fake_call: 1})
+  index({type: 1, fake_call: 1}, background: true)
 
   def self.count(filter)
     coll = collection.aggregate([
