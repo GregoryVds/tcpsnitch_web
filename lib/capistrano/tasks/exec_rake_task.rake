@@ -1,4 +1,4 @@
-set :task, ENV['task'] || raise('missing task="task_name"')
+set :task, ENV['task']
 
 namespace :custom do
   desc 'Exec a rake task (task="custom:task")'
