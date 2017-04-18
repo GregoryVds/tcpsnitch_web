@@ -1,10 +1,10 @@
 namespace :custom do
-  desc 'Clear Rails cache'
-  task :clear_cache do
+  desc 'Exec a rake task (-s task="custom:task")'
+  task :exec_rake_task do
     on roles(:app) do
       within "#{current_path}" do
         with rails_env: "#{fetch(:stage)}" do
-          execute :rake, 'tmp:clear'
+          execute :rake, task
         end
       end
     end
