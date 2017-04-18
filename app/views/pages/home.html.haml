@@ -4,6 +4,6 @@
 
 //- content_for :main_header, "Main header"
 
-- cache @analysis do
+- cache @analysis_updated_at do
   .content-with-left-menu
-    = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis
+    = render 'shared/stats', stat_categories: @stat_categories, analysis: @dataset.analysis

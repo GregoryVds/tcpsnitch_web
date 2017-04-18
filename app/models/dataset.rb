@@ -12,6 +12,10 @@ class Dataset
   end
 
   def analysis_updated_at
+    Analysis.where(analysable_id: 0).pluck(:updated_at)
+  end
+
+  def analysis_updated_at
     analysis.updated_at
   end
 
