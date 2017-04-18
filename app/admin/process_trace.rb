@@ -4,6 +4,7 @@ ActiveAdmin.register ProcessTrace do
   filter :analysis_computed
   filter :events_imported
   filter :name
+  filter :logs
   filter :created_at
   filter :updated_at
 
