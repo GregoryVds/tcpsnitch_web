@@ -1,9 +1,9 @@
 - content_for :page_header_title, @socket_trace
 - if @socket_trace.events_imported
   - content_for :page_header_text, @socket_trace.long_name
-- content_for :left_menu, render('left_menu', trace: @socket_trace)
+- content_for :left_menu, render('left_menu')
 
-- content_for :main_header do 
+- content_for :main_header do
   %nav
     .nav-wrapper
       .col.s12

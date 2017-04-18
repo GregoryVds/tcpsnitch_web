@@ -15,10 +15,6 @@ class Dataset
     Analysis.where(analysable_id: 0).pluck(:updated_at)
   end
 
-  def analysis_updated_at
-    analysis.updated_at
-  end
-
   def schedule_analysis
     DatasetAnalysisJob.perform_later
   end

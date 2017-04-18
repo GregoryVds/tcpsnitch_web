@@ -1,7 +1,7 @@
 - content_for :page_header_title, @app_trace
 - if @app_trace.events_imported
   - content_for :page_header_text, @app_trace.long_name
-- content_for :left_menu, render('app_traces/left_menu', trace: @app_trace)
+- content_for :left_menu, render('left_menu')
 
 - content_for :main_header do
   %nav
