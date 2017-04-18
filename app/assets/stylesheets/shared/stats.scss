@@ -1,6 +1,6 @@
-$grid-width: 800px;
+$grid-width: 820px;
 $gutter: 20px;
-$grid-item-width: $grid-width/2-$gutter;
+$grid-item-width: 400px;
 
 .content .front-stats {
   margin-bottom: 0;
@@ -11,14 +11,15 @@ $grid-item-width: $grid-width/2-$gutter;
   }
 }
 .section.stats{
-  width: $grid-width;
+  min-width: $grid-width;
+  width: 100%;
 }
 
 .grid {
   width: 100%;
   .grid-item {
     width: $grid-item-width;
-    margin-top: $gutter 0 0 0;
+    margin: 0 0 $gutter 0;
   }
 }
 

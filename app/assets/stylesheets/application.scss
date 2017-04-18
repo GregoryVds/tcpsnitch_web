@@ -85,9 +85,13 @@ main .main-body {
   background-color: $bg-color;
   display: flex;
   > .content {
+    padding-top: 20px;
     background-color: $bg-color;
     width: 100%;
     min-height: 400px;
+  }
+  .content-with-left-menu {
+    padding: 0 40px;
   }
 }
 

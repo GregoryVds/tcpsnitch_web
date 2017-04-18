@@ -36,7 +36,7 @@ $(document).on('turbolinks:load', function(event) {
 
     $('.grid').masonry({
         itemSelector: '.grid-item',
-        columnWidth: 390,
+        columnWidth: 400,
         gutter: 20
     });
 

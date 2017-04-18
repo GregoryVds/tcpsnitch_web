@@ -37,12 +37,9 @@
           .left-menu
             = yield :left_menu
         .content
-          .container
-            .row
-              .section
-                - flash.each do |type, msg|
-                  = render 'layouts/flash', type: type, msg: msg
-                = yield
+          - flash.each do |type, msg|
+            = render 'layouts/flash', type: type, msg: msg
+          = yield
     %footer.page-footer
       .footer-main.white-text
         .row

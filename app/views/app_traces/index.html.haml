@@ -2,29 +2,31 @@
 - content_for :page_header_text, 'Browse available traces, filter by operating system or application'
 - content_for :main_header, render('shared/filters')
 
-%h6
-  #{@app_traces.total_count} traces found
+.container
+  .row
+    %h6
+      #{@app_traces.total_count} traces found
 
-%table
-  %thead
-    %tr
-      %th App
-      %th Os
-      %th.right-align #Processes
-      %th.right-align #Sockets
-      %th.right-align #Events
-      %th.right-align Version
-      %th.right-align Created at
-      %tr
-  - @app_traces.each do |app_trace|
-    %tr
-      %td= app_trace.app
-      %td= app_trace.os.capitalize
-      %td.right-align= number_with_delimiter(app_trace.process_traces_count, delimiter: '.')
-      %td.right-align= number_with_delimiter(app_trace.socket_traces_count, delimiter: '.')
-      %td.right-align= number_with_delimiter(app_trace.events_count, delimiter: '.')
-      %td.right-align= app_trace.version
-      %td.right-align= app_trace.created_at.to_s(:long)
-      %td.right-align= link_to 'Show', app_trace_path(app_trace)
+    %table
+      %thead
+        %tr
+          %th App
+          %th Os
+          %th.right-align #Processes
+          %th.right-align #Sockets
+          %th.right-align #Events
+          %th.right-align Version
+          %th.right-align Created at
+          %tr
+      - @app_traces.each do |app_trace|
+        %tr
+          %td= app_trace.app
+          %td= app_trace.os.capitalize
+          %td.right-align= number_with_delimiter(app_trace.process_traces_count, delimiter: '.')
+          %td.right-align= number_with_delimiter(app_trace.socket_traces_count, delimiter: '.')
+          %td.right-align= number_with_delimiter(app_trace.events_count, delimiter: '.')
+          %td.right-align= app_trace.version
+          %td.right-align= app_trace.created_at.to_s(:long)
+          %td.right-align= link_to 'Show', app_trace_path(app_trace)
 
-= paginate @app_traces
+    = paginate @app_traces

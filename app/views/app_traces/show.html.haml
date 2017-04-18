@@ -11,61 +11,62 @@
         = link_to "App trace #{@app_trace.id}", app_trace_path(@app_trace), class: 'breadcrumb'
 
 - cache @app_trace do
-  .section{data: {section: 'Overview'}}
-    = render 'shared/overview_head', trace: @app_trace
-    = render 'shared/front_stats', analysable: @app_trace
-    .card
-      .card-content
-        %span.card-title
-          Trace details
-          %span.download.right
-            = link_to @app_trace.archive.url do
-              Download
-              %i.material-icons.right play_for_work
-        .row
-          .col.s6
-            = show_property("Created at", @app_trace.created_at.to_s(:long))
-            = show_property("Application", @app_trace.app)
-            = show_property("Command", @app_trace.cmd)
-          .col.s6
-            = show_property("#Processes", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
-            = show_property("#Sockets", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
-            = show_property("#Events", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
-    .card
-      .card-content
-        %span.card-title System details
-        .row
-          .col.s12
-            = show_property("Os", @app_trace.os ? @app_trace.os.capitalize : "")
-            = show_property("Kernel", @app_trace.kernel)
-            = show_property("Host uid", @app_trace.host_id)
-            = show_property("App version", @app_trace.app_version)
+  .content-with-left-menu
+    .section{data: {section: 'Overview'}}
+      = render 'shared/overview_head', trace: @app_trace
+      = render 'shared/front_stats', analysable: @app_trace
+      .card
+        .card-content
+          %span.card-title
+            Trace details
+            %span.download.right
+              = link_to @app_trace.archive.url do
+                Download
+                %i.material-icons.right play_for_work
+          .row
+            .col.s6
+              = show_property("Created at", @app_trace.created_at.to_s(:long))
+              = show_property("Application", @app_trace.app)
+              = show_property("Command", @app_trace.cmd)
+            .col.s6
+              = show_property("#Processes", number_with_delimiter(@app_trace.process_traces_count, delimiter: '.'))
+              = show_property("#Sockets", number_with_delimiter(@app_trace.socket_traces_count, delimiter: '.'))
+              = show_property("#Events", number_with_delimiter(@app_trace.events_count, delimiter: '.'))
+      .card
+        .card-content
+          %span.card-title System details
+          .row
+            .col.s12
+              = show_property("Os", @app_trace.os ? @app_trace.os.capitalize : "")
+              = show_property("Kernel", @app_trace.kernel)
+              = show_property("Host uid", @app_trace.host_id)
+              = show_property("App version", @app_trace.app_version)
 
-    .card
-      .card-content
-        %span.card-title Tcpsnitch details
-        .row
-          .col.s6
-            = show_property("Version", @app_trace.version)
-            = show_property("Git hash", @app_trace.git_hash)
-          .col.s6
-            = show_property("Option -b", @app_trace.opt_b)
-            = show_property("Option -f", @app_trace.opt_f)
-            = show_property("Option -u", @app_trace.opt_u)
+      .card
+        .card-content
+          %span.card-title Tcpsnitch details
+          .row
+            .col.s6
+              = show_property("Version", @app_trace.version)
+              = show_property("Git hash", @app_trace.git_hash)
+            .col.s6
+              = show_property("Option -b", @app_trace.opt_b)
+              = show_property("Option -f", @app_trace.opt_f)
+              = show_property("Option -u", @app_trace.opt_u)
 
-  .section{data: {section: 'processes'}, style: "display:none;"}
-    %h5=pluralize(@app_trace.process_traces_count, 'process')
-    %table
-      %thead
-        %th Process
-        %th.right-align #Sockets
-        %th.right-align #Events
-        %th
-      - @app_trace.process_traces.each do |process_trace|
-        %tr
-          %td= process_trace.name
-          %td.right-align= number_with_delimiter(process_trace.socket_traces_count, delimiter: '.')
-          %td.right-align= number_with_delimiter(process_trace.events_count, delimiter: '.')
-          %td.right-align= link_to('Show', process_trace_path(process_trace))
+    .section{data: {section: 'processes'}, style: "display:none;"}
+      %h5=pluralize(@app_trace.process_traces_count, 'process')
+      %table
+        %thead
+          %th Process
+          %th.right-align #Sockets
+          %th.right-align #Events
+          %th
+        - @app_trace.process_traces.each do |process_trace|
+          %tr
+            %td= process_trace.name
+            %td.right-align= number_with_delimiter(process_trace.socket_traces_count, delimiter: '.')
+            %td.right-align= number_with_delimiter(process_trace.events_count, delimiter: '.')
+            %td.right-align= link_to('Show', process_trace_path(process_trace))
 
-  = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis
+    = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis
