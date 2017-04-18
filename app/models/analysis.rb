@@ -6,6 +6,8 @@ class Analysis
   field :analysable_id, type: Integer
   field :measures, type: Hash
 
+  index({analysable_id: 1, analysable_type: 1})
+
   def update(analysable)
     measure_attr = {measures: measures.to_h}
     StatCategory.applies_to(analysable).pluck(:id).each do |stat_category_id|
