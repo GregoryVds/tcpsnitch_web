@@ -1,5 +1,5 @@
 class AppTracesController < ApplicationController
-  FILTERS = [:os, :app]
+  FILTERS = [:os, :connectivity]
   UPLOADED="Trace successfully uploaded"
   UPLOAD_FAIL="Failed to upload trace"
   IMPORTED_SHORTLY = "Trace archive will be imported shortly. Refresh this page in a few minutes..."

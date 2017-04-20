@@ -1,6 +1,7 @@
 %tr
   %td= app_trace.app
   %td= app_trace.os.capitalize
+  %td= app_trace.connectivity.humanize
   %td.right-align= number_with_delimiter(app_trace.process_traces_count, delimiter: '.')
   %td.right-align= number_with_delimiter(app_trace.socket_traces_count, delimiter: '.')
   %td.right-align= number_with_delimiter(app_trace.events_count, delimiter: '.')

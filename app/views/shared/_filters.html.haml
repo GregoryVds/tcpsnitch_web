@@ -9,9 +9,9 @@
           %label
             Operating system
         .input-field.col.s5
-          = select_tag(:app, options_for_select(AppTrace.distinct.pluck(:app), params[:app]), multiple: true, include_blank: 'All') 
+          = select_tag(:connectivity, options_for_select(AppTrace.connectivities, params[:connectivity]), multiple: true, include_blank: 'All')
           %label
-            Application
+            Connectivity
         .input-field.col.s2
           = submit_tag 'Filter', class: 'waves-effect waves-light btn'
 
