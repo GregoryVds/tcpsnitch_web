@@ -93,9 +93,17 @@ class Stat < ActiveRecord::Base
 
   def cdf(count_by_group, total_count)
     running_count = 0
+    last_pc_selected = nil
     count_by_group.sort.map do |val, count|
       running_count += count
       [val, running_count.to_f/total_count * 100.0]
+    end.select do |val, pc|
+      if last_pc_selected.nil? or (pc - last_pc_selected) >= 0.2
+        last_pc_selected = pc
+        true
+      else
+        true
+      end
     end
   end
 
