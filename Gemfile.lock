@@ -125,6 +125,7 @@ GEM
     formtastic_i18n (0.6.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    google-analytics-rails (1.1.0)
     haml (4.0.7)
       tilt
     haml-rails (0.9.0)
@@ -334,6 +335,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   dalli
   devise
+  google-analytics-rails (= 1.1.0)
   haml-rails (~> 0.9)
   jbuilder (~> 2.5)
   jquery-infinite-pages
