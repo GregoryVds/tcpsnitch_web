@@ -102,7 +102,7 @@ class Stat < ActiveRecord::Base
         last_pc_selected = pc
         true
       else
-        true
+        false
       end
     end
   end
