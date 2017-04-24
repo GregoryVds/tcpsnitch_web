@@ -5,7 +5,7 @@ class StatCategory < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
   scope :applies_to_scope, -> (analysable_type) { where("applies_to_#{analysable_type}": true) }
-  scope :left_menu_scope, -> (analysale_type) { applies_to_scope(analysable_type).where.not(name: 'Overview').order(id: :asc) }
+  scope :left_menu_scope, -> (analysable_type) { applies_to_scope(analysable_type).where.not(name: 'Overview').order(id: :asc) }
 
   def self.applies_to(analysable_type)
     cached_collection(applies_to_scope(analysable_type), "applies_to_#{analysable_type}")
