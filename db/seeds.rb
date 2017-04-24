@@ -26,13 +26,13 @@ overview_cat_attr = {
 
 Stat.create!(overview_cat_attr.merge({
   stat_type: :count_by_group,
-  group_by: 'type',
+  group_by: :type,
   name: 'Functions usage',
   description: "Breakdown of functions usage."
 }))
 Stat.create!(overview_cat_attr.merge({
   stat_type: :sum_node_val_for_filters,
-  node: 'return_value',
+  node: :return_value,
   custom: {
     'Bytes sent': {
       type: { '$in': send_family },
@@ -237,6 +237,30 @@ Stat.create!(send_family_cat_attr.merge({
   name: 'Send-like bytes sent CDF',
   description: "Cumulative distribution function for the return value of send-like function calls. This corresponds to the number of bytes actually sent."
 }))
+send_family.each do |func|
+  Stat.create!(send_family_cat_attr.merge({
+    event_filters: {type: func},
+    stat_type: :node_val_cdf,
+    node: 'details.bytes',
+    name: "#{func}() buffer size CDF",
+    description: "Cumulative distribution function for the buffer size argument of #{func}()."
+  }))
+end
+Stat.create!(send_family_cat_attr.merge({
+  event_filters: {type: :writev},
+  stat_type: :node_val_cdf,
+  node: 'details.iovec.iovec_count',
+  name: "writev() iovec count",
+  description: "Cumulative distribution function for the size of writev() iovec."
+}))
+
+Stat.create!(send_family_cat_attr.merge({
+  event_filters: {type: :sendmsg},
+  stat_type: :node_val_cdf,
+  node: 'details.msghdr.iovec.iovec_count',
+  name: "sendmsg() iovec count",
+  description: "Cumulative distribution function for the size of sendmsg() iovec."
+}))
 
 #######################
 # Recv-like functions #
@@ -302,6 +326,31 @@ Stat.create!(recv_family_cat_attr.merge({
   name: 'Recv-like bytes received CDF',
   description: "Cumulative distribution function for the return value of recv-like function calls. This corresponds to the number of bytes actually received."
 }))
+recv_family.each do |func|
+  Stat.create!(recv_family_cat_attr.merge({
+    event_filters: {type: func},
+    stat_type: :node_val_cdf,
+    node: 'details.bytes',
+    name: "#{func}() buffer size CDF",
+    description: "Cumulative distribution function for the buffer size argument of #{func}()."
+  }))
+end
+
+Stat.create!(recv_family_cat_attr.merge({
+  event_filters: {type: :readv},
+  stat_type: :node_val_cdf,
+  node: 'details.iovec.iovec_count',
+  name: "readv() iovec count",
+  description: "Cumulative distribution function for the size of readv() iovec."
+}))
+
+Stat.create!(recv_family_cat_attr.merge({
+  event_filters: {type: :recvmsg},
+  stat_type: :node_val_cdf,
+  node: 'details.msghdr.iovec.iovec_count',
+  name: "recvmsg() iovec count",
+  description: "Cumulative distribution function for the size of recvmsg() iovec."
+}))
 
 #######################
 # Async I/O functions #
@@ -312,14 +361,14 @@ poll = 'poll'
 epoll = 'epoll'
 async_families = [select, poll, epoll]
 async_functions = {
-  select  => [:select, :pselect],
-  poll    => [:poll, :ppoll],
-  epoll   => [:epoll_ctl, :epoll_wait, :epoll_pwait]
+select  => [:select, :pselect],
+poll    => [:poll, :ppoll],
+epoll   => [:epoll_ctl, :epoll_wait, :epoll_pwait]
 }
 events = {
-  select  => [:READ, :WRITE, :EXCEPT],
-  poll    => [:POLLIN, :POLLPRI, :POLLOUT, :POLLRDHUP, :POLLERR, :POLLHUP, :POLLNVAL],
-  epoll   => [:EPOLLIN, :EPOLLOUT, :EPOLLRDHUP, :EPOLLPRI, :EPOLLERR, :EPOLLHUP, :EPOLLET, :EPOLLONESHOT, :EPOLLWAKEUP]
+select  => [:READ, :WRITE, :EXCEPT],
+poll    => [:POLLIN, :POLLPRI, :POLLOUT, :POLLRDHUP, :POLLERR, :POLLHUP, :POLLNVAL],
+epoll   => [:EPOLLIN, :EPOLLOUT, :EPOLLRDHUP, :EPOLLPRI, :EPOLLERR, :EPOLLHUP, :EPOLLET, :EPOLLONESHOT, :EPOLLWAKEUP]
 }
 async_family = async_functions.values.flatten
 async_family_cat = StatCategory.create!({
@@ -328,13 +377,21 @@ async_family_cat = StatCategory.create!({
 })
 
 def async_description(functions, ev_type)
-  if ev_type == :requested_events
-    "Proportion of #{functions} calls that requests each event."
-  else
-    "Proportion of #{functions} calls that returns each event."
-  end
+if ev_type == :requested_events
+  "Proportion of #{functions} calls that requests each event."
+else
+  "Proportion of #{functions} calls that returns each event."
 end
-# TODO function calls popularity
+end
+
+Stat.create!({
+    stat_category: async_family_cat,
+    event_filters: {type: { '$in': async_functions.values_at(select, poll, epoll).flatten }},
+    stat_type: :count_by_group,
+    group_by: :type,
+    name: "Async I/O functions usage",
+    description: "Breakdown of async I/O functions usage."
+})
 
 async_families.each do |family|
   [:requested_events, :returned_events].each do |ev_type|
@@ -357,16 +414,16 @@ end
 #########
 
 ioctl_cat = StatCategory.create!({
-  name: 'ioctl()',
-  description: "Statistic about the usage of the ioctl() function"
+name: 'ioctl()',
+description: "Statistic about the usage of the ioctl() function"
 })
 Stat.create!({
-  stat_type: :count_by_group,
-  stat_category: ioctl_cat,
-  event_filters: {type: 'ioctl'},
-  group_by: 'details.request',
-  name: 'ioctl() requests',
-  description: "Breakdown of arguments used for the 'request' parameter of ioctl()."
+stat_type: :count_by_group,
+stat_category: ioctl_cat,
+event_filters: {type: 'ioctl'},
+group_by: 'details.request',
+name: 'ioctl() requests',
+description: "Breakdown of arguments used for the 'request' parameter of ioctl()."
 })
 
 #################
@@ -374,28 +431,28 @@ Stat.create!({
 #################
 
 threads_usage = StatCategory.create!({
-  name: 'Threads usage',
-  description: 'About threads usage...',
-  applies_to_app_trace: false,
-  applies_to_dataset: false
+name: 'Threads usage',
+description: 'About threads usage...',
+applies_to_app_trace: false,
+applies_to_dataset: false
 })
 
 Stat.create!({
-  stat_category: threads_usage,
-  event_filters: {
-    type: { '$in': send_family },
-    return_value: { '$ne': -1 }
-  },
-  stat_type: :sum_node_val_by_group,
-  group_by: :thread_id,
-  node: :return_value,
-  name: 'Bytes sent per thread',
-  description: 'Sum of bytes sent per thread.'
+stat_category: threads_usage,
+event_filters: {
+  type: { '$in': send_family },
+  return_value: { '$ne': -1 }
+},
+stat_type: :sum_node_val_by_group,
+group_by: :thread_id,
+node: :return_value,
+name: 'Bytes sent per thread',
+description: 'Sum of bytes sent per thread.'
 })
 
 Stat.create!({
-  stat_category: threads_usage,
-  event_filters: {
+stat_category: threads_usage,
+event_filters: {
     type: { '$in': recv_family },
     return_value: { '$ne': -1 }
   },
