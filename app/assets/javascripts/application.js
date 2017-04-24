@@ -54,6 +54,14 @@ $(document).on('turbolinks:load', function(event) {
         sections.filter('[data-section="'+section+'"]').show()
         window.dispatchEvent(new Event('resize'));
     });
+
+    // Stats
+    $('.stat .card-action .action').click(function(event){
+      $stat = $(event.target).closest('.stat')
+      $stat.find('.data').toggle();
+      $stat.find('.action').toggle();
+      $('.grid').masonry();
+    });
 });
 
 

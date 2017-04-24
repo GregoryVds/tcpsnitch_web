@@ -39,6 +39,13 @@ class Stat < ActiveRecord::Base
     count_distinct_node_val? or simple_count?
   end
 
+  def data_summable?
+    count_by_group? or
+    count_distinct_node_val_by_group? or
+    sum_node_val_by_group? or
+    sum_node_val_for_filters?
+  end
+
   def pretty_name
     name.sub(/^./, &:upcase)
   end

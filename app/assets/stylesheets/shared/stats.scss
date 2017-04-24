@@ -9,6 +9,19 @@ $grid-item-width: 400px;
   .no-data {
     text-align: center;
   }
+  .data ul {
+    width: 50%;
+    margin: auto;
+    list-style-type: none;
+    li span:last-child {
+      float: right;
+    }
+  }
+  a.action {
+    cursor: pointer;
+    color: $primary-color !important;
+    margin-right: 0 !important;
+  }
 }
 .section.stats{
   min-width: $grid-width;

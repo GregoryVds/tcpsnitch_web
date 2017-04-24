@@ -23,6 +23,26 @@
           = column_chart stat_data
         - elsif stat.pc_true_for_nodes?
           = column_chart stat_data, max: 1
+        .data{style: 'display:none;'}
+          %strong
+            Data:
+          %ul
+            - stat_data.each do |key, val|
+              %li
+                %span= key
+                %span
+                  - if stat.node_val_cdf?
+                    = number_with_precision(val)
+                  - else
+                    = number_with_delimiter(val)
+            - if stat.data_summable?
+              %li
+                %span Total
+                %span= number_with_delimiter(stat_data.map(&:last).sum)
 
-  - if stat.description.present?
-    .card-action= stat.description
+  .card-action
+    = stat.description
+    %a.span.right.action More
+    %a.span.right.action{style: 'display:none;'} Less
+
+
