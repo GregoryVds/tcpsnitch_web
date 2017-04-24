@@ -10,11 +10,12 @@ $grid-item-width: 400px;
     text-align: center;
   }
   .data ul {
-    width: 50%;
     margin: auto;
     list-style-type: none;
-    li span:last-child {
-      float: right;
+    span.num {
+      display: inline-block;
+      width: 100px;
+      text-align: right;
     }
   }
   a.action {

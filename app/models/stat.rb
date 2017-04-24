@@ -46,6 +46,10 @@ class Stat < ActiveRecord::Base
     sum_node_val_for_filters?
   end
 
+  def data_decimal?
+    node_val_cdf?
+  end
+
   def pretty_name
     name.sub(/^./, &:upcase)
   end

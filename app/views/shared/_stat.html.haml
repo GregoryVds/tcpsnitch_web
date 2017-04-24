@@ -27,18 +27,21 @@
           %strong
             Data:
           %ul
+            - sum = stat_data.map(&:last).sum if stat.data_summable?
             - stat_data.each do |key, val|
               %li
                 %span= key
-                %span
-                  - if stat.node_val_cdf?
-                    = number_with_precision(val)
+                %span.right
+                  - num = stat.data_decimal? ? number_with_precision(val) : number_with_delimiter(val)
+                  - if stat.data_summable?
+                    %span.pc= "#{number_with_precision(val.to_f/sum*100)}%"
+                    %span.num= number_with_delimiter(num)
                   - else
-                    = number_with_delimiter(val)
+                    = num
             - if stat.data_summable?
               %li
                 %span Total
-                %span= number_with_delimiter(stat_data.map(&:last).sum)
+                %span.right= number_with_delimiter(stat_data.map(&:last).sum)
 
   .card-action
     = stat.description
