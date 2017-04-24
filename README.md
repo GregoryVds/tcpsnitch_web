@@ -1,26 +1,34 @@
-# README
+# TCPSnitch Web
 
-* Usages Ruby 2.3.3 (don't use 2.4 as Mongo driver does not support it)
+Web app live at www.tcpsnitch.org to centralize, visualize and analyze the traces gathered by [tcpsnitch](https://github.com/GregoryVds/tcpsnitch), a tracing tool designed to investigate the interactions between an application and the TCP/IP stack.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Stack overview
 
-Things you may want to cover:
+- Ruby 2.3 (MongoDB driver does not support 2.4)
+- Rails 5
+- Puma
+- Nginx
+- MongoDB 3.4
+- Postgresql
+- Redis for storing background jobs
+- Memcached for fragment caching
 
-* Ruby version
+## Main gems
 
-* System dependencies
+- Mongoid ORM framework for MongoDB.
+- Sidekiq for background jobs processing.
+- Carrierwave for file uploads.
+- Chartkick to create charts.
+- Activeadmin for administration interface.
+- Whenever for managing Cron jobs.
+- Capistrano for deployment.
 
-* Configuration
+## Sidekiq jobs
 
-* Database creation
+We currently use 4 priority queues to organize the background jobs:
+- `default`, used for trace import jobs (archive import and socket trace import).
+- `low`, `xlow`, and `xxlow` to compute statistics on app traces, process traces and socket traces respectively.
 
-* Database initialization
+## Database
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Currently, the `rake db:seed` task is always executed on deploy. It destroys all `Stats` and `StatCategories` before reseeding them. This is temporary.
