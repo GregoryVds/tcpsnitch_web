@@ -1,7 +1,7 @@
 class DatasetAnalysisJob < ActiveJob::Base
   queue_as :low
 
-  def perform
-    Dataset.get.analysis.update(Dataset.get)
+  def perform(os, con)
+    DatasetAnalysis.get(os, con).update
   end
 end

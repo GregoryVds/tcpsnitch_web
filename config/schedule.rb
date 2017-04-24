@@ -20,5 +20,5 @@
 # Learn more: http://github.com/javan/whenever
 #
 every 12.hours do
-  runner "Dataset.get.schedule_analysis"
+  runner "DatasetAnalysis.schedule_analysis"
 end

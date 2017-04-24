@@ -1,9 +1,9 @@
 - content_for :page_header_title, 'Sockets API usage'
 - content_for :page_header_text, 'Statistics about the real usage of the sockets API'
+- content_for :main_header, render('filters')
 - content_for :left_menu, render('left_menu')
 
-//- content_for :main_header, "Main header"
-
-- cache @analysis_updated_at do
+- cache @cache_val do
   .content-with-left-menu
-    = render 'shared/stats', stat_categories: @stat_categories, analysis: @dataset.analysis
+    = render 'shared/stats', stat_categories: @stat_categories, analysis: DatasetAnalysis.get(params[:os], params[:connectivity])
+
