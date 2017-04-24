@@ -27,6 +27,7 @@ append :linked_dirs, "public/uploads"
 set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 after 'deploy:migrate', 'custom:seed_stats'
+after 'deploy', 'whenever:update_crontab'
 
 # Default value for :linked_files is []
 # append :linked_files, "config/database.yml", "config/secrets.yml"
