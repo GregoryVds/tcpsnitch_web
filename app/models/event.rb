@@ -1,6 +1,5 @@
 class Event
   include Mongoid::Document
-  include Mongoid::Timestamps
 
   field :app, type: String
   field :app_trace_id, type: Integer
@@ -8,6 +7,7 @@ class Event
   field :details, type: Hash
   field :errno, type: String
   field :fake_call, type: Boolean
+  field :index, type: Integer
   field :os, type: Integer
   field :return_value, type: Integer
   field :process_trace_id, type: Integer
@@ -19,7 +19,7 @@ class Event
 
   index({app_trace_id: 1, fake_call: 1})
   index({process_trace_id: 1, fake_call: 1})
-  index({socket_trace_id: 1, fake_call: 1})
+  index({socket_trace_id: 1, fake_call: 1, index: 1})
   index({type: 1, fake_call: 1}, background: true)
 
   def self.count(filter)

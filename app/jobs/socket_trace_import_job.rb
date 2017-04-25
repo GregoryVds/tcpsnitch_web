@@ -66,9 +66,10 @@ class SocketTraceImportJob < ActiveJob::Base
 
   def enrich(event_hash)
     event_hash['app'] = @app_trace.app
-    event_hash['connectivity'] = @app_trace.connectivity_int
-    event_hash['os'] = @app_trace.os_int
     event_hash['app_trace_id'] = @app_trace.id
+    event_hash['connectivity'] = @app_trace.connectivity_int
+    event_hash['index'] = @events_count
+    event_hash['os'] = @app_trace.os_int
     event_hash['process_trace_id'] = @process_trace.id
     event_hash['socket_trace_id'] = @socket_trace.id
     # TODO: Time since
