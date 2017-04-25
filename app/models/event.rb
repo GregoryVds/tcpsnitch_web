@@ -88,10 +88,4 @@ class Event
     ], allow_disk_use: true).to_a
     coll.empty? ? 0 : coll.first['sum']
   end
-
-  def self.sum_node_val_for_filters(filter, sum_node, filters)
-    filters.map do |group_name, group_filter|
-      [group_name, sum(filter.merge(group_filter), sum_node)]
-    end
-  end
 end

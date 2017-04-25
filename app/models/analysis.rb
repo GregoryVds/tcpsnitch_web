@@ -11,9 +11,10 @@ class Analysis
   index({analysable_id: 1, analysable_type: 1})
 
   def update(analysable)
+    atype = analysable.analysable_type
     measure_attr = {measures: measures.to_h}
-    StatCategory.applies_to(analysable.analysable_type).pluck(:id).each do |stat_category_id|
-      Stat.category(stat_category_id).each do |stat|
+    StatCategory.applies_to(atype).pluck(:id).each do |stat_category_id|
+      Stat.category(stat_category_id, atype).each do |stat|
         measure_attr[:measures][stat.name] = stat.compute(analysable.filter)
         update_attributes(measure_attr)
       end

@@ -16,7 +16,7 @@ class DatasetAnalysis
   def update
     measure_attr = {measures: measures.to_h}
     StatCategory.applies_to(:dataset).pluck(:id).each do |stat_category_id|
-      Stat.category(stat_category_id).each do |stat|
+      Stat.category(stat_category_id, :dataset).each do |stat|
         measure_attr[:measures][stat.name] = stat.compute(filters)
         update_attributes(measure_attr)
       end

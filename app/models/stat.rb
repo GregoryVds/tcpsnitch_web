@@ -10,6 +10,7 @@ class Stat < ActiveRecord::Base
     :count_distinct_node_val,
     :count_distinct_node_val_by_group,
     :node_val_cdf,
+    :node_val_cdf_for_filters,
     :sum_node_val_by_group,
     :sum_node_val_for_filters,
     :pc_true_for_nodes
@@ -79,12 +80,20 @@ class Stat < ActiveRecord::Base
     cdf(Event.count_by_group(filter, node), total_count)
   end
 
+  def node_val_cdf_for_filters(filter)
+    custom.map do |serie_name, serie_filter|
+      {name: serie_name, data: node_val_cdf(serie_filter.merge(filter))}
+    end
+  end
+
   def sum_node_val_by_group(filter)
     Event.sum_node_val_by_group(filter, group_by, node)
   end
 
   def sum_node_val_for_filters(filter)
-    Event.sum_node_val_for_filters(filter, node, custom)
+    custom.map do |serie_name, serie_filter|
+      [serie_name, Event.sum(filter.merge(serie_filter), node)]
+    end
   end
 
   def pc_true_for_nodes(filter)
