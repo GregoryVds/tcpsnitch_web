@@ -27,9 +27,21 @@ overview_cat_attr = {
 Stat.create!(overview_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :type,
-  name: 'Functions usage',
-  description: "Breakdown of functions usage."
+  name: 'Functions calls',
+  description: "Breakdown of functions calls."
 }))
+
+Stat.create!(overview_cat_attr.merge({
+  applies_to_app_trace: false,
+  applies_to_process_trace: false,
+  applies_to_socket_trace: false,
+  stat_type: :count_distinct_node_val_by_group,
+  node: :app_trace_id,
+  group_by: :type,
+  name: 'Functions usage',
+  description: 'Count of applications using each function.'
+}))
+
 Stat.create!(overview_cat_attr.merge({
   stat_type: :sum_node_val_for_filters,
   node: :return_value,
@@ -83,15 +95,29 @@ socket_cat = StatCategory.create!({
   description: 'Statistics about the socket() function usage.'
 })
 
+socket_cat_attr = {
+  event_filters: {type: :socket},
+  stat_category: socket_cat
+}
+
 [:domain, :type, :protocol].each do |field|
-  Stat.create!({
+  Stat.create!(socket_cat_attr.merge({
     stat_type: :count_by_group,
-    event_filters: {type: :socket},
-    stat_category: socket_cat,
-    name: "Socket() #{field}",
     group_by: "details.sock_info.#{field}",
+    name: "Socket() #{field} args",
     description: "Breakdown of arguments used for the '#{field}' parameter of socket()."
-  })
+  }))
+
+  Stat.create!(socket_cat_attr.merge({
+    applies_to_app_trace: false,
+    applies_to_process_trace: false,
+    applies_to_socket_trace: false,
+    stat_type: :count_distinct_node_val_by_group,
+    node: :app_trace_id,
+    group_by: "details.sock_info.#{field}",
+    name: "Socket() #{field}s usage",
+    description: "Count of applications using each socket() #{field}."
+  }))
 end
 
 socket_flags = [:SOCK_CLOEXEC, :SOCK_NONBLOCK]
@@ -117,14 +143,29 @@ sockopt_cat_attr = {
   stat_category: sockopt_cat,
   stat_type: :count_by_group
 }
+
 [[:getsockopt, :setsockopt], [:getsockopt], [:setsockopt]].each do |group|
   [:level, :optname].each do |field|
     functions = functions_list(group)
+    name_prefix = (group.length == 1) ? functions : 'Sockopts'
+
     Stat.create!(sockopt_cat_attr.merge({
       event_filters: {type: {'$in': group}},
-      name: "#{functions} #{field}",
       group_by: "details.#{field}",
+      name: "#{name_prefix} #{field} args",
       description: "Breakdown of arguments used for the '#{field}' parameter of #{functions}."
+    }))
+
+    Stat.create!(sockopt_cat_attr.merge({
+      applies_to_app_trace: false,
+      applies_to_process_trace: false,
+      applies_to_socket_trace: false,
+      event_filters: {type: {'$in': group}},
+      stat_type: :count_distinct_node_val_by_group,
+      node: :app_trace_id,
+      group_by: "details.#{field}",
+      name: "#{name_prefix} #{field} usage",
+      description: "Count of applications using each #{field} for #{functions}."
     }))
   end
 end
@@ -142,17 +183,28 @@ fcntl_cat_attr = {
   stat_type: :count_by_group,
   stat_category: fcntl_cat
 }
+
 Stat.create!(fcntl_cat_attr.merge({
   event_filters: {type: 'fcntl'},
-  name: 'fcntl() commands',
   group_by: 'details.cmd',
-  description: "Breakdown of arguments for the 'cmd' parameter of fnctl()"
+  name: 'fcntl() commands args',
+  description: "Breakdown of arguments for the 'cmd' parameter of fcntl()."
+}))
+
+Stat.create!(fcntl_cat_attr.merge({
+  applies_to_app_trace: false,
+  applies_to_process_trace: false,
+  applies_to_socket_trace: false,
+  stat_type: :count_distinct_node_val_by_group,
+  node: :app_trace_id,
+  group_by: 'details.cmd',
+  name: 'fcntl() commands usage',
+  description: 'Count of applications using each fcntl() command.'
 }))
 
 fcntl_fd_flags = [:O_CLOEXEC]
 [:F_GETFD, :F_SETFD].each do |cmd|
   Stat.create!(fcntl_cat_attr.merge({
-    stat_category: fcntl_cat,
     stat_type: :pc_true_for_nodes,
     event_filters: {type: 'fcntl', 'details.cmd': cmd},
     node: nodes_list(fcntl_fd_flags, "details"),
@@ -163,14 +215,13 @@ end
 
 fcntl_fl_flags = [:O_APPEND, :O_ASYNC, :O_DIRECT, :O_NOATIME, :O_NONBLOCK]
 [:F_GETFL, :F_SETFL].each do |cmd|
-  Stat.create!({
-    stat_category: fcntl_cat,
+  Stat.create!(fcntl_cat_attr.merge({
     stat_type: :pc_true_for_nodes,
     event_filters: {type: 'fcntl', 'details.cmd': cmd},
     node: nodes_list(fcntl_fl_flags, "details"),
     name: "Command #{cmd} flags",
     description: "Proportion of fcntl() #{cmd} commands that sets each flag."
-  })
+  }))
 end
 
 #######################
@@ -189,9 +240,21 @@ send_family_cat_attr = {
 Stat.create!(send_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :type,
-  name: 'Send-like functions usage',
-  description: "Breakdown of send-like functions usage."
+  name: 'Send-like functions calls',
+  description: 'Breakdown of send-like functions calls.'
 }))
+
+Stat.create!(send_family_cat_attr.merge({
+  applies_to_app_trace: false,
+  applies_to_process_trace: false,
+  applies_to_socket_trace: false,
+  stat_type: :count_distinct_node_val_by_group,
+  node: :app_trace_id,
+  group_by: :type,
+  name: 'Send-like functions usage',
+  description: 'Count of applications using each function.'
+}))
+
 Stat.create!(send_family_cat_attr.merge({
   stat_type: :sum_node_val_by_group,
   event_filters: {
@@ -203,12 +266,14 @@ Stat.create!(send_family_cat_attr.merge({
   name: 'Send-like sum of bytes sent',
   description: 'Sum of bytes sent per function type.'
 }))
+
 Stat.create!(send_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :success,
   name: 'Send-like success-rate',
   description: "Success rate of send-like functions calls."
 }))
+
 Stat.create!(send_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :errno,
@@ -267,20 +332,35 @@ Stat.create!(send_family_cat_attr.merge({
 #######################
 
 recv_flags = [:MSG_CMSG_CLOEXEC, :MSG_DONTWAIT, :MSG_ERRQUEUE, :MSG_OOB, :MSG_PEEK, :MSG_TRUNC, :MSG_WAITALL]
+
 recv_family_cat = StatCategory.create!({
   name: 'Recv-like functions',
   description: "Statistic about the usage of functions designed to receive data over a socket (#{recv_family.join(", ")})."
 })
+
 recv_family_cat_attr = {
   stat_category: recv_family_cat,
   event_filters: {type: { '$in': recv_family }}
 }
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :type,
-  name: 'Recv-like functions usage',
-  description: "Breakdown of recv-like functions usage."
+  name: 'Recv-like functions calls',
+  description: "Breakdown of recv-like functions calls."
 }))
+
+Stat.create!(recv_family_cat_attr.merge({
+  applies_to_app_trace: false,
+  applies_to_process_trace: false,
+  applies_to_socket_trace: false,
+  stat_type: :count_distinct_node_val_by_group,
+  node: :app_trace_id,
+  group_by: :type,
+  name: 'Recv-like functions usage',
+  description: 'Count of applications using each function.'
+}))
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :sum_node_val_by_group,
   event_filters: {
@@ -377,21 +457,36 @@ async_family_cat = StatCategory.create!({
 })
 
 def async_description(functions, ev_type)
-if ev_type == :requested_events
-  "Proportion of #{functions} calls that requests each event."
-else
-  "Proportion of #{functions} calls that returns each event."
+  if ev_type == :requested_events
+    "Proportion of #{functions} calls that requests each event."
+  else
+    "Proportion of #{functions} calls that returns each event."
+  end
 end
-end
+
+async_family_filter = {type: { '$in': async_functions.values_at(select, poll, epoll).flatten }}
 
 Stat.create!({
     stat_category: async_family_cat,
-    event_filters: {type: { '$in': async_functions.values_at(select, poll, epoll).flatten }},
+    event_filters: async_family_filter,
     stat_type: :count_by_group,
     group_by: :type,
-    name: "Async I/O functions usage",
-    description: "Breakdown of async I/O functions usage."
+    name: 'Async I/O functions calls',
+    description: 'Breakdown of async I/O functions calls.'
 })
+
+Stat.create!(overview_cat_attr.merge({
+  stat_category: async_family_cat,
+  event_filters: async_family_filter,
+  applies_to_app_trace: false,
+  applies_to_process_trace: false,
+  applies_to_socket_trace: false,
+  stat_type: :count_distinct_node_val_by_group,
+  node: :app_trace_id,
+  group_by: :type,
+  name: 'Async I/O Functions usage',
+  description: 'Count of applications using each function.'
+}))
 
 async_families.each do |family|
   [:requested_events, :returned_events].each do |ev_type|
@@ -414,40 +509,55 @@ end
 #########
 
 ioctl_cat = StatCategory.create!({
-name: 'ioctl()',
-description: "Statistic about the usage of the ioctl() function"
+  name: 'ioctl()',
+  description: "Statistic about the usage of the ioctl() function"
 })
-Stat.create!({
-stat_type: :count_by_group,
-stat_category: ioctl_cat,
-event_filters: {type: 'ioctl'},
-group_by: 'details.request',
-name: 'ioctl() requests',
-description: "Breakdown of arguments used for the 'request' parameter of ioctl()."
-})
+
+ioctl_cat_attr = {
+  stat_category: ioctl_cat,
+  event_filters: {type: 'ioctl'},
+}
+
+Stat.create!(ioctl_cat_attr.merge({
+  stat_type: :count_by_group,
+  group_by: 'details.request',
+  name: 'ioctl() requests args',
+  description: "Breakdown of arguments used for the 'request' parameter of ioctl()."
+}))
+
+Stat.create!(ioctl_cat_attr.merge({
+  applies_to_app_trace: false,
+  applies_to_process_trace: false,
+  applies_to_socket_trace: false,
+  stat_type: :count_distinct_node_val_by_group,
+  node: :app_trace_id,
+  group_by: 'details.request',
+  name: 'ioctl() requests usage',
+  description: 'Count of applications using each ioctl() request.'
+}))
 
 #################
 # THREADS USAGE #
 #################
 
 threads_usage = StatCategory.create!({
-name: 'Threads usage',
-description: 'About threads usage...',
-applies_to_app_trace: false,
-applies_to_dataset: false
+  name: 'Threads usage',
+  description: 'About threads usage...',
+  applies_to_app_trace: false,
+  applies_to_dataset: false
 })
 
 Stat.create!({
-stat_category: threads_usage,
-event_filters: {
-  type: { '$in': send_family },
-  return_value: { '$ne': -1 }
-},
-stat_type: :sum_node_val_by_group,
-group_by: :thread_id,
-node: :return_value,
-name: 'Bytes sent per thread',
-description: 'Sum of bytes sent per thread.'
+  stat_category: threads_usage,
+  event_filters: {
+    type: { '$in': send_family },
+    return_value: { '$ne': -1 }
+  },
+  stat_type: :sum_node_val_by_group,
+  group_by: :thread_id,
+  node: :return_value,
+  name: 'Bytes sent per thread',
+  description: 'Sum of bytes sent per thread.'
 })
 
 Stat.create!({

@@ -2,8 +2,14 @@ class AppTrace < ActiveRecord::Base
   include Archive
   include Trace
 
-  enum connectivity: {wifi: 0, lte: 1, ethernet: 2, handover_wifi_lte: 3,
-                      connectivity_loss: 4}
+  enum connectivity: {
+    wifi: 0,
+    lte: 1,
+    #ethernet: 2,
+    handover_wifi_lte: 3
+    #connectivity_loss: 4
+  }
+
   enum os: {linux: 0, android: 1}
 
   has_many :process_traces, -> { order :id }, inverse_of: :app_trace, dependent: :destroy

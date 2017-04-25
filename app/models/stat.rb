@@ -41,7 +41,6 @@ class Stat < ActiveRecord::Base
 
   def data_summable?
     count_by_group? or
-    count_distinct_node_val_by_group? or
     sum_node_val_by_group? or
     sum_node_val_for_filters?
   end
