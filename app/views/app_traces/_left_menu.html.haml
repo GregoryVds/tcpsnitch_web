@@ -1,6 +1,4 @@
 %ul
-  %li{data: {section: 'Overview'}}
-    %a Overview
   %li{data: {section: 'processes'}}
     %a Process traces
-  = render 'shared/stats_submenu', stat_categories: @stat_categories
+  = render 'shared/stats_submenu', analysable_type: :app_trace

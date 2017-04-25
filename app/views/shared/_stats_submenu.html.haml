@@ -1,3 +1,3 @@
-- stat_categories.each do |cat|
+- StatCategory.applies_to(analysable_type).each do |cat|
   %li{data: {section: cat.name}}
     %a= cat.pretty_name

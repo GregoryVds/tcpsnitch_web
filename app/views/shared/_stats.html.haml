@@ -1,8 +1,8 @@
-- stat_categories.each do |cat|
+- StatCategory.applies_to(analysable_type).each do |cat|
   .section.stats{data: {section: cat.name}}
     %h5= cat.pretty_name
     %p= cat.description
     .grid
-      - Stat.category(cat.id).each do |stat|
+      - Stat.category(cat.id).applies_to(analysable_type).each do |stat|
         - unless stat.number?
           = render 'shared/stat', stat: stat, analysis: analysis

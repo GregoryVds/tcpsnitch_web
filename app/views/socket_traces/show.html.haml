@@ -14,10 +14,10 @@
 
 - cache @socket_trace do
   .content-with-left-menu
-    .section{data: {section: 'Overview'}}
-      = render 'shared/overview_head', trace: @socket_trace
-      = render 'shared/front_stats', analysable: @socket_trace
+    = render 'shared/overview_head', trace: @socket_trace
+    = render 'shared/stats', analysable_type: :socket_trace, analysis: @analysis
 
+    .section{data: {section: 'Overview'}}
       .card
         .card-content
           %span.card-title Trace details
@@ -28,7 +28,6 @@
             .col.s6
               = show_property("#Events", number_with_delimiter(@socket_trace.events_count, delimiter: '.'))
 
-
     .section{data: {section: 'events'}}
       .infinite-list
         .events
@@ -36,4 +35,3 @@
         %p.pagination
           - unless @events.last_page?
             = link_to('Next page', socket_trace_events_path(@socket_trace, page: @events.next_page), remote: true, rel: 'next')
-    = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis

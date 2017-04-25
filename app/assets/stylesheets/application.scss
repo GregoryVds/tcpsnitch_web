@@ -92,6 +92,9 @@ main .main-body {
   }
   .content-with-left-menu {
     padding: 0 40px;
+    .section {
+      padding-top: 0;
+    }
   }
 }
 

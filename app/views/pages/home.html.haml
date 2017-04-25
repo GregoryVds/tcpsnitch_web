@@ -5,5 +5,5 @@
 
 - cache @cache_val do
   .content-with-left-menu
-    = render 'shared/stats', stat_categories: @stat_categories, analysis: DatasetAnalysis.get(params[:os], params[:connectivity])
+    = render 'shared/stats', analysable_type: :dataset, analysis: DatasetAnalysis.get(params[:os], params[:connectivity])
 

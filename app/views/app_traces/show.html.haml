@@ -12,9 +12,10 @@
 
 - cache @app_trace do
   .content-with-left-menu
+    = render 'shared/overview_head', trace: @app_trace
+    = render 'shared/stats', analysable_type: :app_trace, analysis: @analysis
+
     .section{data: {section: 'Overview'}}
-      = render 'shared/overview_head', trace: @app_trace
-      = render 'shared/front_stats', analysable: @app_trace
       .card
         .card-content
           %span.card-title
@@ -68,5 +69,3 @@
             %td.right-align= number_with_delimiter(process_trace.socket_traces_count, delimiter: '.')
             %td.right-align= number_with_delimiter(process_trace.events_count, delimiter: '.')
             %td.right-align= link_to('Show', process_trace_path(process_trace))
-
-    = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis

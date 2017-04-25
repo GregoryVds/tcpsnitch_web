@@ -13,10 +13,10 @@
 
 - cache @process_trace do
   .content-with-left-menu
-    .section{data: {section: 'Overview'}}
-      = render 'shared/overview_head', trace: @process_trace
-      = render 'shared/front_stats', analysable: @process_trace
+    = render 'shared/overview_head', trace: @process_trace
+    = render 'shared/stats', analysable_type: :process_trace, analysis: @analysis
 
+    .section{data: {section: 'Overview'}}
       .card
         .card-content
           %span.card-title Trace details
@@ -42,5 +42,3 @@
             %td= socket_trace.socket_type
             %td.right-align= number_with_delimiter(socket_trace.events_count, delimiter: '.')
             %td.right-align= link_to('Show', socket_trace_path(socket_trace))
-
-    = render 'shared/stats', stat_categories: @stat_categories, analysis: @analysis

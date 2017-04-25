@@ -1,6 +1,4 @@
 %ul
-  %li{data: {section: 'Overview'}}
-    %a Overview
   %li{data: {section: 'sockets'}}
     %a Socket traces
-  = render 'shared/stats_submenu', stat_categories: @stat_categories
+  = render 'shared/stats_submenu', analysable_type: :process_trace

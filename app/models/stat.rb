@@ -20,15 +20,15 @@ class Stat < ActiveRecord::Base
   validates :name, :stat_category, :stat_type, presence: true
   validates :name, uniqueness: true
 
-  scope :front_scope, -> { where(name: ["Functions usage", "Bytes sent & received"]) }
   scope :category_scope, -> (cat_id) { where(stat_category_id: cat_id).order(id: :asc) }
-
-  def self.front
-    cached_collection(front_scope, "about")
-  end
+  scope :applies_to_scope, -> (analysable_type) { where("applies_to_#{analysable_type}": true) }
 
   def self.category(id)
     cached_collection(category_scope(id), "category_#{id}")
+  end
+
+  def self.applies_to(analysable_type)
+    cached_collection(applies_to_scope(analysable_type), "applies_to_#{analysable_type}")
   end
 
   def collection?
