@@ -13,7 +13,7 @@ namespace :custom do
       # Events matching filters
       ev_scope = Event.in(type: [:getsockopt, :setsockopt]).not_in(app_trace_id: excluded_apps)
       ev_scope = ev_scope.where(connectivity: connectivity) unless connectivity.nil?
-      ev_scope = ev_scope.where(os: os) unless connectivity.nil?
+      ev_scope = ev_scope.where(os: os) unless os.nil?
       ev_scope = ev_scope.where("details.#{node}" => val)
       apps = AppTrace.where(id: ev_scope.pluck(:app_trace_id).uniq).pluck(:app).uniq
 
