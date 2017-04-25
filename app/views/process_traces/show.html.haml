@@ -16,7 +16,7 @@
     = render 'shared/overview_head', trace: @process_trace
     = render 'shared/stats', analysable_type: :process_trace, analysis: @analysis
 
-    .section{data: {section: 'Overview'}}
+    .section.fake-grid-item{data: {section: 'Overview'}}
       .card
         .card-content
           %span.card-title Trace details

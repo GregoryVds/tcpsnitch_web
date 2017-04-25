@@ -94,6 +94,10 @@ main .main-body {
     padding: 0 40px;
     .section {
       padding-top: 0;
+      padding-bottom: 0;
+    }
+    .fake-grid-item {
+      width: 820px;
     }
   }
 }
