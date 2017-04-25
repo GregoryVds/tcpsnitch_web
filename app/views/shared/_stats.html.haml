@@ -3,6 +3,6 @@
     %h5= cat.pretty_name
     %p= cat.description
     .grid
-      - Stat.category(cat.id).applies_to(analysable_type).each do |stat|
+      - Stat.category(cat.id, analysable_type).each do |stat|
         - unless stat.number?
           = render 'shared/stat', stat: stat, analysis: analysis
