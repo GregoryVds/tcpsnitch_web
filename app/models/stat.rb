@@ -42,7 +42,8 @@ class Stat < ActiveRecord::Base
   end
 
   def data_decimal?
-    node_val_cdf?
+    node_val_cdf? or
+    node_val_cdf_for_filters?
   end
 
   def pretty_name
@@ -110,9 +111,11 @@ class Stat < ActiveRecord::Base
     last_pc_selected = nil
     count_by_group.sort.map do |val, count|
       running_count += count
-      [val, running_count.to_f/total_count * 100.0]
+      # Highchart cannot plot 0 on logarithmic scale, we set it to 0.0001 instead.
+      # Waiting for better solution.
+      [val==0 ? 0.0001 : val, (running_count.to_f/total_count * 100.0).round(3)]
     end.select do |val, pc|
-      if last_pc_selected.nil? or (pc - last_pc_selected) >= 0.2
+      if last_pc_selected.nil? or (pc - last_pc_selected) >= 0.25
         last_pc_selected = pc
         true
       else

@@ -302,15 +302,16 @@ Stat.create!(send_family_cat_attr.merge({
   name: 'Send-like bytes sent CDF',
   description: "Cumulative distribution function for the return value of send-like function calls. This corresponds to the number of bytes actually sent."
 }))
-send_family.each do |func|
-  Stat.create!(send_family_cat_attr.merge({
-    event_filters: {type: func},
-    stat_type: :node_val_cdf,
-    node: 'details.bytes',
-    name: "#{func}() buffer size CDF",
-    description: "Cumulative distribution function for the buffer size argument of #{func}()."
-  }))
-end
+
+Stat.create!(send_family_cat_attr.merge({
+  stat_type: :node_val_cdf_for_filters,
+  event_filters: {},
+  custom: Hash[send_family.map{ |f| [f, {type: f}] }],
+  node: 'details.bytes',
+  name: "Send-like buffer size comparison",
+  description: "Cumulative distribution function the buffer size argument of send-like function calls."
+}))
+
 Stat.create!(send_family_cat_attr.merge({
   event_filters: {type: :writev},
   stat_type: :node_val_cdf,
@@ -372,30 +373,35 @@ Stat.create!(recv_family_cat_attr.merge({
   name: 'Recv-like sum of bytes received',
   description: 'Sum of bytes received per function type.'
 }))
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :success,
   name: 'Recv-like success-rate',
   description: "Success rate of recv-like functions calls."
 }))
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :count_by_group,
   group_by: :errno,
   name: 'Recv-like errnos',
   description: "Breakdown of errno error codes for recv-like functions."
 }))
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :pc_true_for_nodes,
   node: nodes_list(recv_flags, "details.flags"),
   name: "Receiving flags popularity",
   description: "Proportion of recv-like functions calls that sets each flag."
 }))
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :node_val_cdf,
   node: 'details.bytes',
   name: 'Recv-like buffer size CDF',
   description: "Cumulative distribution function the buffer size argument of recv-like function calls."
 }))
+
 Stat.create!(recv_family_cat_attr.merge({
   stat_type: :node_val_cdf,
   event_filters: {
@@ -406,15 +412,15 @@ Stat.create!(recv_family_cat_attr.merge({
   name: 'Recv-like bytes received CDF',
   description: "Cumulative distribution function for the return value of recv-like function calls. This corresponds to the number of bytes actually received."
 }))
-recv_family.each do |func|
-  Stat.create!(recv_family_cat_attr.merge({
-    event_filters: {type: func},
-    stat_type: :node_val_cdf,
-    node: 'details.bytes',
-    name: "#{func}() buffer size CDF",
-    description: "Cumulative distribution function for the buffer size argument of #{func}()."
-  }))
-end
+
+Stat.create!(recv_family_cat_attr.merge({
+  stat_type: :node_val_cdf_for_filters,
+  event_filters: {},
+  custom: Hash[recv_family.map{ |f| [f, {type: f}] }],
+  node: 'details.bytes',
+  name: "Recv-like buffer size comparison",
+  description: "Cumulative distribution function the buffer size argument of recv-like function calls."
+}))
 
 Stat.create!(recv_family_cat_attr.merge({
   event_filters: {type: :readv},

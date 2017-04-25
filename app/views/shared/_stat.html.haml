@@ -17,8 +17,18 @@
           = stat_data
         - elsif stat.count_distinct_node_val_by_group?
           = bar_chart stat_data
-        - elsif stat.node_val_cdf?
-          = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node, library: {xAxis: {type: 'linear'}}
+        - elsif stat.node_val_cdf? or stat.node_val_cdf_for_filters?
+          // = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node
+          %div{id: "my_chart#{stat.id}"}
+          :javascript
+            Highcharts.chart("my_chart#{stat.id}", {
+              series: #{stat.node_val_cdf? ? [{data: stat_data}].to_json : stat_data.to_json},
+              xAxis: {type: "logarithmic"},
+              yAxis: {max: 100},
+              title: null,
+              legend: {enabled: #{stat.node_val_cdf_for_filters?}},
+              credits: false
+            })
         - elsif stat.sum_node_val_by_group? or stat.sum_node_val_for_filters?
           = column_chart stat_data
         - elsif stat.pc_true_for_nodes?
