@@ -65,7 +65,7 @@ class Stat < ActiveRecord::Base
   end
 
   def simple_count(filter)
-    Event.count(filter)
+    Event.simple_count(filter)
   end
 
   def count_by_group(filter)
@@ -81,7 +81,7 @@ class Stat < ActiveRecord::Base
   end
 
   def node_val_cdf(filter)
-    total_count = Event.count(filter)
+    total_count = Event.simple_count(filter)
     cdf(Event.count_by_group(filter, node), total_count)
   end
 

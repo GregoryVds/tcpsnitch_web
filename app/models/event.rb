@@ -22,7 +22,7 @@ class Event
   index({socket_trace_id: 1, fake_call: 1, index: 1})
   index({type: 1, fake_call: 1}, background: true)
 
-  def self.count(filter)
+  def self.simple_count(filter)
     coll = collection.aggregate([
       {:$match => filter},
       {:$count => 'count'}
