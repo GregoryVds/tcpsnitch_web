@@ -8,6 +8,13 @@ def functions_list(functions)
   functions.map{|f|"#{f}()"}.join(', ')
 end
 
+dyn_filter_socket_ids = <<'EOF'
+  id_column = (analysable_type == :socket_trace ? "id" : "#{analysable_type}_id")
+  SocketTrace.where(id_column => analysable.id).pluck(:id).map do |id|
+    ["Socket ##{id}", {"socket_trace_id" => id}]
+  end
+EOF
+
 ############
 # Overview #
 ############
@@ -319,6 +326,19 @@ Stat.create!(send_family_cat_attr.merge({
 }))
 
 Stat.create!(send_family_cat_attr.merge({
+  applies_to_dataset: false,
+  stat_type: :timeserie_sum_node_for_dyn_filters,
+  event_filters: {
+    type: { '$in': send_family },
+    return_value: { '$ne': -1 }
+  },
+  custom: {dyn_filters: dyn_filter_socket_ids},
+  node: 'return_value',
+  name: "Bytes sent per socket",
+  description: "Cumulative distribution function the buffer size argument of send-like function calls."
+}))
+
+Stat.create!(send_family_cat_attr.merge({
   event_filters: {type: :writev},
   stat_type: :node_val_cdf,
   node: 'details.iovec.iovec_count',
@@ -426,6 +446,19 @@ Stat.create!(recv_family_cat_attr.merge({
   node: 'details.bytes',
   name: "Recv-like buffer size comparison",
   description: "Cumulative distribution function the buffer size argument of recv-like function calls."
+}))
+
+Stat.create!(recv_family_cat_attr.merge({
+  applies_to_dataset: false,
+  stat_type: :timeserie_sum_node_for_dyn_filters,
+  event_filters: {
+    type: { '$in': recv_family },
+    return_value: { '$ne': -1 }
+  },
+  custom: {dyn_filters: dyn_filter_socket_ids},
+  node: 'return_value',
+  name: "Bytes received per socket",
+  description: "Cumulative distribution function the buffer size argument of send-like function calls."
 }))
 
 Stat.create!(recv_family_cat_attr.merge({

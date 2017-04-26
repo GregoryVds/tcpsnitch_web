@@ -16,7 +16,10 @@ class StatDecorator < Draper::Decorator
   end
 
   def line_chart?
-    node_val_cdf? or node_val_cdf_for_filters?
+    node_val_cdf? or
+    node_val_cdf_for_filters? or
+    timeserie_sum_node? or
+    timeserie_sum_node_for_dyn_filters?
   end
 
   def column_chart?
@@ -29,6 +32,30 @@ class StatDecorator < Draper::Decorator
 
   def bar_chart_height(data)
     data.length > 15 ? "#{data.length * 20}px" : '300px'
+  end
+
+  def line_chart_log_scale?
+    node_val_cdf? or node_val_cdf_for_filters?
+  end
+
+  def line_chart_x_axis
+    if line_chart_log_scale?
+      {type: "logarithmic", min: 1}.to_json
+    else
+      {type: "linear"}.to_json
+    end
+  end
+
+  def line_chart_y_axis
+    if node_val_cdf? or node_val_cdf_for_filters?
+      {max: 100}.to_json
+    else
+      {}.to_json
+    end
+  end
+
+  def line_chart_legend?
+    node_val_cdf_for_filters? or timeserie_sum_node_for_dyn_filters?
   end
 
   # Data

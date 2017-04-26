@@ -78,6 +78,16 @@ class Event
     end
   end
 
+  def self.timeserie(filter, node)
+    collection.aggregate([
+      {:$match => filter},
+      {:$sort => {index: 1}},
+      {:$project => {timestamp_usec: 1, node: "$#{node}"}}
+    ], allow_disk_use: true).map do |r|
+      [r['timestamp_usec'], r['node']]
+    end
+  end
+
   def self.sum(filter, sum_node)
     coll = collection.aggregate([
       {:$match => filter},
