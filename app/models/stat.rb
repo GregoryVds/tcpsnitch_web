@@ -58,7 +58,7 @@ class Stat < ActiveRecord::Base
   end
 
   def count_distinct_node_val_by_group(filter)
-    Event.count_distinct_node_val_by_group(filter, node, group_by)
+    Event.count_distinct_node_val_by_group(filter, node, group_by).sort{|a,b| a[1] <=> b[1]}.reverse
   end
 
   def node_val_cdf(filter)
