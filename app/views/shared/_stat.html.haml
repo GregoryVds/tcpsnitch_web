@@ -16,7 +16,7 @@
         - elsif stat.number?
           = stat_data
         - elsif stat.count_distinct_node_val_by_group?
-          = bar_chart stat_data
+          = bar_chart stat_data, height: '100%'
         - elsif stat.node_val_cdf? or stat.node_val_cdf_for_filters?
           // = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node
           %div{id: "my_chart#{stat.id}"}
