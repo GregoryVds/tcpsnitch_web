@@ -36,7 +36,7 @@ Stat.create!(overview_cat_attr.merge({
   applies_to_process_trace: false,
   applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val_by_group,
-  node: :app_trace_id,
+  node: :app,
   group_by: :type,
   name: 'Functions usage',
   description: 'Count of applications using each function.'
@@ -60,6 +60,9 @@ Stat.create!(overview_cat_attr.merge({
 }))
 
 Stat.create!(overview_cat_attr.merge({
+  applies_to_socket_trace: false,
+  applies_to_process_trace: false,
+  applies_to_app_trace: false,
   stat_type: :count_distinct_node_val,
   node: :app_trace_id,
   name: 'App traces count',
@@ -67,6 +70,8 @@ Stat.create!(overview_cat_attr.merge({
 }))
 
 Stat.create!(overview_cat_attr.merge({
+  applies_to_socket_trace: false,
+  applies_to_process_trace: false,
   stat_type: :count_distinct_node_val,
   node: :process_trace_id,
   name: 'Process traces count',
@@ -74,6 +79,7 @@ Stat.create!(overview_cat_attr.merge({
 }))
 
 Stat.create!(overview_cat_attr.merge({
+  applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val,
   node: :socket_trace_id,
   name: 'Socket traces count',
@@ -113,7 +119,7 @@ socket_cat_attr = {
     applies_to_process_trace: false,
     applies_to_socket_trace: false,
     stat_type: :count_distinct_node_val_by_group,
-    node: :app_trace_id,
+    node: :app,
     group_by: "details.sock_info.#{field}",
     name: "Socket() #{field}s usage",
     description: "Count of applications using each socket() #{field}."
@@ -162,7 +168,7 @@ sockopt_cat_attr = {
       applies_to_socket_trace: false,
       event_filters: {type: {'$in': group}},
       stat_type: :count_distinct_node_val_by_group,
-      node: :app_trace_id,
+      node: :app,
       group_by: "details.#{field}",
       name: "#{name_prefix} #{field} usage",
       description: "Count of applications using each #{field} for #{functions}."
@@ -196,7 +202,7 @@ Stat.create!(fcntl_cat_attr.merge({
   applies_to_process_trace: false,
   applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val_by_group,
-  node: :app_trace_id,
+  node: :app,
   group_by: 'details.cmd',
   name: 'fcntl() commands usage',
   description: 'Count of applications using each fcntl() command.'
@@ -249,7 +255,7 @@ Stat.create!(send_family_cat_attr.merge({
   applies_to_process_trace: false,
   applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val_by_group,
-  node: :app_trace_id,
+  node: :app,
   group_by: :type,
   name: 'Send-like functions usage',
   description: 'Count of applications using each function.'
@@ -356,7 +362,7 @@ Stat.create!(recv_family_cat_attr.merge({
   applies_to_process_trace: false,
   applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val_by_group,
-  node: :app_trace_id,
+  node: :app,
   group_by: :type,
   name: 'Recv-like functions usage',
   description: 'Count of applications using each function.'
@@ -488,7 +494,7 @@ Stat.create!(overview_cat_attr.merge({
   applies_to_process_trace: false,
   applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val_by_group,
-  node: :app_trace_id,
+  node: :app,
   group_by: :type,
   name: 'Async I/O Functions usage',
   description: 'Count of applications using each function.'
@@ -536,7 +542,7 @@ Stat.create!(ioctl_cat_attr.merge({
   applies_to_process_trace: false,
   applies_to_socket_trace: false,
   stat_type: :count_distinct_node_val_by_group,
-  node: :app_trace_id,
+  node: :app,
   group_by: 'details.request',
   name: 'ioctl() requests usage',
   description: 'Count of applications using each ioctl() request.'

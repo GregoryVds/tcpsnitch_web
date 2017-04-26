@@ -25,7 +25,7 @@
                 credits: false
               })
         - elsif stat.number?
-          .number= stat_data
+          .number= number_with_delimiter(stat_data)
 
         - if stat.show_data?
           .data{style: 'display:none;'}
