@@ -1,61 +1,52 @@
 - stat_data = stat.data(analysis)
 .card.stat.grid-item
   .card-content
-    %span.card-title
-      = stat.pretty_name
+    %span.card-title= stat.pretty_name
     .content
       - if analysis.nil?
-        .no-data
-          Analysis is being computed...
+        .no-data Analysis is being computed...
       - elsif stat_data.nil?
-        .no-data
-          No data
+        .no-data No data matching this analysis.
       - else
-        - if stat.count_by_group?
-          = pie_chart stat_data
+        - if stat.chart?
+          = pie_chart(stat_data)                  if stat.pie_chart?
+          = bar_chart(stat_data, height: '100%')  if stat.bar_chart?
+          = column_chart(stat_data)               if stat.column_chart?
+          = column_chart(stat_data, max: 1)       if stat.column_chart_pc?
+          - if stat.line_chart?
+            %div{id: "my_chart#{stat.id}"}
+            :javascript
+              Highcharts.chart("my_chart#{stat.id}", {
+                series: #{stat.node_val_cdf? ? [{data: stat_data}].to_json : stat_data.to_json},
+                xAxis: {type: "logarithmic"},
+                yAxis: {max: 100},
+                title: null,
+                legend: {enabled: #{stat.node_val_cdf_for_filters?}},
+                credits: false
+              })
         - elsif stat.number?
-          = stat_data
-        - elsif stat.count_distinct_node_val_by_group?
-          = bar_chart stat_data, height: '100%'
-        - elsif stat.node_val_cdf? or stat.node_val_cdf_for_filters?
-          // = line_chart stat_data, max: 100, ytitle: "CDF", xtitle: stat.node
-          %div{id: "my_chart#{stat.id}"}
-          :javascript
-            Highcharts.chart("my_chart#{stat.id}", {
-              series: #{stat.node_val_cdf? ? [{data: stat_data}].to_json : stat_data.to_json},
-              xAxis: {type: "logarithmic"},
-              yAxis: {max: 100},
-              title: null,
-              legend: {enabled: #{stat.node_val_cdf_for_filters?}},
-              credits: false
-            })
-        - elsif stat.sum_node_val_by_group? or stat.sum_node_val_for_filters?
-          = column_chart stat_data
-        - elsif stat.pc_true_for_nodes?
-          = column_chart stat_data, max: 1
-        .data{style: 'display:none;'}
-          %strong
-            Data:
-          %ul
-            - sum = stat_data.map(&:last).sum if stat.data_summable?
-            - stat_data.each do |key, val|
-              %li
-                %span= key
-                %span.right
-                  - num = stat.data_decimal? ? number_with_precision(val) : number_with_delimiter(val)
-                  - if stat.data_summable?
-                    %span.pc= "#{number_with_precision(val.to_f/sum*100)}%"
-                    %span.num= number_with_delimiter(num)
-                  - else
-                    = num
-            - if stat.data_summable?
-              %li
-                %span Total
-                %span.right= number_with_delimiter(stat_data.map(&:last).sum)
+          .number= stat_data
 
+        - if stat.show_data?
+          .data{style: 'display:none;'}
+            %strong Data:
+            %ul
+              - sum = stat_data.map(&:last).sum if stat.data_summable?
+              - stat_data.each do |key, val|
+                %li
+                  %span= key
+                  %span.right
+                    - if stat.data_summable?
+                      %span.pc= stat.pc(val, sum)
+                      %span.num= stat.data_point(val)
+                    - else
+                      = stat.data_point(val)
+              - if stat.data_summable?
+                %li
+                  %span Total
+                  %span.right= number_with_delimiter(stat_data.map(&:last).sum)
   .card-action
     = stat.description
-    %a.span.right.action More
-    %a.span.right.action{style: 'display:none;'} Less
-
-
+    - if stat.show_data?
+      %a.span.right.action More
+      %a.span.right.action{style: 'display:none;'} Less

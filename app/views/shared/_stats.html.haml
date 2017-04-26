@@ -4,5 +4,4 @@
     %p= cat.description
     .grid
       - Stat.category(cat.id, analysable_type).each do |stat|
-        - unless stat.number?
-          = render 'shared/stat', stat: stat, analysis: analysis
+        = render 'shared/stat', stat: stat.decorate, analysis: analysis

@@ -18,6 +18,12 @@ $grid-item-width: 400px;
       text-align: right;
     }
   }
+  .number {
+    float: right;
+    font-size: 40px;
+    position: relative;
+    top: -50px;
+  }
   a.action {
     cursor: pointer;
     color: $primary-color !important;

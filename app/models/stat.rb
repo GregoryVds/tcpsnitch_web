@@ -27,29 +27,6 @@ class Stat < ActiveRecord::Base
     cached_collection(category_scope(id, analysable_type), "category_#{id}_#{analysable_type}")
   end
 
-  def collection?
-    !number?
-  end
-
-  def number?
-    count_distinct_node_val? or simple_count?
-  end
-
-  def data_summable?
-    count_by_group? or
-    sum_node_val_by_group? or
-    sum_node_val_for_filters?
-  end
-
-  def data_decimal?
-    node_val_cdf? or
-    node_val_cdf_for_filters?
-  end
-
-  def pretty_name
-    name.sub(/^./, &:upcase)
-  end
-
   def custom=(val)
     val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin
     write_attribute(:custom, val)
@@ -58,6 +35,14 @@ class Stat < ActiveRecord::Base
   def event_filters=(val)
     val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin
     write_attribute(:event_filters, val)
+  end
+
+  def number?
+    count_distinct_node_val? or simple_count?
+  end
+
+  def collection?
+    !number?
   end
 
   def simple_count(filter)
