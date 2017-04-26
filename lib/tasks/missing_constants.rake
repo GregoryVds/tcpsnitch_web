@@ -5,8 +5,11 @@ namespace :custom do
     proto = 'details.sock_info.protocol'
     events.where(proto => 0).update_all(proto => '0')
     events.where(proto => '1').update_all(proto => 'icmp')
+    events.where(proto => 1).update_all(proto => 'icmp')
     events.where(proto => '6').update_all(proto => 'tcp')
+    events.where(proto => 6).update_all(proto => 'tcp')
     events.where(proto => '17').update_all(proto => 'udp')
+    events.where(proto => 17).update_all(proto => 'udp')
 
     events = Event.in(type: [:getsockopt, :setsockopt])
     level = 'details.level'
