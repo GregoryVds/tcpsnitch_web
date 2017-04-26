@@ -27,6 +27,10 @@ class StatDecorator < Draper::Decorator
     pc_true_for_nodes?
   end
 
+  def bar_chart_height(data)
+    data.length > 15 ? "#{data.length * 20}px" : '300px'
+  end
+
   # Data
 
   def show_data?

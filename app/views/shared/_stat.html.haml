@@ -9,10 +9,10 @@
         .no-data No data matching this analysis.
       - else
         - if stat.chart?
-          = pie_chart(stat_data)                  if stat.pie_chart?
-          = bar_chart(stat_data, height: '100%')  if stat.bar_chart?
-          = column_chart(stat_data)               if stat.column_chart?
-          = column_chart(stat_data, max: 1)       if stat.column_chart_pc?
+          = pie_chart(stat_data) if stat.pie_chart?
+          = bar_chart(stat_data, height: stat.bar_chart_height(stat_data)) if stat.bar_chart?
+          = column_chart(stat_data) if stat.column_chart?
+          = column_chart(stat_data, max: 1) if stat.column_chart_pc?
           - if stat.line_chart?
             %div{id: "my_chart#{stat.id}"}
             :javascript
