@@ -17,10 +17,16 @@ class Event
   field :thread_id, type: Integer
   field :type, type: String
 
-  index({app_trace_id: 1, fake_call: 1})
-  index({process_trace_id: 1, fake_call: 1})
-  index({socket_trace_id: 1, fake_call: 1, index: 1})
+  # For app/process/socket analysis
+  index({app_trace_id: 1, fake_call: 1, type: 1})
+  index({process_trace_id: 1, fake_call: 1, type: 1})
+  index({socket_trace_id: 1, fake_call: 1, type: 1})
+
+  # For dataset analysis
   index({type: 1, fake_call: 1}, background: true)
+
+  # For browsing events
+  index({socket_trace_id: 1, index: 1})
 
   def self.simple_count(filter)
     coll = collection.aggregate([
