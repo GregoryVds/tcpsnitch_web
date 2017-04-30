@@ -102,7 +102,7 @@ class Stat < ActiveRecord::Base
   end
 
   def eval_dyn_filter(analysable)
-    custom[:dyn_filters] = eval(custom[:dyn_filters])
+    custom[:dyn_filters] = eval(custom[:to_eval])
   end
 
   def compute(analysable)

@@ -331,7 +331,7 @@ Stat.create!(send_family_cat_attr.merge({
     type: { '$in': send_family },
     return_value: { '$ne': -1 }
   },
-  custom: {dyn_filters: dyn_filter_socket_ids},
+  custom: {to_eval: dyn_filter_socket_ids},
   node: 'return_value',
   name: "Bytes sent per socket",
   description: "Cumulative distribution function the buffer size argument of send-like function calls."
@@ -454,7 +454,7 @@ Stat.create!(recv_family_cat_attr.merge({
     type: { '$in': recv_family },
     return_value: { '$ne': -1 }
   },
-  custom: {dyn_filters: dyn_filter_socket_ids},
+  custom: {to_eval: dyn_filter_socket_ids},
   node: 'return_value',
   name: "Bytes received per socket",
   description: "Cumulative distribution function the buffer size argument of send-like function calls."
