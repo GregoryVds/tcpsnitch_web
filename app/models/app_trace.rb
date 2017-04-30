@@ -1,5 +1,6 @@
 class AppTrace < ActiveRecord::Base
   include Archive
+  include Analysable
   include Trace
 
   enum connectivity: {

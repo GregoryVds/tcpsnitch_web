@@ -13,7 +13,7 @@
 - cache @app_trace do
   .content-with-left-menu
     = render 'shared/overview_head', trace: @app_trace
-    = render 'shared/stats', analysable_type: :app_trace, analysis: @analysis
+    = render 'shared/stats', analysable: @app_trace
 
     .section.fake-grid-item{data: {section: 'Overview'}}
       .card

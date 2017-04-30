@@ -84,6 +84,33 @@ class Event
     end
   end
 
+  def self.timeserie(filter, node)
+    collection.aggregate([
+      {:$match => filter},
+      {:$sort => {index: 1}},
+      {:$project => {timestamp_usec: 1, node: "$#{node}"}}
+    ], allow_disk_use: true).map do |r|
+      [r['timestamp_usec'], r['node']]
+    end
+  end
+
+  def self.timeserie_sum_node(filter, node)
+    serie = timeserie(filter, node)
+    return nil if serie.empty?
+    first_timestamp = serie.first.first
+    last_timestamp_in_serie = nil
+    running_sum = 0
+    serie.map do |timestamp,val|
+      running_sum += val
+      if last_timestamp_in_serie.nil? or ((timestamp - last_timestamp_in_serie) > 1000) # 1ms
+        last_timestamp_in_serie = timestamp
+        [timestamp-first_timestamp,running_sum]
+      else
+        nil
+      end
+    end.compact
+  end
+
   def self.sum(filter, sum_node)
     coll = collection.aggregate([
       {:$match => filter},

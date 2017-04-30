@@ -13,7 +13,9 @@ class Stat < ActiveRecord::Base
     :node_val_cdf_for_filters,
     :sum_node_val_by_group,
     :sum_node_val_for_filters,
-    :pc_true_for_nodes
+    :pc_true_for_nodes,
+    :timeserie_sum_node,
+    :timeserie_sum_node_for_dyn_filters
   ]
 
   belongs_to :stat_category, inverse_of: :stats
@@ -25,11 +27,6 @@ class Stat < ActiveRecord::Base
 
   def self.category(id, analysable_type)
     cached_collection(category_scope(id, analysable_type), "category_#{id}_#{analysable_type}")
-  end
-
-  def custom=(val)
-    val = eval(val) if val.is_a?(String) # Hack for ActiveAdmin
-    write_attribute(:custom, val)
   end
 
   def event_filters=(val)
@@ -72,6 +69,13 @@ class Stat < ActiveRecord::Base
     end
   end
 
+  def node_val_cdf_for_dyn_filters(filter)
+    custom[:dyn_filters].map do |serie_name, serie_filter|
+      data = node_val_cdf(serie_filter.merge(filter))
+      data.nil? ? nil : {name: serie_name, data: data}
+    end.compact
+  end
+
   def sum_node_val_by_group(filter)
     Event.sum_node_val_by_group(filter, group_by, node)
   end
@@ -86,8 +90,24 @@ class Stat < ActiveRecord::Base
     node.split(',').map{|n| pc_true_for_node(filter, n)}.compact
   end
 
-  def compute(filter)
-    where = event_filters.merge(filter).merge(fake_call: false)
+  def timeserie_sum_node(filter)
+    Event.timeserie_sum_node(filter, node)
+  end
+
+  def timeserie_sum_node_for_dyn_filters(filter)
+    custom[:dyn_filters].map do |serie_name, serie_filter|
+      data = timeserie_sum_node(serie_filter.merge(filter))
+      data.nil? ? nil : {name: serie_name, data: data}
+    end.compact
+  end
+
+  def eval_dyn_filter(analysable)
+    custom[:dyn_filters] = eval(custom[:dyn_filters])
+  end
+
+  def compute(analysable)
+    eval_dyn_filter(analysable) if timeserie_sum_node_for_dyn_filters?
+    where = event_filters.merge(analysable.events_filter).merge(fake_call: false)
     send(stat_type, where)
   end
 

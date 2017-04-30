@@ -1,7 +1,9 @@
-- StatCategory.applies_to(analysable_type).each do |cat|
-  .section.stats{data: {section: cat.name}}
-    %h5= cat.pretty_name
-    %p= cat.description
-    .grid
-      - Stat.category(cat.id, analysable_type).each do |stat|
-        = render 'shared/stat', stat: stat.decorate, analysis: analysis
+- cache analysable.analysis_cache_key do
+  - analysis = analysable.analysis
+  - StatCategory.applies_to(analysable.analysable_type).each do |cat|
+    .section.stats{data: {section: cat.name}}
+      %h5= cat.pretty_name
+      %p= cat.description
+      .grid
+        - Stat.category(cat.id, analysable.analysable_type).each do |stat|
+          = render 'shared/stat', stat: stat.decorate, analysis: analysis

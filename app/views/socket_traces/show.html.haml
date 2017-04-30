@@ -15,7 +15,7 @@
 - cache @socket_trace do
   .content-with-left-menu
     = render 'shared/overview_head', trace: @socket_trace
-    = render 'shared/stats', analysable_type: :socket_trace, analysis: @analysis
+    = render 'shared/stats', analysable: @socket_trace
 
     .section.fake-grid-item{data: {section: 'Overview'}}
       .card
