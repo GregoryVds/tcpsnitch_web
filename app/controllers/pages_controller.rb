@@ -3,8 +3,7 @@ class PagesController < ApplicationController
 
   def home
     sanitize_filters
-    @cache_val = DatasetAnalysis.cache_val(params[:os], params[:connectivity])
-    @stat_categories = StatCategory.applies_to(:dataset)
+    @dataset_segment = DatasetSegment.new(params[:os], params[:connectivity])
   end
 
   def about

@@ -97,7 +97,7 @@ class Stat < ActiveRecord::Base
     running_sum = 0
     serie.map do |timestamp,val|
       running_sum += val
-      [(timestamp-first_timestamp,running_sum] if running_sum > 0
+      [timestamp-first_timestamp,running_sum] if running_sum > 0
     end
   end
 
@@ -108,8 +108,13 @@ class Stat < ActiveRecord::Base
     end.compact
   end
 
-  def compute(filter)
-    where = event_filters.merge(filter).merge(fake_call: false)
+  def eval_dyn_filter(analysable)
+    custom[:dyn_filters] = eval(custom[:dyn_filters])
+  end
+
+  def compute(analysable)
+    eval_dyn_filter(analysable) if timeserie_sum_node_for_dyn_filters?
+    where = event_filters.merge(analysable.events_filter).merge(fake_call: false)
     send(stat_type, where)
   end
 

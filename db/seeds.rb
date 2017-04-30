@@ -9,8 +9,7 @@ def functions_list(functions)
 end
 
 dyn_filter_socket_ids = <<'EOF'
-  id_column = (analysable_type == :socket_trace ? "id" : "#{analysable_type}_id")
-  SocketTrace.where(id_column => analysable.id).pluck(:id).map do |id|
+  analysable.socket_ids.map do |id|
     ["Socket ##{id}", {"socket_trace_id" => id}]
   end
 EOF

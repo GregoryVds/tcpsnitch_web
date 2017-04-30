@@ -2,8 +2,6 @@ module Trace
   extend ActiveSupport::Concern
 
   included do
-    extend Analysable
-    after_commit :create_analysis, on: :create
     before_destroy :destroy_events
     before_destroy :destroy_analysis
   end
@@ -14,20 +12,8 @@ module Trace
     Event.where(filter)
   end
 
-  def analysis
-    Analysis.where(analysable_type: trace_type, analysable_id: id).first
-  end
-
-  def create_analysis
-    Analysis.create({analysable_type: trace_type, analysable_id: id, measures: {}})
-  end
-
   def destroy_events
     events.delete_all if events
-  end
-
-  def destroy_analysis
-    analysis.destroy! if analysis
   end
 
   # Polymorphism
@@ -50,12 +36,16 @@ module Trace
 
   # Analysable
 
-  def filter
+  def events_filter
     {"#{trace_type}_id": id}
   end
 
   def analysable_type
     trace_type
+  end
+
+  def analysable_id
+    id
   end
 
   # Analysis
