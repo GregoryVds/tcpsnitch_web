@@ -91,14 +91,7 @@ class Stat < ActiveRecord::Base
   end
 
   def timeserie_sum_node(filter)
-    serie = Event.timeserie(filter, node)
-    return nil if serie.empty?
-    first_timestamp = serie.first.first
-    running_sum = 0
-    serie.map do |timestamp,val|
-      running_sum += val
-      [timestamp-first_timestamp,running_sum] if running_sum > 0
-    end
+    Event.timeserie_sum_node(filter, node)
   end
 
   def timeserie_sum_node_for_dyn_filters(filter)

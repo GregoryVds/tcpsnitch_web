@@ -34,12 +34,16 @@ class StatDecorator < Draper::Decorator
     data.length > 15 ? "#{data.length * 20}px" : '300px'
   end
 
-  def line_chart_log_scale?
+  def line_chart_x_axis_log_scale?
     node_val_cdf? or node_val_cdf_for_filters?
   end
 
+  def line_chart_y_axis_log_scale?
+    timeserie_sum_node_for_dyn_filters? or timeserie_sum_node?
+  end
+
   def line_chart_x_axis
-    if line_chart_log_scale?
+    if line_chart_x_axis_log_scale?
       {type: "logarithmic", min: 1}.to_json
     else
       {type: "linear"}.to_json
@@ -47,11 +51,10 @@ class StatDecorator < Draper::Decorator
   end
 
   def line_chart_y_axis
-    if node_val_cdf? or node_val_cdf_for_filters?
-      {max: 100}.to_json
-    else
-      {}.to_json
-    end
+    attrs = {}
+    attrs.merge!({type: "logarithmic"}) if line_chart_y_axis_log_scale?
+    attrs.merge!({max: 100}) if node_val_cdf? or node_val_cdf_for_filters?
+    attrs.to_json
   end
 
   def line_chart_legend?
