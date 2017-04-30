@@ -16,6 +16,17 @@ class AppTrace < ActiveRecord::Base
   has_many :process_traces, -> { order :id }, inverse_of: :app_trace, dependent: :destroy
   has_many :socket_traces, inverse_of: :app_trace
 
+  before_save :update_events_os, if: :os_changed?
+  before_save :update_events_connectivity, if: :connectivity_changed?
+
+  def update_events_os
+    events.update_all(os: os)
+  end
+
+  def update_events_connectivity
+    events.update_all(connectivity: connectivity)
+  end
+
   def os_int
     AppTrace.os[os]
   end

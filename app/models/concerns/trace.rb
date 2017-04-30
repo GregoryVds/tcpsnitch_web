@@ -9,7 +9,7 @@ module Trace
   # Relations
 
   def events
-    Event.where(filter)
+    Event.where(events_filter)
   end
 
   def destroy_events
