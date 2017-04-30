@@ -22,7 +22,8 @@
                 yAxis: #{stat.line_chart_y_axis},
                 title: null,
                 legend: {enabled: #{stat.line_chart_legend?}},
-                credits: false
+                credits: false,
+                chart: {zoomType: "xy"}
               })
         - elsif stat.number?
           .number= number_with_delimiter(stat_data)
