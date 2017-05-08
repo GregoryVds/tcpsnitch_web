@@ -8,9 +8,13 @@ class Event
   field :errno, type: String
   field :fake_call, type: Boolean
   field :index, type: Integer
+  field :network_specialized_app, type: Boolean
   field :os, type: Integer
+  field :remote_con, type: Boolean
   field :return_value, type: Integer
   field :process_trace_id, type: Integer
+  field :socket_domain, type: String
+  field :socket_type, type: String
   field :socket_trace_id, type: Integer
   field :success, type: Boolean
   field :timestamp_usec, type: Integer
@@ -23,7 +27,11 @@ class Event
   index({socket_trace_id: 1, fake_call: 1, type: 1})
 
   # For dataset analysis
-  index({type: 1, fake_call: 1}, background: true)
+  index({fake_call: 1, type: 1}, background: true) # Global
+  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, type: 1}, background: true) # Global filtered
+  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, os: 1, type: 1}, background: true) # Android vs Linux
+  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, socket_domain: 1, type: 1}, background: true) # IPV4 vs IPV6
+  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, socket_type: 1, type: 1}, background: true) # UDP vs TCP
 
   # For browsing events
   index({socket_trace_id: 1, index: 1})

@@ -11,10 +11,19 @@ class SocketTraceImportJob < ActiveJob::Base
 
     import_events(file)
 
+    Event.where(socket_trace_id: socket_trace_id).update_all({
+      remote_con: @remote_con,
+      socket_domain: @socket_domain,
+      socket_type: @socket_type
+    })
+
     @socket_trace.events_count = @events_count
-    @socket_trace.socket_type = @socket_type
     @socket_trace.events_imported = true
+    @socket_trace.remote_con = @remote_con
+    @socket_trace.socket_type = @socket_type
+    @socket_trace.socket_domain = @socket_domain
     @socket_trace.save!
+
     @socket_trace.schedule_analysis
 
     @process_trace.increment!(:events_count, @events_count)
@@ -34,16 +43,25 @@ class SocketTraceImportJob < ActiveJob::Base
   end
 
   def parse_json_event(line)
-    Oj.load(line.chomp("\n"))
+    Oj.load(line.chomp("\n"), mode: :strict)
   end
 
   def import_events(file)
     File.open(file).lazy.map do |line|
       parse_json_event(line)
     end.map do |hash|
-      enrich(hash)
+      enrich_event(hash)
     end.each do |event|
-      @socket_type = socket_type(event) if @events_count==0
+      if @events_count==0
+        @socket_type = socket_type(event)
+        @socket_domain = socket_domain(event)
+      end
+      if event['type'].eql?('connect') then
+        addr = Addrinfo.ip(event['details']['addr']['ip'])
+        @remote_con = !(addr.ipv4_loopback? or addr.ipv6_loopback?)
+      else
+        @remote_con = false
+      end
       new_event(event)
     end
     dump_to_mongo
@@ -64,7 +82,11 @@ class SocketTraceImportJob < ActiveJob::Base
     event['details']['sock_info']['type']
   end
 
-  def enrich(event_hash)
+  def socket_domain(event)
+    event['details']['sock_info']['domain']
+  end
+
+  def enrich_event(event_hash)
     event_hash['app'] = @app_trace.app
     event_hash['app_trace_id'] = @app_trace.id
     event_hash['connectivity'] = @app_trace.connectivity_int

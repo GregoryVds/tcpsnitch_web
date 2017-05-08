@@ -1,6 +1,7 @@
 class DatasetSegment
   include Analysable
-  attr_reader :os, :connectivity
+  attr_reader :os, :connectivity, :socket_domain, :socket_type, :remote_con,
+              :network_specialized_app
 
   def initialize(os, connectivity)
     @os = (os.nil? ? nil : os.to_i)
@@ -8,7 +9,7 @@ class DatasetSegment
   end
 
   def events_filter
-    filter = {}
+    filter = {network_specialized_app: false, remote_con: true}
     filter.merge!({os: @os}) unless @os.nil?
     filter.merge!({connectivity: @connectivity}) unless @connectivity.nil?
     filter

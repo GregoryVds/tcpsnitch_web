@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425145603) do
+ActiveRecord::Schema.define(version: 20170508150549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,15 +47,15 @@ ActiveRecord::Schema.define(version: 20170425145603) do
   end
 
   create_table "app_traces", force: :cascade do |t|
-    t.boolean  "analysis_computed",    default: false
-    t.string   "archive",                              null: false
+    t.boolean  "analysis_computed",       default: false
+    t.string   "archive",                                 null: false
     t.string   "app"
     t.string   "app_version"
     t.string   "cmd"
     t.integer  "connectivity"
     t.text     "comments"
     t.integer  "events_count"
-    t.boolean  "events_imported",      default: false
+    t.boolean  "events_imported",         default: false
     t.string   "git_hash"
     t.string   "host_id"
     t.string   "kernel"
@@ -70,8 +70,9 @@ ActiveRecord::Schema.define(version: 20170425145603) do
     t.integer  "user_id"
     t.text     "version"
     t.text     "workload"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "network_specialized_app", default: false
     t.index ["app"], name: "index_app_traces_on_app", using: :btree
     t.index ["connectivity"], name: "index_app_traces_on_connectivity", using: :btree
     t.index ["os"], name: "index_app_traces_on_os", using: :btree
@@ -101,6 +102,8 @@ ActiveRecord::Schema.define(version: 20170425145603) do
     t.boolean  "analysis_computed", default: false
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.integer  "socket_domain"
+    t.boolean  "remote_con"
     t.index ["app_trace_id"], name: "index_socket_traces_on_app_trace_id", using: :btree
     t.index ["process_trace_id"], name: "index_socket_traces_on_process_trace_id", using: :btree
     t.index ["socket_type"], name: "index_socket_traces_on_socket_type", using: :btree
