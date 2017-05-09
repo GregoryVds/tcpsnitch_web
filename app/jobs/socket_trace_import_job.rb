@@ -13,8 +13,8 @@ class SocketTraceImportJob < ActiveJob::Base
 
     Event.where(socket_trace_id: socket_trace_id).update_all({
       remote_con: @remote_con,
-      socket_domain: @socket_domain,
-      socket_type: @socket_type
+      socket_domain: SocketTrace.socket_domains[@socket_domain],
+      socket_type: SocketTrace.socket_types[@socket_type]
     })
 
     @socket_trace.events_count = @events_count
