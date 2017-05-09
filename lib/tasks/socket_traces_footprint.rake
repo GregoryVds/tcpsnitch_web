@@ -1,16 +1,13 @@
 os          = ENV['os']
 target      = ENV['target'] ? ENV['target'] : 'app_trace'
 subject     = ENV['subject'] ? ENV['subject'] : 'functions'
+inc_subsets = ENV['inc_subsets'] ? ENV['inc_subsets'] : false
 
-stat = if subject.eql?('functions')
-  "Functions calls"
-elsif subject.eql?('sockopts')
-  "Sockopts optname args"
-elsif subject.eql?('ioctls')
-  "ioctl() requests args"
-else
-  raise "subject error"
-end
+stat = if subject.eql?('functions') then "Functions calls"
+    elsif subject.eql?('sockopts')  then "Sockopts optname args"
+    elsif subject.eql?('ioctls')    then "ioctl() requests args"
+    else raise "subject error"
+    end
 
 namespace :custom do
   desc 'Count for each socket trace footprint'
@@ -19,6 +16,7 @@ namespace :custom do
 
     scope = Analysis.where(analysable_type: target)
     scope = scope.where(os: AppTrace.os[os]) unless os.nil?
+    puts AppTrace.os[os]
 
     if target.eql?('app_trace') then
       footprints_per_app = Hash.new{[]}
@@ -48,9 +46,19 @@ namespace :custom do
       end
     end
 
-    puts "#{subject.capitalize} usage by #{target}"
+    if inc_subsets
+      footprints.each do |footprint1, count1|
+        footprints.each do |footprint2, count2|
+          next if footprint1.eql?(footprint2)
+          footprints[footprint1] += count2 if (footprint2.split(',')-footprint1.split(',')).empty? # If 2 is subset of 1
+        end
+      end
+    end
+
+    puts "#{subject.capitalize} usage (% of #{target})"
     puts "Os: #{os.nil? ? "all" : os}"
-    puts "Totat: #{total}"
+    puts "Include subsets: #{inc_subsets}"
+    puts "Total: #{total}"
 
     footprints.sort_by{|k,v| v}.reverse.each do |footprint, count|
       puts "#{'%.3f' % (count/total.to_f)}%: #{footprint.split(',')}"
