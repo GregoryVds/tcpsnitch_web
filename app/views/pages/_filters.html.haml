@@ -4,14 +4,10 @@
       Filter traces
     = form_tag(url_for(controller: 'pages', action: 'home'), method: :get, class: 'col s10') do
       .row
-        .input-field.col.s5
-          = select_tag(:os, options_for_select(AppTrace.os, params[:os]), include_blank: 'All')
+        .input-field.col.s10
+          = select_tag(:segment, options_for_select(DatasetSegment::SEGMENTS, params[:segment]))
           %label
-            Operating system
-        .input-field.col.s5
-          = select_tag(:connectivity, options_for_select(AppTrace.connectivities, params[:connectivity]), include_blank: 'All')
-          %label
-            Connectivity
+            Dataset segment
         .input-field.col.s2
           = submit_tag 'Filter', class: 'waves-effect waves-light btn'
 

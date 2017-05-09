@@ -1,18 +1,25 @@
 class DatasetSegment
   include Analysable
-  attr_reader :os, :connectivity, :socket_domain, :socket_type, :remote_con,
-              :network_specialized_app
 
-  def initialize(os, connectivity)
-    @os = (os.nil? ? nil : os.to_i)
-    @connectivity = (connectivity.nil? ? nil : connectivity.to_i)
+  SEGMENTS = [:global, :sanitized, :android, :linux, :ipv4, :ipv6, :udp, :tcp]
+
+  SEGMENTS_FILTERS = {
+    global:     {fake_call: false},
+    sanitized:  {fake_call: false, network_specialized_app: false, remote_con: true},
+    android:    {fake_call: false, network_specialized_app: false, remote_con: true, os: AppTrace.os[:android]},
+    linux:      {fake_call: false, network_specialized_app: false, remote_con: true, os: AppTrace.os[:linux]},
+    ipv4:       {fake_call: false, network_specialized_app: false, remote_con: true, socket_domain: SocketTrace.socket_domains[:AF_INET]},
+    ipv6:       {fake_call: false, network_specialized_app: false, remote_con: true, socket_domain: SocketTrace.socket_domains[:AF_INET6]},
+    udp:        {fake_call: false, network_specialized_app: false, remote_con: true, socket_type: SocketTrace.socket_types[:SOCK_DGRAM]},
+    tcp:        {fake_call: false, network_specialized_app: false, remote_con: true, socket_type: SocketTrace.socket_types[:SOCK_STREAM]},
+  }
+
+  def initialize(segment_type=:global)
+    @segment_type = segment_type.to_sym
   end
 
   def events_filter
-    filter = {network_specialized_app: false, remote_con: true}
-    filter.merge!({os: @os}) unless @os.nil?
-    filter.merge!({connectivity: @connectivity}) unless @connectivity.nil?
-    filter
+    DatasetSegment::SEGMENTS_FILTERS[@segment_type]
   end
 
   def analysable_type
@@ -20,14 +27,12 @@ class DatasetSegment
   end
 
   def analysable_id # Create unique id based on os & con
-    (os.nil? ? 0 : os+1) + (connectivity.nil? ? 0 : connectivity+1) * 100
+    DatasetSegment::SEGMENTS.index(@segment_type)
   end
 
   def self.schedule_all_analysis
-    (AppTrace.os.values+[nil]).each do |os|
-      (AppTrace.connectivities.values+[nil]).each do |con|
-        DatasetAnalysisJob.perform_later(os, con)
-      end
+    SEGMENTS.each do |segment|
+      DatasetAnalysisJob.perform_later(segment.to_s)
     end
   end
 end
