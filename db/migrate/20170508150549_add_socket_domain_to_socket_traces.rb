@@ -36,10 +36,10 @@ class AddSocketDomainToSocketTraces < ActiveRecord::Migration[5.0]
     end
 
     AppTrace.all.each do |app_trace|
-      if ["traceroute", "iperf3", "nmap"].include?(app_trace.app)
-        app_trace.network_specialized_app = true
-        Event.where(app_trace_id: app_trace.id).update_all(network_specialized_app: true)
-      end
+      nsa = ["traceroute", "iperf3", "nmap"].include?(app_trace.app)
+      app_trace.network_specialized_app = nsa
+      app_trace.save!
+      Event.where(app_trace_id: app_trace.id).update_all({network_specialized_app: nsa})
     end
   end
 
