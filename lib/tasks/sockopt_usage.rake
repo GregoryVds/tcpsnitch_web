@@ -1,7 +1,7 @@
 connectivity  = ENV['con']
 os            = ENV['os']
 node          = ENV['node'] ? ENV['node'] : 'optname'
-exclude      = ENV['exclude'] ? ENV['exclude'].split(',') : nil
+exclude       = ENV['exclude'] ? ENV['exclude'].split(',') : nil
 
 namespace :custom do
   desc 'Extract apps using each sockopt/level'
