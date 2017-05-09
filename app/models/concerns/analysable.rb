@@ -9,7 +9,7 @@ module Analysable
   # - connectivity
 
   def analysis_filter
-    {analysable_type: analysable_type, analysable_id: analysable_id}
+    {analysable_type: analysable_type, analysable_id: analysable_id, os: os}
   end
 
   def analysis
