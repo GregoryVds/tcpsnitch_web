@@ -13,8 +13,8 @@ class Event
   field :remote_con, type: Boolean
   field :return_value, type: Integer
   field :process_trace_id, type: Integer
-  field :socket_domain, type: String
-  field :socket_type, type: String
+  field :socket_domain, type: Integer
+  field :socket_type, type: Integer
   field :socket_trace_id, type: Integer
   field :success, type: Boolean
   field :timestamp_usec, type: Integer

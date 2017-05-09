@@ -29,9 +29,9 @@ class AddSocketDomainToSocketTraces < ActiveRecord::Migration[5.0]
 
       # Update events
       Event.where(socket_trace_id: socket_trace.id).update_all({
-        socket_domain: domain,
         remote_con: remote_con,
-        socket_type: socket_trace.socket_type
+        socket_domain: SocketTrace.socket_domains[domain],
+        socket_type: SocketTrace.socket_types[socket_trace.socket_type]
       })
     end
 
@@ -46,5 +46,6 @@ class AddSocketDomainToSocketTraces < ActiveRecord::Migration[5.0]
   def down
     remove_column :socket_traces, :socket_domain
     remove_column :socket_traces, :remote_con
+    remove_column :app_traces, :network_specialized_app
   end
 end
