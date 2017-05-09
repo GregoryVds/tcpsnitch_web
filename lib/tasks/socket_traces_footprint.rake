@@ -30,7 +30,7 @@ namespace :custom do
 
       total = footprints_per_app.size
       footprints_per_app.values.each do |footprint|
-        footprints[footprint.uniq.join(',')] += 1
+        footprints[footprint.uniq.sort.join(',')] += 1
       end
     else
       scope = Analysis.where(analysable_type: target)

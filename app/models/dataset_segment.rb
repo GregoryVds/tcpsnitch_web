@@ -14,6 +14,10 @@ class DatasetSegment
     tcp:        {fake_call: false, network_specialized_app: false, remote_con: true, socket_type: SocketTrace.socket_types[:SOCK_STREAM]},
   }
 
+  def os
+    nil
+  end
+
   def initialize(segment_type=:global)
     @segment_type = segment_type.to_sym
   end
