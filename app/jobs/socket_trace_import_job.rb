@@ -57,8 +57,7 @@ class SocketTraceImportJob < ActiveJob::Base
         @socket_domain = socket_domain(event)
       end
       if event['type'].eql?('connect') then
-        addr = Addrinfo.ip(event['details']['addr']['ip'])
-        @remote_con = !(addr.ipv4_loopback? or addr.ipv6_loopback?)
+        @remote_con = not(LoopbackDetector::loopback?(event['details']['addr']['ip']))
       else
         @remote_con = false
       end

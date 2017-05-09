@@ -16,8 +16,7 @@ class AddSocketDomainToSocketTraces < ActiveRecord::Migration[5.0]
       remote_con = if connect.nil?
         false
       else
-        addr = Addrinfo.ip(connect.details[:addr][:ip])
-        not(addr.ipv4_loopback? or addr.ipv6_loopback?)
+        not(LoopbackDetector::loopback?(connect.details[:addr][:ip]))
       end
       socket_trace.remote_con = remote_con
 
