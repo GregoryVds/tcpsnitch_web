@@ -2,6 +2,8 @@ os          = ENV['os']
 target      = ENV['target'] ? ENV['target'] : 'app_trace'
 subject     = ENV['subject'] ? ENV['subject'] : 'functions'
 inc_subsets = ENV['inc_subsets'] ? true : false
+socket_type = ENV['socket_type'] ? ENV['socket_type'] : nil
+remote_con  = ENV['remote_con'] ? ENV['remote_con'] : nil
 
 stat = if subject.eql?('functions') then "Functions calls"
     elsif subject.eql?('sockopts')  then "Sockopts optname args"
@@ -16,6 +18,8 @@ namespace :custom do
 
     scope = Analysis.where(analysable_type: target)
     scope = scope.where(os: AppTrace.os[os]) unless os.nil?
+    scope = scope.where(socket_type: SocketTrace.socket_types[socket_type]) unless socket_type.nil?
+    scope = scope.where(remote_con: remote_con.eql?("true")) unless remote_con.nil?
 
     if target.eql?('app_trace') then
       footprints_per_app = Hash.new{[]}
@@ -33,16 +37,14 @@ namespace :custom do
         footprints[footprint.uniq.sort.join(',')] += 1
       end
     else
-      scope = Analysis.where(analysable_type: target)
-      scope = scope.where(os: AppTrace.os[os]) unless os.nil?
-      total = scope.count
-
       scope.all.each do |analysis|
         stats = analysis[:measures][stat]
         next if stats.nil?
         footprint = stats.map(&:first).sort
         footprints[footprint.join(',')] += 1
       end
+
+      total = scope.count
     end
 
     if inc_subsets
@@ -57,6 +59,7 @@ namespace :custom do
     end
 
     puts "#{subject.capitalize} usage (% of #{target})"
+    puts "Socket type: #{socket_type.nil? ? "all" : socket_type}"
     puts "Os: #{os.nil? ? "all" : os}"
     puts "Include subsets: #{inc_subsets}"
     puts "Total: #{total}"

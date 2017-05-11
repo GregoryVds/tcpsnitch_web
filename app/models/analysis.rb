@@ -5,7 +5,9 @@ class Analysis
   field :analysable_type, type: String
   field :analysable_id, type: Integer
   field :os, type: Integer
+  field :socket_type, type: Integer
   field :connectivity, type: Integer
+  field :remote_con, type: Boolean
   field :measures, type: Hash
 
   index({analysable_id: 1, analysable_type: 1})

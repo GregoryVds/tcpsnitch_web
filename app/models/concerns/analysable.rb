@@ -12,12 +12,15 @@ module Analysable
     {analysable_type: analysable_type, analysable_id: analysable_id}
   end
 
+  def analysis_attr
+    base_attr = {measures: {}, os: AppTrace.os[os]}
+    base_attr.merge!({remote_con: remote_con, socket_type: socket_type}) if analysable_type == :socket_trace
+    base_attr
+  end
+
   def analysis
     a = Analysis.where(analysis_filter).first
-    a ? a : Analysis.create!(analysis_filter.merge({
-      measures: {},
-      os: AppTrace.os[os]
-    }))
+    a ? a : Analysis.create!(analysis_filter.merge(analysis_attr))
   end
 
   def destroy_analysis
