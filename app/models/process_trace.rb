@@ -11,7 +11,6 @@ class ProcessTrace < ActiveRecord::Base
   delegate :os, to: :app_trace
   delegate :connectivity, to: :app_trace
 
-
   def to_s
     "Process trace ##{id}"
   end

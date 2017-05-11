@@ -9,12 +9,15 @@ module Analysable
   # - connectivity
 
   def analysis_filter
-    {analysable_type: analysable_type, analysable_id: analysable_id, os: os}
+    {analysable_type: analysable_type, analysable_id: analysable_id}
   end
 
   def analysis
     a = Analysis.where(analysis_filter).first
-    a ? a : Analysis.create!(analysis_filter.merge({measures: {}}))
+    a ? a : Analysis.create!(analysis_filter.merge({
+      measures: {},
+      os: AppTrace.os[os]
+    }))
   end
 
   def destroy_analysis
