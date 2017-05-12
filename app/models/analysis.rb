@@ -10,7 +10,7 @@ class Analysis
   field :remote_con, type: Boolean
   field :measures, type: Hash
 
-  index({analysable_id: 1, analysable_type: 1})
+  index({analysable_type: 1, analysable_id: 1})
 
   def update(analysable)
     analysable_type = analysable.analysable_type
