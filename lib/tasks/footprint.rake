@@ -12,8 +12,8 @@ stat = if subject.eql?('functions') then "Functions calls"
     end
 
 namespace :custom do
-  desc 'Count for each socket trace footprint'
-  task :socket_traces_footprint => :environment do
+  desc 'Footprint analysis'
+  task :footprint => :environment do
     footprints = Hash.new{0}
 
     scope = Analysis.where(analysable_type: target)
@@ -59,13 +59,14 @@ namespace :custom do
     end
 
     puts "#{subject.capitalize} usage (% of #{target})"
-    puts "Socket type: #{socket_type.nil? ? "all" : socket_type}"
     puts "Os: #{os.nil? ? "all" : os}"
+    puts "Socket type: #{socket_type.nil? ? "all" : socket_type}"
+    puts "Remote connections: #{remote_con.nil? ? "all" : remote_con}"
     puts "Include subsets: #{inc_subsets}"
     puts "Total: #{total}"
 
     footprints.sort_by{|k,v| v}.reverse.each do |footprint, count|
-      puts "#{'%.3f' % (count/total.to_f)}%: #{footprint.split(',')}"
+      puts "#{'%.3f' % (count/total.to_f)}: #{footprint.split(',')}"
     end
   end
 end
