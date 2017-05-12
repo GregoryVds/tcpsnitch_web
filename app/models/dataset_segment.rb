@@ -4,14 +4,17 @@ class DatasetSegment
   SEGMENTS = [:global, :sanitized, :android, :linux, :ipv4, :ipv6, :udp, :tcp]
 
   SEGMENTS_FILTERS = {
-    global:     {fake_call: false},
-    sanitized:  {fake_call: false, network_specialized_app: false, remote_con: true},
-    android:    {fake_call: false, network_specialized_app: false, remote_con: true, os: AppTrace.os[:android]},
-    linux:      {fake_call: false, network_specialized_app: false, remote_con: true, os: AppTrace.os[:linux]},
-    ipv4:       {fake_call: false, network_specialized_app: false, remote_con: true, socket_domain: SocketTrace.socket_domains[:AF_INET]},
-    ipv6:       {fake_call: false, network_specialized_app: false, remote_con: true, socket_domain: SocketTrace.socket_domains[:AF_INET6]},
-    udp:        {fake_call: false, network_specialized_app: false, remote_con: true, socket_type: SocketTrace.socket_types[:SOCK_DGRAM]},
-    tcp:        {fake_call: false, network_specialized_app: false, remote_con: true, socket_type: SocketTrace.socket_types[:SOCK_STREAM]},
+    global:         {fake_call: false},
+    sanitized:      {fake_call: false, network_specialized_app: false},
+    android:        {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android]},
+    linux:          {fake_call: false, network_specialized_app: false, os: AppTrace.os[:linux]},
+    udp:            {fake_call: false, network_specialized_app: false, socket_type: SocketTrace.socket_types[:SOCK_DGRAM]},
+    tcp:            {fake_call: false, network_specialized_app: false, socket_type: SocketTrace.socket_types[:SOCK_STREAM]},
+    android_remote: {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], remote_con: true},
+    android_ipv4:   {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_domain: SocketTrace.socket_domains[:AF_INET]},
+    android_ipv6:   {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_domain: SocketTrace.socket_domains[:AF_INET6]},
+    android_udp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_DGRAM]},
+    android_tcp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_STREAM]}
   }
 
   def os

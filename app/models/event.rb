@@ -28,10 +28,11 @@ class Event
 
   # For dataset analysis
   index({fake_call: 1, type: 1}, background: true) # Global
-  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, type: 1}, background: true) # Global filtered
-  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, os: 1, type: 1}, background: true) # Android vs Linux
-  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, socket_domain: 1, type: 1}, background: true) # IPV4 vs IPV6
-  index({fake_call: 1, network_specialized_app: 1, remote_con: 1, socket_type: 1, type: 1}, background: true) # UDP vs TCP
+  index({fake_call: 1, network_specialized_app: 1, type: 1}, background: true) # Global filtered
+  index({fake_call: 1, network_specialized_app: 1, os: 1, type: 1}, background: true) # Android vs Linux
+  index({fake_call: 1, network_specialized_app: 1, os: 1, socket_domain: 1, type: 1}, background: true) # IPV4 vs IPV6
+  index({fake_call: 1, network_specialized_app: 1, os: 1, socket_type: 1, type: 1}, background: true) # UDP vs TCP
+  index({fake_call: 1, network_specialized_app: 1, os: 1, remote_con: 1, type: 1}, background: true) # UDP vs TCP
 
   # For browsing events
   index({socket_trace_id: 1, index: 1})
