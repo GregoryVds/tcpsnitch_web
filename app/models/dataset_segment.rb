@@ -1,8 +1,6 @@
 class DatasetSegment
   include Analysable
 
-  SEGMENTS = [:global, :sanitized, :android, :linux, :ipv4, :ipv6, :udp, :tcp]
-
   SEGMENTS_FILTERS = {
     global:         {fake_call: false},
     sanitized:      {fake_call: false, network_specialized_app: false},
@@ -16,6 +14,8 @@ class DatasetSegment
     android_udp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_DGRAM]},
     android_tcp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_STREAM]}
   }
+
+  SEGMENTS = SEGMENTS_FILTERS.keys
 
   def os
     nil
