@@ -66,7 +66,7 @@ namespace :custom do
     puts "Total: #{total}"
 
     footprints.sort_by{|k,v| v}.reverse.each do |footprint, count|
-      puts "#{'%.3f' % (count/total.to_f)}: #{footprint.split(',')}"
+      puts "#{'%.4f' % (count/total.to_f)}: #{footprint.split(',')}"
     end
   end
 end
