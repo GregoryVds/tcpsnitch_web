@@ -12,7 +12,7 @@ def f(val, x)
 end
 
 namespace :custom do
-  desc 'Compute sockopts average position in trace'
+  desc 'Sockopts analysis'
   task :sockopts_analysis => :environment do
     scope = SocketTrace.joins(:app_trace).where(app_traces: {os: os})
     scope = scope.where(socket_type: socket_type) unless socket_type.nil?
