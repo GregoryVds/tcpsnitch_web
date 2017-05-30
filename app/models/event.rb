@@ -32,7 +32,8 @@ class Event
   index({fake_call: 1, network_specialized_app: 1, os: 1, type: 1}, background: true) # Android vs Linux
   index({fake_call: 1, network_specialized_app: 1, os: 1, socket_domain: 1, type: 1}, background: true) # IPV4 vs IPV6
   index({fake_call: 1, network_specialized_app: 1, os: 1, socket_type: 1, type: 1}, background: true) # UDP vs TCP
-  index({fake_call: 1, network_specialized_app: 1, os: 1, remote_con: 1, type: 1}, background: true) # UDP vs TCP
+  index({fake_call: 1, network_specialized_app: 1, os: 1, remote_con: 1, type: 1}, background: true) # Remote vs Local
+  index({fake_call: 1, network_specialized_app: 1, os: 1, connectivity: 1, type: 1}, background: true) # LTE vs Handover
 
   # For browsing events
   index({socket_trace_id: 1, index: 1})

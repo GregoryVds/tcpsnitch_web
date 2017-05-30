@@ -12,7 +12,9 @@ class DatasetSegment
     android_ipv4:   {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_domain: SocketTrace.socket_domains[:AF_INET]},
     android_ipv6:   {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_domain: SocketTrace.socket_domains[:AF_INET6]},
     android_udp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_DGRAM]},
-    android_tcp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_STREAM]}
+    android_tcp:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], socket_type: SocketTrace.socket_types[:SOCK_STREAM]},
+    android_lte:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], connectivity: AppTrace.connectivities[:lte]},
+    android_wifi_loss_to_lte:    {fake_call: false, network_specialized_app: false, os: AppTrace.os[:android], connectivity: AppTrace.connectivities[:wifi_loss_to_lte]}
   }
 
   SEGMENTS = SEGMENTS_FILTERS.keys
@@ -22,6 +24,7 @@ class DatasetSegment
   end
 
   def initialize(segment_type=:global)
+    raise ArgumentError unless SEGMENTS.include?(segment_type.to_sym)
     @segment_type = segment_type.to_sym
   end
 

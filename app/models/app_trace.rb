@@ -8,7 +8,8 @@ class AppTrace < ActiveRecord::Base
     lte: 1,
     #ethernet: 2,
     wifi_shutdown_to_lte: 3,
-    wifi_loss_to_lte: 4
+    wifi_loss_to_lte: 4,
+    wifi_rate_limited: 5
   }
 
   enum os: {linux: 0, android: 1}
