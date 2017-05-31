@@ -36,6 +36,8 @@ class Event
   index({fake_call: 1, network_specialized_app: 1, os: 1, connectivity: 1, type: 1}, background: true) # LTE vs Handover
 
   # For browsing events
+  index({app_trace_id: 1, index: 1})
+  index({process_trace_id: 1, index: 1})
   index({socket_trace_id: 1, index: 1})
 
   def self.simple_count(filter)
