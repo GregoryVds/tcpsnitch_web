@@ -19,6 +19,7 @@ class AppTrace < ActiveRecord::Base
 
   before_save :update_events_os, if: :os_changed?
   before_save :update_events_connectivity, if: :connectivity_changed?
+  before_save :update_network_specialized_app, if: :network_specialized_app_changed?
 
   def update_events_os
     events.update_all(os: os)
@@ -26,6 +27,10 @@ class AppTrace < ActiveRecord::Base
 
   def update_events_connectivity
     events.update_all(connectivity: connectivity)
+  end
+
+  def update_network_specialized_app
+    events.update_all(network_specialized_app: network_specialized_app)
   end
 
   def os_int
